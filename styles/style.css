@@ -1,0 +1,123 @@
+body {
+    margin: 0;
+    /* background: url(../images/PVHOMEBG.png); */
+    mix-blend-mode: normal;
+}
+
+/* Common */
+a.none {
+    text-decoration: none;
+}
+
+section .bk {
+    position: unset;
+    height: calc(100vh - 50px);
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content {
+    max-width: 800px;
+    padding: 15px;
+    color: white;
+    font-family: 'Inter';
+
+}
+button{
+    cursor: pointer;
+}
+
+/* end common */
+/************************************************************************************/
+/* start nav bar */
+nav {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    background: #111B36;
+    height: 50px;
+}
+
+nav a {
+    font-family: 'Inter', sans-serif;
+    /* font-family: 'Lobster', cursive;
+    font-family: 'Secular One', sans-serif; */
+    font-size: 20px;
+    color: rgb(199, 199, 199);
+    margin: 0 15px 0 25px;
+    transition: all 0.5s;
+}
+
+nav a:hover {
+    color: #B35C01;
+}
+
+.back-arrow {
+    width: 25px;
+}
+
+.logo {
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    line-height: 50px;
+    font-size: 25px;
+    color: #B35C01;
+}
+
+a.logo:hover {
+    color: rgb(199, 199, 199);
+    ;
+}
+
+/* End nav bar */
+/************************************************************************************/
+/* start back ground image bar */
+.bk {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+}
+
+.bk.image {
+    object-fit: cover;
+}
+
+.bk.cover {
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4.5px);
+}
+
+/* End back ground image bar */
+/************************************************************************************/
+/* start Home Section */
+#home .content {
+    font-size: 35px;
+}
+
+.primary.btn {
+    font-family: 'Inter', sans-serif;
+    margin: 35px auto;
+    padding: 16px 50px;
+    background-color: #B35C01;
+    border-radius: 15px;
+    color: aliceblue;
+    border: 0;
+    font-size: 16px;
+    transition: all 0.2s ;
+}
+.primary.btn:hover {
+    background-color: #ffad55;
+    color: #111B36;
+}
+
+.content .logo {
+    font-size: 50px;
+}
