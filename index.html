@@ -56,13 +56,21 @@
                     <div class="title">
                         <h2>On Grid</h2>
                         <div class="content">
+                            <strong>Advantages</strong>
                             <ul>
-                                <li>1</li>
-                                <li>1</li>
-                                <li>1</li>
+                                <li>Low Cost</li>
+                                <li>Easy maintenance</li>
+                                <li>Synchronize with other sources of power</li>
+                                <li>Better ROI (Return On Investment)</li>
+                            </ul>
+                            <strong>Disadvantages</strong>
+                            <ul>
+                                <li>Doesn't generate electricity during a blackout</li>
+                                <li>Doesn't Work At Night</li>
                             </ul>
                         </div>
-                        <div class="center"><button class="btn secondary">Select</button></div>
+                        <div class="center"><a href="#data-entry" class="none"><button
+                                    class="btn secondary">Select</button></a></div>
                     </div>
                 </div>
                 <div class="grid-item blur-box">
@@ -72,13 +80,22 @@
                     <div class="title">
                         <h2>Off Grid</h2>
                         <div class="content">
+                            <strong>Advantages</strong>
                             <ul>
-                                <li>1</li>
-                                <li>1</li>
-                                <li>1</li>
+                                <li>No more relying with the Grid</li>
+                                <li>No more Power Interruptions</li>
+                                <li>No more Monthly electricity bills</li>
+                                <li>Ideal for Remote Areas</li>
+                            </ul>
+                            <strong>Disadvantages</strong>
+                            <ul>
+                                <li>Higher Initial Cost.</li>
+                                <li>Limited Solar Energy Storage.</li>
+                                <li>Battery Life Span is up to 10-15 years only compared</li>
                             </ul>
                         </div>
-                        <div class="center"><button class="btn secondary">Select</button></div>
+                        <div class="center"><a href="#data-entry" class="none"><button
+                                    class="btn secondary">Select</button></a></div>
                     </div>
                 </div>
                 <div class="grid-item blur-box">
@@ -88,18 +105,71 @@
                     <div class="title">
                         <h2>Hybrid</h2>
                         <div class="content">
+                            <strong>Advantages</strong>
                             <ul>
-                                <li>1</li>
-                                <li>1</li>
-                                <li>1</li>
+                                <li>Energy Independence up to 95%.</li>
+                                <li>No more Power Interruptions.</li>
+                                <li>High Efficiency.</li>
+                                <li>Low Maintenance</li>
+                            </ul>
+                            <strong>Disadvantages</strong>
+                            <ul>
+                                <li>Higher Initial Cost than On Grid</li>
+                                <li>Limited Solar Energy Storage.</li>
+                                <li>Battery Life Span is up to 10-15 years only compared</li>
                             </ul>
                         </div>
-                        <div class="center"><button class="btn secondary">Select</button></div>
+                        <div class="center"><a href="#data-entry" class="none"><button
+                                    class="btn secondary">Select</button></a></div>
                     </div>
                 </div>
             </div>
         </div>
 
+    </section>
+    <section id="data-entry">
+        <div class="center bk">
+            <div class="data-entry-container content">
+                <div class="center">
+                    <h1>Data Entry</h1>
+                </div>
+                <form>
+                    <div class="data-entry-box center">
+                        <div>
+                            <label class="data-input" for="government">Government
+                                <select name="government" id="government">
+                                    <option value="cairo">Cairo</option>
+                                    <option value="qalubia">Qalubia</option>
+                                    <option value="ealexandia">Ealexandia</option>
+                                </select>
+                            </label>
+                            <div class="flex-container">
+                                <label class="data-input flex-item" for="area">Area
+                                    <div>
+                                        <input type="text" name="area" id="area">
+                                        <span>m<sup>2</sup></span>
+                                    </div>
+                                </label>
+                                <label class="data-input flex-item" for="total-power">Total Power
+                                    <div>
+                                        <input type="text" name="total-power" id="total-power">
+                                        <span>W&nbsp</span>
+                                    </div>
+
+                                </label>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="center">
+                        <button class="btn primary">Submit</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
     </section>
 
 </body>
