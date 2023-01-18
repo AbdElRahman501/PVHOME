@@ -10,7 +10,7 @@ a.none {
 
 section .bk {
     position: unset;
-    min-height: 100vh;
+    min-height: calc(100vh - 50px);
     height: unset;
 }
 
@@ -118,8 +118,17 @@ nav {
     position: sticky;
     top: 0;
     z-index: 5;
+    overflow-y: scroll;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
 }
-
+nav::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+}
+nav div.history{
+    display: flex;
+    align-items: center;
+}
 nav a {
     font-family: 'Inter', sans-serif;
     /* font-family: 'Lobster', cursive;
@@ -127,7 +136,7 @@ nav a {
     font-size: 20px;
     color: rgb(199, 199, 199);
     margin: 0 15px 0 25px;
-    transition: all 0.5s;
+    transition: all 0.1s;
 }
 
 nav a:hover {
