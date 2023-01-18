@@ -1,6 +1,12 @@
 import React from 'react'
+import { useState } from 'react';
 
 function DataEntryScreen() {
+    const [onSubmit , setOnSubmit] = useState(false)
+    function submitHandler(e) {
+        e.preventDefault();
+        setOnSubmit(true)
+    }
   return (
     <section id="data-entry">
         <div className="center bk">
@@ -8,7 +14,7 @@ function DataEntryScreen() {
                 <div className="center">
                     <h1>Data Entry</h1>
                 </div>
-                <form>
+                <form onSubmit={submitHandler}>
                     <div className="data-entry-box center">
                         <div>
                             <label className="data-input"  htmlFor="government">Government
@@ -39,7 +45,7 @@ function DataEntryScreen() {
                     </div>
 
                     <div className="center">
-                        <button className="btn primary">Submit</button>
+                        <button className="btn primary">{onSubmit? "Thankes":"Submit"}</button>
                     </div>
 
                 </form>
