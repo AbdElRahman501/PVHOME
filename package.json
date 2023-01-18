@@ -8,12 +8,20 @@
     "node": "16.15.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cd ./server && node index.js"
+    "start": "nodemon server/index.js",
+    "build": "cd client && npm install && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AbdElRahman501/PVHOME.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AbdElRahman501/PVHOME/issues"
+  },
+  "homepage": "https://github.com/AbdElRahman501/PVHOME#readme",
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
