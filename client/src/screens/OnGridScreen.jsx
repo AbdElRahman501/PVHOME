@@ -5,9 +5,9 @@ import governments from "../components/governorates.json"
 function OnGridScreen() {
 
     const [onSubmit, setOnSubmit] = useState(false)
-    const [government, setGovernment] = useState();
-    const [area, setArea] = useState();
-    const [power, setPower] = useState();
+    const [government, setGovernment] = useState("");
+    const [area, setArea] = useState(0);
+    const [power, setPower] = useState(0);
 
 
     const [numOfPanels, setNumOfPanels] = useState();
@@ -16,16 +16,11 @@ function OnGridScreen() {
     function submitHandler(e) {
         e.preventDefault();
         setOnSubmit(true)
-        console.log(government, area, power);
         let number = (power / powerOfSingleModel) + 1
         setNumOfPanels(Math.floor(number))
     }
     function changeHandler() {
-        console.log("done");
         setOnSubmit(false)
-        setGovernment()
-        setArea()
-        setPower()
         setNumOfPanels()
     }
 
@@ -59,6 +54,7 @@ function OnGridScreen() {
                                 <div>
                                     <label className="data-input" htmlFor="government">Government
                                         <select name="government" id="government" required
+                                            value={government}
                                             onChange={(e) => setGovernment(e.target.value)}
                                         >
                                             {governments.map((x, i) => <option key={i} value={x.governorate_name_en}>{x.governorate_name_en}</option>)}
@@ -68,7 +64,8 @@ function OnGridScreen() {
                                         <label className="data-input flex-item" htmlFor="area">Area
                                             <div>
                                                 <input type="number" name="area" id="area" placeholder='E.X 50' required
-                                                    onChange={(e) => setArea(e.target.value)}
+                                                    value={area}
+                                                    onChange={(e) => setArea(e.target.value > 0 ? e.target.value : 0)}
                                                 />
                                                 <span>m<sup>2</sup></span>
                                             </div>
@@ -76,7 +73,8 @@ function OnGridScreen() {
                                         <label className="data-input flex-item" htmlFor="total-power">Total Power
                                             <div>
                                                 <input type="number" name="total-power" id="total-power" placeholder='E.X 100' required
-                                                    onChange={(e) => setPower(e.target.value)}
+                                                    value={power}
+                                                    onChange={(e) => setPower(e.target.value > 0 ? e.target.value : 0)}
                                                 />
                                                 <span>W</span>
                                             </div>
