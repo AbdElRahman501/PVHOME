@@ -31,6 +31,7 @@ section .bk {
 button {
     cursor: pointer;
 }
+
 .btn {
     font-family: 'Inter', sans-serif;
     padding: 16px 50px;
@@ -39,6 +40,7 @@ button {
     font-size: 16px;
     transition: all 0.2s;
 }
+
 .primary.btn {
     background-color: #B35C01;
     color: aliceblue;
@@ -48,6 +50,7 @@ button {
     background-color: #ffad55;
     color: #111B36;
 }
+
 .secondary.btn {
     background-color: unset;
     border: 1px solid #ffffff;
@@ -58,6 +61,7 @@ button {
     background-color: #ffad55;
     color: #111B36;
 }
+
 .grid-container {
     width: 100%;
     display: flex;
@@ -73,14 +77,17 @@ button {
     min-height: 300px;
 
 }
-.flex-container{
+
+.flex-container {
     display: flex;
     gap: 15px;
     justify-content: space-between;
 }
-.flex-item{
+
+.flex-item {
     width: 50%;
 }
+
 .big-icon {
     height: 150px;
     max-width: 250px;
@@ -119,16 +126,22 @@ nav {
     top: 0;
     z-index: 5;
     overflow-y: scroll;
-    -ms-overflow-style: none;  /* Internet Explorer 10+ */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    /* Firefox */
 }
-nav::-webkit-scrollbar { 
-    display: none;  /* Safari and Chrome */
+
+nav::-webkit-scrollbar {
+    display: none;
+    /* Safari and Chrome */
 }
-nav div.history{
+
+nav div.history {
     display: flex;
     align-items: center;
 }
+
 nav a {
     font-family: 'Inter', sans-serif;
     /* font-family: 'Lobster', cursive;
@@ -188,7 +201,7 @@ a.logo:hover {
     font-size: 35px;
 }
 
-#home .primary.btn{
+#home .primary.btn {
     margin: 35px auto;
 }
 
@@ -207,9 +220,11 @@ a.logo:hover {
 #design .grid-container {
     gap: 25px;
 }
-#design .blur-box  {
+
+#design .blur-box {
     position: relative;
 }
+
 #design .blur-box img {
     margin: 15px;
     object-fit: contain;
@@ -243,36 +258,42 @@ a.logo:hover {
     overflow-y: scroll;
 
 }
+
 .title .content::-webkit-scrollbar {
     display: none;
-  }
+}
+
 .title .content ul {
     margin: 0;
     padding: 0 15px;
 
 }
-.title:hover{
+
+.title:hover {
     bottom: 0;
     height: 100%;
     border-radius: 40px;
 }
-.title:hover > .content{
+
+.title:hover>.content {
     opacity: 1;
 }
+
 /* End design section */
 /************************************************************************************/
 /* start Data entry section */
 
-#data-entry{
+#data-entry {
     font-family: 'Inter', sans-serif;
 
 }
 
-#data-entry  button{
+#data-entry button {
     position: absolute;
     bottom: 10px;
 }
-.data-entry-container{
+
+.data-entry-container {
     background: #111B36;
     border-radius: 40px;
     padding: 0 15px;
@@ -282,15 +303,18 @@ a.logo:hover {
     width: 80%;
     position: relative;
 }
-.data-entry-box{
+
+.data-entry-box {
     height: 400px;
 }
+
 .data-input {
     position: relative;
     display: grid;
     margin: 10px 0;
     line-height: 1.7;
 }
+
 .data-input span {
     position: absolute;
     right: 5px;
@@ -298,6 +322,7 @@ a.logo:hover {
     color: #838383;
 
 }
+
 .data-input select,
 .data-input input {
     margin: 0;
@@ -308,16 +333,53 @@ a.logo:hover {
     border-radius: 10px;
     font-family: system-ui;
 }
-.data-input select{
+
+.data-input select {
     width: 100%;
 }
+
 .data-input select:focus,
 .data-input input:focus {
     outline: #B35C01;
     border: 2px solid #B35C01;
 
 }
-.flex-item input{
+
+.flex-item input {
     width: calc(100% - 49px);
     padding-right: 35px;
+}
+
+/* back */
+.back-enter {
+    transform: translateX(-100%);
+}
+
+.back-enter-active {
+    transform: translateX(0);
+}
+
+.back-exit {
+    transform: translateX(0);
+}
+
+.back-exit-active {
+    transform: translate(100%);
+}
+
+/* next */
+.next-enter {
+    transform: translateX(100%);
+}
+
+.next-enter-active {
+    transform: translateX(0);
+}
+
+.next-exit {
+    transform: translateX(0);
+}
+
+.next-exit-active {
+    transform: translateX(-100%);
 }

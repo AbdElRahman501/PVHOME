@@ -2,13 +2,15 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 function SystemsScreen() {
+
+
     return (
         <section id="design">
             <div className="center bk">
                 <div className="grid-container">
                     <div className="grid-item blur-box">
                         <div className="center">
-                            <img className="big-icon" src="images/image4.png" alt=""   />
+                            <img className="big-icon" src="/images/image4.png" alt="" />
                         </div>
                         <div className="title">
                             <h2>On Grid</h2>
@@ -26,13 +28,18 @@ function SystemsScreen() {
                                     <li>Doesn't Work At Night</li>
                                 </ul>
                             </div>
-                            <div className="center"><Link to="/dataEntry" className="none"><button
-                                className="btn secondary">Select</button></Link></div>
+                            <div className="center">
+                                <Link to="On Grid" className="none">
+                                    <button className="btn secondary" >
+                                        Select
+                                    </button>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                     <div className="grid-item blur-box">
                         <div className="center">
-                            <img className="big-icon" src="images/image5.png" alt=""   />
+                            <img className="big-icon" src="/images/image5.png" alt="" />
                         </div>
                         <div className="title">
                             <h2>Off Grid</h2>
@@ -51,13 +58,18 @@ function SystemsScreen() {
                                     <li>Battery Life Span is up to 10-15 years only compared</li>
                                 </ul>
                             </div>
-                            <div className="center"><Link to="/dataEntry" className="none"><button
-                                className="btn secondary">Select</button></Link></div>
+                            <div className="center">
+                                <Link to="Off Grid" className="none">
+                                    <button className="btn secondary" >
+                                        Select
+                                    </button>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                     <div className="grid-item blur-box">
                         <div className="center">
-                            <img className="big-icon" src="images/Group1.png" alt=""   />
+                            <img className="big-icon" src="/images/Group1.png" alt="" />
                         </div>
                         <div className="title">
                             <h2>Hybrid</h2>
@@ -76,8 +88,13 @@ function SystemsScreen() {
                                     <li>Battery Life Span is up to 10-15 years only compared</li>
                                 </ul>
                             </div>
-                            <div className="center"><Link to="/dataEntry" className="none"><button
-                                className="btn secondary">Select</button></Link></div>
+                            <div className="center">
+                                <Link to="Hybrid" className="none">
+                                    <button className="btn secondary" >
+                                        Select
+                                    </button>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>

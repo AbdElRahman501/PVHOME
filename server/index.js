@@ -15,6 +15,7 @@ app.use(express.urlencoded({extended: true ,limit: '50mb' }));
 
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
+mongoose.set('strictQuery',false);
 mongoose.connect(process.env.MONGODB_CLOUD, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

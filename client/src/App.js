@@ -1,29 +1,36 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import SlideRoutes from 'react-slide-routes';
+import { Route, Routes, useLocation } from "react-router-dom";
 import ScrollToTop from "./components/scrollTotop";
 import Navbar from "./components/Navbar";
 import HomeScreen from "./screens/HomeScreen";
 import SystemsScreen from "./screens/SystemsScreen";
-import DataEntryScreen from "./screens/DtatEntryScreen";
+import OnGridScreen from "./screens/OnGridScreen";
+import OffGridScreen from "./screens/OffGridScreen";
+import HybridScreen from "./screens/HybridScreen";
 
 function App() {
-  const [data, setData] = React.useState(null);
+  // const [data, setData] = React.useState(null);
 
-  React.useEffect(() => {
-    fetch("/api")
-      .then((res) => res.json())
-      .then((data) => setData(data.message));
-  }, []);
+  // React.useEffect(() => {
+  //   fetch("/api")
+  //     .then((res) => res.json())
+  //     .then((data) => setData(data.message));
+  // }, []);
+
+  const location = useLocation();
 
   return (
     <div>
       <Navbar />
       <ScrollToTop>
-        <Routes>
-        <Route path="/" element={<HomeScreen />} />
-        <Route path="/systems" element={<SystemsScreen />} /> 
-        <Route path="/dataEntry" element={<DataEntryScreen />} /> 
-        </Routes>
+        <SlideRoutes location={location} duration={400} >
+            <Route path="/" element={<HomeScreen />}  exact />
+            <Route path="/systems" element={<SystemsScreen />} />
+            <Route path="/systems/On Grid" element={<OnGridScreen />} />
+            <Route path="/systems/Off Grid" element={<OffGridScreen />} />
+            <Route path="/systems/Hybrid" element={<HybridScreen />} />
+        </SlideRoutes>
       </ScrollToTop>
     </div>
   )
