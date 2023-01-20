@@ -24,13 +24,17 @@ function App() {
     <div>
       <Navbar />
       <ScrollToTop>
-        <SlideRoutes location={location} duration={400} >
-            <Route path="/" element={<HomeScreen />}  exact />
+
+        {/* <SlideRoutes location={location} duration={400} > */}
+          <Routes>
+            <Route path="/" element={<HomeScreen />} exact />
             <Route path="/systems" element={<SystemsScreen />} />
             <Route path="/systems/On Grid" element={<OnGridScreen />} />
             <Route path="/systems/Off Grid" element={<OffGridScreen />} />
             <Route path="/systems/Hybrid" element={<HybridScreen />} />
-        </SlideRoutes>
+          </Routes>
+        {/* </SlideRoutes> */}
+
       </ScrollToTop>
     </div>
   )
