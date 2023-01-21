@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import Logo from './logo';
 
 function Navbar() {
   let { pathname } = useLocation();
@@ -9,7 +10,7 @@ function Navbar() {
   return (
     <div>
       <nav>
-        <Link to="/" className={pathname ? "logo none" : "logo none active"}>PVHOME</Link>
+        <Link to="/" className="none"><Logo pathname={pathname} /></Link>
         {pathname && pages.map((x, i) => {
           let item = x.split("%20").join(" ")
           return <div className='history' key={i} >
@@ -19,7 +20,7 @@ function Navbar() {
                 fill="white" />
             </svg>
             <Link to={pages.length > 0 && pages[pages.length - 1].split("%20").join(" ") === item ? pages.join("/") : item}
-              className={pages[pages.length - 1].split("%20").join(" ") === item? "active none" : "none"}>
+              className={pages[pages.length - 1].split("%20").join(" ") === item ? "active none" : "none"}>
               {item.toUpperCase()}</Link>
           </div>
         })
