@@ -1,5 +1,5 @@
 import React from 'react'
-import governments from "../components/governorates.json"
+import governments from "../../components/governments.json"
 
 function OnGridDataEntry(props) {
     const { data, setData, submitHandler } = props

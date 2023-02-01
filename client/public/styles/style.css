@@ -182,13 +182,13 @@ a.active:hover{
     width: 4rem;
     transition: all 0.5s;
 }
-.logo path {
+.logo path[stroke*="#B35C01"]{
     stroke: #fff;
 }
 .logo path.fill {
     fill: #fff;
 }
-a .logo:hover path {
+a .logo:hover path[stroke*="#B35C01"] {
     stroke: #B35C01;
 }
 a .logo:hover path.fill {
@@ -197,14 +197,14 @@ a .logo:hover path.fill {
 .logo.active {
     width: 8rem;
 }
-.logo.active path {
+.logo.active path[stroke*="#B35C01"] {
     stroke: #B35C01;
 
 }
 .logo.active path.fill {
     fill: #B35C01;
 }
-a .logo.active:hover path {
+a .logo.active:hover path[stroke*="#B35C01"] {
     stroke: #fff
 }
 a .logo.active:hover path.fill {
@@ -266,6 +266,9 @@ a .logo.active:hover path.fill {
     height: 100%;
     border-radius: 40px;
 }
+#design .blur-box:hover .content {
+    opacity: 1;
+}
 #design .blur-box img {
     margin: 15px;
     object-fit: contain;
@@ -310,11 +313,6 @@ a .logo.active:hover path.fill {
 
 }
 
-
-
-.title:hover>.content {
-    opacity: 1;
-}
 
 /* End design section */
 /************************************************************************************/
@@ -431,6 +429,9 @@ a .logo.active:hover path.fill {
 }
 .device{
     grid-area: dv;
+}
+.hd{
+    grid-area: hd;
 }
 .device.btn{
     grid-area: unset;

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
-import OnGridDataEntry from '../onGrid/OnGridDataEntry';
-import OnGridResults from '../onGrid/OnGridResults';
+import OnGridDataEntry from '../SystemsComponents/onGrid/OnGridDataEntry';
+import OnGridResults from '../SystemsComponents/onGrid/OnGridResults';
 
 function OnGridScreen() {
     const [data, setData] = useState({ });
@@ -34,7 +34,7 @@ function OnGridScreen() {
                     </div>
                     {!onSubmit
                         ? <OnGridDataEntry submitHandler={submitHandler} data={data} setData={setData}  />
-                        : <OnGridResults changeHandler={changeHandler} numOfPanels={numOfPanels} powerOfSingleModel={powerOfSingleModel}  />
+                        : <OnGridResults changeHandler={changeHandler} numOfPanels={numOfPanels} powerOfSingleModel={powerOfSingleModel} data={data}  />
                     }
                 </div>
             </div>
