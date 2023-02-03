@@ -45,7 +45,7 @@ function OffGridDataEntry(props) {
         e.preventDefault();
         setOnSubmit(true)
         setData({ totalEnergy, totalPower, devices })
-        console.log(devices);
+        // console.log(devices);
     }
 
     function nFormatter(num, digits) {
@@ -68,12 +68,12 @@ function OffGridDataEntry(props) {
                     {/* <div className="data-grid-container" >
                         <label className="data-input device " htmlFor="area">Area
                             <div>
-                                <input type="number" name="area" id="area" />
+                                <input type="number" name="area" id="area" required />
                                 <span>m<sup>2</sup></span>
                             </div>
                         </label>
                         <label className="data-input hd" htmlFor="government">Government
-                            <select name="government" id="government">
+                            <select name="government" id="government" required>
                                 <option value="cairo">Cairo</option>
                                 <option value="qalubia">Qalubia</option>
                                 <option value="ealexandia">Ealexandia</option>
@@ -92,7 +92,7 @@ function OffGridDataEntry(props) {
                         <div className="data-grid-container" key={i}>
                             <label className="data-input device" htmlFor="device" >
                                 <div>
-                                    <input type="text" name="device" id="device" required placeholder={x.deviceName}
+                                    <input type="text" name="device" id="device" required={totalEnergy === 0} placeholder={x.deviceName}
                                         value={x.device}
                                         onChange={(e) => setDevices(pv => pv.map((y, k) => k == i ? { ...y, device: e.target.value } : y))}
                                     />
@@ -101,7 +101,7 @@ function OffGridDataEntry(props) {
                             </label>
                             <label className="data-input " htmlFor="quantity">
                                 <div>
-                                    <input type="number" name="quantity" id="quantity" required
+                                    <input type="number" name="quantity" id="quantity" required={totalEnergy === 0}
                                         value={x.quantity}
                                         onChange={(e) => setDevices(pv => pv.map((y, k) => k == i ? { ...y, quantity: Number(e.target.value) > 0 ? Number(e.target.value) : 0 } : y))}
                                     />
@@ -111,7 +111,7 @@ function OffGridDataEntry(props) {
                             </label>
                             <label className="data-input " htmlFor="power">
                                 <div>
-                                    <input type="number" name="Power" id="power" required
+                                    <input type="number" name="Power" id="power" required={totalEnergy === 0}
                                         value={x.power}
                                         onChange={(e) => setDevices(pv => pv.map((y, k) => k == i ? { ...y, power: Number(e.target.value) > 0 ? Number(e.target.value) : 0 } : y))}
                                     />
@@ -120,7 +120,7 @@ function OffGridDataEntry(props) {
                             </label>
                             <label className="data-input " htmlFor="hours">
                                 <div>
-                                    <input type="number" name="hours" id="hours" required
+                                    <input type="number" name="hours" id="hours" required={totalEnergy === 0}
                                         value={x.hours}
                                         onChange={(e) => setDevices(pv => pv.map((y, k) => k == i ? { ...y, hours: Number(e.target.value) > 0 ? Number(e.target.value) : 0 } : y))}
                                     />

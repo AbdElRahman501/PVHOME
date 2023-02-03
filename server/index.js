@@ -3,6 +3,8 @@ import express from "express";
 import 'dotenv/config'
 import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
+import inverterRouter from './routers/inverterRouter.js';
+import batteryRouter from './routers/batteriesRouter.js';
 
 const PORT = process.env.PORT || 3001;
 
@@ -24,6 +26,13 @@ mongoose.connect(process.env.MONGODB_CLOUD, {
 app.get("/api", (req, res) => {
     res.json({ message: "Hello from server!" });
 });
+
+
+
+app.use("/api/inverters", inverterRouter);
+app.use("/api/batteries", batteryRouter);
+
+
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));

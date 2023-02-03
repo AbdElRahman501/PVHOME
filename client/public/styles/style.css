@@ -4,18 +4,22 @@ body {
 }
 
 /* Common */
-.success{
+.success {
     background-color: green;
 }
-.success.btn:hover{
+
+.success.btn:hover {
     background-color: rgb(3, 72, 3);
 }
-.failed{
+
+.failed {
     background-color: red;
 }
-.failed.btn:hover{
+
+.failed.btn:hover {
     background-color: rgb(93, 5, 5);
 }
+
 a.none {
     text-decoration: none;
 }
@@ -26,6 +30,14 @@ section .bk {
     height: unset;
 }
 
+.relative {
+    position: relative;
+}
+.absolute{
+    position: absolute;
+    left: 10px;
+    top: 0;
+}
 .center {
     display: flex;
     justify-content: center;
@@ -52,7 +64,8 @@ button {
     font-size: 16px;
     transition: all 0.2s;
 }
-.disabled{
+
+.disabled {
     opacity: 0.3;
     pointer-events: none;
 }
@@ -166,50 +179,64 @@ nav a {
 nav a:hover {
     color: #B35C01;
 }
-a.active{
+
+a.active {
     color: #B35C01;
     font-size: 25px;
     font-weight: 800;
 }
-a.active:hover{
+
+a.active:hover {
     color: white;
 }
 
 .back-arrow {
     width: 20px;
 }
+
 .logo {
     width: 4rem;
     transition: all 0.5s;
+    height: 46px;
 }
-.logo path[stroke*="#B35C01"]{
+
+.logo path[stroke*="#B35C01"] {
     stroke: #fff;
 }
+
 .logo path.fill {
     fill: #fff;
 }
+
 a .logo:hover path[stroke*="#B35C01"] {
     stroke: #B35C01;
 }
+
 a .logo:hover path.fill {
     fill: #B35C01;
 }
+
 .logo.active {
     width: 8rem;
 }
+
 .logo.active path[stroke*="#B35C01"] {
     stroke: #B35C01;
 
 }
+
 .logo.active path.fill {
     fill: #B35C01;
 }
+
 a .logo.active:hover path[stroke*="#B35C01"] {
     stroke: #fff
 }
+
 a .logo.active:hover path.fill {
     fill: #ffffff;
 }
+
 /* End nav bar */
 /************************************************************************************/
 /* start back ground image bar */
@@ -261,14 +288,17 @@ a .logo.active:hover path.fill {
 #design .blur-box {
     position: relative;
 }
+
 #design .blur-box:hover .title {
     bottom: 0;
     height: 100%;
     border-radius: 40px;
 }
+
 #design .blur-box:hover .content {
     opacity: 1;
 }
+
 #design .blur-box img {
     margin: 15px;
     object-fit: contain;
@@ -340,6 +370,34 @@ a .logo.active:hover path.fill {
 
 .data-entry-box {
     min-height: 400px;
+}
+
+.data-entry-container .data-slider {
+    display: flex;
+    overflow: hidden;
+    width: 80%;
+}
+
+.data-entry-container .back button,
+.data-entry-container .next button {
+    background: none;
+    border: 0;
+    font-size: 2.5rem;
+    color: #fff;
+}
+
+.data-entry-container .next {
+    position: absolute;
+    right: 0;
+}
+
+.data-entry-container .back {
+    position: absolute;
+    left: 0;
+}
+
+.data-slider .data-entry-box {
+    min-width: 100%;
 }
 
 .data-input {
@@ -427,13 +485,16 @@ a .logo.active:hover path.fill {
     gap: 15px;
     align-items: flex-end;
 }
-.device{
+
+.device {
     grid-area: dv;
 }
-.hd{
+
+.hd {
     grid-area: hd;
 }
-.device.btn{
+
+.device.btn {
     grid-area: unset;
     margin: 0 !important;
     color: white;
@@ -441,13 +502,88 @@ a .logo.active:hover path.fill {
     padding: 0;
     border-radius: 10px;
 }
-.results p{
+
+.results p {
     font-size: 12px;
 }
+
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-areas: "sc sc sc sc sc nm nm nm";
+    margin: 5px 0;
+}
+
+.grid p {
+    font-size: 12px;
+    margin: 0;
+}
+
+.grid h6.nm {
+    font-size: 12px;
+    margin: 0;
+    font-weight: 600;
+    text-align: center;
+}
+
+.grid.scores {
+    background-color: #fff;
+    color: #b35c01;
+    border-radius: 10px;
+    height: 80px;
+    align-items: center;
+}
+
+.grid.scores p {
+    font-size: 14px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 89%;
+    padding: 0;
+    border: 5px solid;
+}
+.grid.scores p span{
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    border: 0;
+    position: absolute;
+    border: 7px solid #fff;
+}
+.horizontal-slider{
+    width: 100%;
+    height: 90px;
+    overflow: hidden;
+    position: absolute;
+    background-color: #111B36;
+    transition: all 0.25s linear;
+}
+.grid.scores h4 {
+    font-size: 25px;
+    padding: 0 10px;
+    margin: 0;
+}
+
+.grid.scores h6.nm {
+    font-size: 14px;
+    padding: 0 10px;
+    color: #111B36;
+    cursor: pointer;
+}
+
+.nm {
+    grid-area: nm;
+}
+
 @media screen and (max-width: 600px) {
-    .device.btn span{
+    .device.btn span {
         display: none;
     }
+
     .device.btn {
         font-size: 20px;
     }

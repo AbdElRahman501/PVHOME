@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react';
+import React, { useState } from 'react'
 import OffGridDataEntry from '../SystemsComponents/offGrid/OffGridDataEntry';
 import OffGridResults from '../SystemsComponents/offGrid/OffGridResults';
 
@@ -7,9 +6,8 @@ import OffGridResults from '../SystemsComponents/offGrid/OffGridResults';
 function OffGridScreen() {
 
     const [onSubmit, setOnSubmit] = useState(false)
-    const [data , setData] = useState({})
+    const [data, setData] = useState({})
 
-    console.log(data);
     return (
         <section id="data-entry">
             <div className="center bk">
@@ -18,10 +16,10 @@ function OffGridScreen() {
                         <h1>OFF Grid</h1>
                     </div>
                     {!onSubmit
-                    ?<OffGridDataEntry data={data} setData={setData} setOnSubmit={setOnSubmit} />
-                    :<OffGridResults data={data} setOnSubmit={setOnSubmit} />
+                        ? <OffGridDataEntry data={data} setData={setData} setOnSubmit={setOnSubmit} />
+                        : <OffGridResults data={data} setOnSubmit={setOnSubmit} />
                     }
-                    
+
                 </div>
             </div>
         </section>
