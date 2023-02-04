@@ -13,13 +13,13 @@ export async function choseInverter(power, setInverters) {
     }
 }
 export async function choseBattery(energy, inverter, setBattery) {
-    setBattery({ battery:"", loading: true, error: false })
+    setBattery({ batteries:"", loading: true, error: false })
     try {
-        const { data:battery } = await Axios.post("/api/batteries/choseBattery", { energy, inverter });
-        setBattery({ battery, loading: false, error: false })
+        const { data:batteries } = await Axios.post("/api/batteries/choseBattery", { energy, inverter });
+        setBattery({ batteries, loading: false, error: false })
 
     } catch (error) {
-        setBattery({ battery:"", loading: false, error: error })
+        setBattery({ batteries:"", loading: false, error: error })
 
     }
 }

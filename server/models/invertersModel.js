@@ -3,7 +3,7 @@ import mongoose from "mongoose"
 
 const inverterSchema = new mongoose.Schema({
     name: { type: String },
-    voltage: { type: Number },
+    voltage: [Number],
     power: { type: Number },
     price: { type: Number }
 }, {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react';
 import { choseInverter } from '../../actions/choseElements';
+import CircleProgressBar from '../../components/CircleProgressBar';
 
 function OnGridResults(props) {
     const { data, numOfPanels, powerOfSingleModel, changeHandler } = props
@@ -12,7 +13,7 @@ function OnGridResults(props) {
 
     useEffect(() => {
         if (data) {
-            setInverter(choseInverter(data.power,setInverter));
+            setInverter(choseInverter(data.power, setInverter));
         }
     }, [data])
     console.log(inverters);
@@ -34,10 +35,10 @@ function OnGridResults(props) {
                             <div className='horizontal-slider' style={{ height: height + "px" }}>
                                 {inverters.map(inverter => <div key={inverter.id} className='grid scores '>
                                     <h4>#{inverter?.rank}</h4>
-                                    <p><span className='center' style={{ clip: `rect(0px,${inverter.totalScore < 50 ? (75 - ((inverter.totalScore / 100) * 70)) : 35}px,${inverter.totalScore > 50 ? (75 - ((inverter.totalScore / 100) * 70)) : 71}px,0px)`, rotate: `${inverter.totalScore < 50 ? 35 - (75 - ((inverter.totalScore / 100) * 70)) : 0}deg` }}></span>{inverter.totalScore.toFixed()}%</p>
-                                    <p><span className='center' style={{ clip: `rect(0px,${inverter.numScore < 50 ? (75 - ((inverter.numScore / 100) * 70)) : 35}px,${inverter.numScore > 50 ? (75 - ((inverter.numScore / 100) * 70)) : 71}px,0px)`, rotate: `${inverter.numScore < 50 ? 35 - (75 - ((inverter.numScore / 100) * 70)) : 0}deg` }}></span>{inverter.numScore.toFixed()}%</p>
-                                    <p><span className='center' style={{ clip: `rect(0px,${inverter.powerScore < 50 ? (75 - ((inverter.powerScore / 100) * 70)) : 35}px,${inverter.powerScore > 50 ? (75 - ((inverter.powerScore / 100) * 70)) : 71}px,0px)`, rotate: `${inverter.powerScore < 50 ? 35 - (75 - ((inverter.powerScore / 100) * 70)) : 0}deg` }}></span>{inverter.powerScore.toFixed()}%</p>
-                                    <p><span className='center' style={{ clip: `rect(0px,${inverter.priceScore < 50 ? (75 - ((inverter.priceScore / 100) * 70)) : 35}px,${inverter.priceScore > 50 ? (75 - ((inverter.priceScore / 100) * 70)) : 71}px,0px)`, rotate: `${inverter.priceScore < 50 ? 35 - (75 - ((inverter.priceScore / 100) * 70)) : 0}deg` }}></span>{inverter.priceScore.toFixed()}%</p>
+                                    <CircleProgressBar>{inverter.totalScore.toFixed(0)}</CircleProgressBar>
+                                    <CircleProgressBar>{inverter.numScore.toFixed(0)}</CircleProgressBar>
+                                    <CircleProgressBar>{inverter.powerScore.toFixed(0)}</CircleProgressBar>
+                                    <CircleProgressBar>{inverter.priceScore.toFixed(0)}</CircleProgressBar>
                                     <h6 className='nm' onClick={() => setHeight(pv => pv == 90 ? 90 * 3 : 90)}>{inverter.num + " X " + inverter.name} <i className='fa fa-angle-down'></i></h6>
                                 </div>)}
                             </div>

@@ -17,15 +17,15 @@ batteryRouter.get(
 batteryRouter.get(
   '/seed',
   expressAsyncHandler(async (req, res) => {
-    await Batteries.collection.drop();
-    const createdBatteries = await Batteries.insertMany(data.batteries);
+    // await Batteries.collection.drop();
+    // const createdBatteries = await Batteries.insertMany(data.batteries);
     res.json(createdBatteries);
   })
 );
 
 
 
-export function choseBattery(energy, inverter,batteries) {
+function choseBattery(energy, inverter, batteries) {
   let chosenBat = []
   let score = []
 
@@ -33,21 +33,26 @@ export function choseBattery(energy, inverter,batteries) {
     return a.ampereHour - b.ampereHour;
   });
   for (let battery of batteries) {
-    let batteryOfOne = energy / (battery.dod * inverter.voltage)
-    // console.log(batteryOfOne);
-    let branch = batteryOfOne / battery.ampereHour;
-    branch = Math.floor(branch) < branch ? Math.floor(branch) + 1 : Math.floor(branch)
-    let batteryPerBranch = inverter.voltage / battery.voltage
-    batteryPerBranch = Math.floor(batteryPerBranch) < batteryPerBranch ? Math.floor(batteryPerBranch) + 1 : Math.floor(batteryPerBranch)
-    if (batteryPerBranch >= 1) {
-      // console.log(batteryOfOne,branch,batteryPerBranch) 
-      if (batteryOfOne < battery.ampereHour) {
-        return { branch, batteryPerBranch, num: branch * batteryPerBranch, ...battery }
-      } else {
+    let voltage = inverter.voltage.find(x => x > battery.voltage) || inverter.voltage.find(x => x >= battery.voltage)
+    if (voltage) {
+      let batteryOfOne = energy / (battery.dod * voltage)
+      // console.log(batteryOfOne);
+      let branch = batteryOfOne / battery.ampereHour;
+      branch = Math.floor(branch) < branch ? Math.floor(branch) + 1 : Math.floor(branch)
+      let batteryPerBranch = voltage / battery.voltage
+      batteryPerBranch = Math.floor(batteryPerBranch) < batteryPerBranch ? Math.floor(batteryPerBranch) + 1 : Math.floor(batteryPerBranch)
+      if (batteryPerBranch >= 1) {
+
+        // console.log(batteryOfOne,branch,batteryPerBranch) 
         let num = branch * batteryPerBranch
         let totalPrice = (num * battery.price);
-        chosenBat.push({ ...battery, branch, batteryPerBranch, num, totalPrice })
-
+        chosenBat.push({
+          ...battery,
+          branch,
+          batteryPerBranch,
+          num,
+          totalPrice
+        })
       }
     }
 
@@ -60,15 +65,34 @@ export function choseBattery(energy, inverter,batteries) {
     // let priceRate =  chosenBat.reduce((b, a) => a.totalPrice+b, 0)
     let priceScore = 100 - ((battery.totalPrice / priceRate) * 100)
     let totalScore = (priceScore + numScore) / 2
-    score.push({ ...battery, numScore, totalScore, priceScore })
+    score.push({
+      ...battery,
+      numScore,
+      totalScore,
+      priceScore
+    })
     // console.log(battery.num,battery.amperHour,"numScore "+numScore.toFixed(2),"priceRate "+priceScore.toFixed(2),"totalScore "+totalScore.toFixed(2));
   }
   // console.log(score.map(x => ({ total: x.totalScore?.toFixed(2), priceS: x.priceScore?.toFixed(2), numX: x.numScore?.toFixed(2) })));
 
   // console.log(score);
-  return (score.find(x => x.totalScore === Math.max(...score.map(x => x.totalScore))));
+  let first = {
+    ...score.find(x => x.totalScore === Math.max(...score.map(x => x.totalScore))),
+    rank: 1
+  }
+  let second = {
+    ...score.filter(x => x.id !== first.id).find(x => x.totalScore === Math.max(...score.filter(x => x.id !== first.id).map(x => x.totalScore))),
+    rank: 2
+  }
+  let third = {
+    ...score.filter(x => x.id !== first.id && x.id !== second.id).find(x => x.totalScore === Math.max(...score.filter(x => x.id !== first.id && x.id !== second.id).map(x => x.totalScore))),
+    rank: 3
+  }
+
+  return ([first, second, third])
 
 }
+
 batteryRouter.post(
   '/choseBattery',
   expressAsyncHandler(async (req, res) => {
@@ -77,7 +101,7 @@ batteryRouter.post(
     batteries = batteries.map(x => {
       return { id: x._id, name: x.name, voltage: x.voltage, ampereHour: x.ampereHour, price: x.price, dod: x.dod }
     })
-    let response = choseBattery(req.body.energy,req.body.inverter,batteries );
+    let response = choseBattery(req.body.energy, req.body.inverter, batteries);
     res.json(response);
   })
 );

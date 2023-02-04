@@ -375,7 +375,9 @@ a .logo.active:hover path.fill {
 .data-entry-container .data-slider {
     display: flex;
     overflow: hidden;
-    width: 80%;
+    width: 90%;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
 }
 
 .data-entry-container .back button,
@@ -397,7 +399,9 @@ a .logo.active:hover path.fill {
 }
 
 .data-slider .data-entry-box {
-    min-width: 100%;
+    min-width: calc(100% - 10px);
+    scroll-snap-align: start;
+    padding: 0 5px;
 }
 
 .data-input {
@@ -518,6 +522,8 @@ a .logo.active:hover path.fill {
 .grid p {
     font-size: 12px;
     margin: 0;
+    width: 75px;
+    text-align: center;
 }
 
 .grid h6.nm {
@@ -534,25 +540,8 @@ a .logo.active:hover path.fill {
     height: 80px;
     align-items: center;
 }
-
-.grid.scores p {
-    font-size: 14px;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 89%;
-    padding: 0;
-    border: 5px solid;
-}
-.grid.scores p span{
-    width: 58px;
-    height: 58px;
-    border-radius: 50%;
-    border: 0;
-    position: absolute;
-    border: 7px solid #fff;
+.horizontal-slider-box{
+    height: 90px;
 }
 .horizontal-slider{
     width: 100%;
