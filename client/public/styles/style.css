@@ -255,7 +255,7 @@ a .logo.active:hover path.fill {
 
 .bk.cover {
     background: rgb(0 0 0 / 43%);
-    backdrop-filter: blur(4.5px);
+    backdrop-filter: blur(1.5px);
 }
 
 /* End back ground image bar */
@@ -369,7 +369,7 @@ a .logo.active:hover path.fill {
 }
 
 .data-entry-box {
-    min-height: 400px;
+    min-height: 300px;
 }
 
 .data-entry-container .data-slider {
@@ -386,16 +386,17 @@ a .logo.active:hover path.fill {
     border: 0;
     font-size: 2.5rem;
     color: #fff;
+    margin: 0;
 }
 
 .data-entry-container .next {
     position: absolute;
-    right: 0;
+    right: -15px;
 }
 
 .data-entry-container .back {
     position: absolute;
-    left: 0;
+    left: -15px;
 }
 
 .data-slider .data-entry-box {
@@ -516,7 +517,7 @@ a .logo.active:hover path.fill {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     grid-template-areas: "sc sc sc sc sc nm nm nm";
-    margin: 5px 0;
+    margin: 6px 0;
 }
 
 .grid p {
@@ -567,13 +568,48 @@ a .logo.active:hover path.fill {
 .nm {
     grid-area: nm;
 }
-
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
+    #data-entry {
+        width: 100vw;
+    }
+}
+@media screen and (max-width: 650px) {
     .device.btn span {
         display: none;
     }
 
     .device.btn {
         font-size: 20px;
+    }
+    
+    .data-entry-container{
+        width: calc(100% - 30px);
+        padding: 0 10px;
+    }
+    .grid.data{
+        width: 90%;
+        margin: 0 auto;
+
+    }
+    .grid.data h4{
+        font-size: 10.5px;
+    }
+    .grid p {
+        font-size: 10px;
+        width: unset;
+    }
+    .grid.scores h6.nm {
+        font-size: 10px;
+    }
+    .data-entry-container .data-slider{
+        width: 100%;
+    }
+    .calc-data{
+        font-size: 12px;
+        max-width: 80%;
+        margin: 1px;
+    }
+    .data-entry-container .back button, .data-entry-container .next button {
+        font-size: 24px;
     }
 }

@@ -42,8 +42,8 @@ function OffGridResults(props) {
             </div>
             <div className="center relative">
                 <div className='absolute'>
-                    <p>{NumFormatter(data.totalPower, 2)}* 1.3 // {NumFormatter(data.totalPower * 1.3, 2)}  W</p>
-                    <p>{NumFormatter(data.totalEnergy, 2)} whr</p>
+                    <p className='calc-data'>{NumFormatter(data.totalPower, 2)}* 1.3 // {NumFormatter(data.totalPower * 1.3, 2)}  W</p>
+                    <p className='calc-data'>{NumFormatter(data.totalEnergy, 2)} whr</p>
                 </div>
                 <button className="btn secondary" onClick={() => setOnSubmit(false)} >Change</button>
             </div>

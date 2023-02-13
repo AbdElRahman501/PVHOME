@@ -50,7 +50,7 @@ function BatteryComponents(props) {
                     </div>
                 </div>
 
-                <div className='grid' style={{ gridTemplateColumns: "repeat(5,1fr)", height: "50px" }}>
+                <div className='grid data' style={{ gridTemplateColumns: "repeat(5,1fr)", height: "50px" }}>
                     <h4>NUMBER</h4>
                     <h4>PRICE</h4>
                     <h4>TOTAL COST</h4>
@@ -59,7 +59,7 @@ function BatteryComponents(props) {
 
 
                 </div>
-                <div className='grid' style={{ gridTemplateColumns: "repeat(5,1fr)", height: "50px" }}>
+                <div className='grid data' style={{ gridTemplateColumns: "repeat(5,1fr)", height: "50px" }}>
                     <h4>{batteries[0].branch + "x" + batteries[0].batteryPerBranch + "=" + batteries[0].num} </h4>
                     <h4>{batteries[0].price} EGP </h4>
                     <h4>{batteries[0].totalPrice} EGP </h4>

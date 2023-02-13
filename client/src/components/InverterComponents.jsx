@@ -69,7 +69,7 @@ function InverterComponents(props) {
           </div>
         </div>
 
-        <div className='grid' style={{ gridTemplateColumns: "repeat(6,1fr)", height: "50px" }}>
+        <div className='grid data' style={{ gridTemplateColumns: "repeat(6,1fr)", height: "50px" }}>
           <h4>NUMBER</h4>
           <h4>PRICE</h4>
           <h4>TOTAL COST</h4>
@@ -78,7 +78,7 @@ function InverterComponents(props) {
           <h4>VOLTAGE</h4>
 
         </div>
-        <div className='grid' style={{ gridTemplateColumns: "repeat(6,1fr)", height: "50px" }}>
+        <div className='grid data' style={{ gridTemplateColumns: "repeat(6,1fr)", height: "50px" }}>
           <h4>{inverters[0].num} </h4>
           <h4>{inverters[0].price} EGP </h4>
           <h4>{inverters[0].totalPrice} EGP </h4>

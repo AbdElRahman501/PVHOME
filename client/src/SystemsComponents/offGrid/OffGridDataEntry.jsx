@@ -92,7 +92,7 @@ function OffGridDataEntry(props) {
                         <div className="data-grid-container" key={i}>
                             <label className="data-input device" htmlFor="device" >
                                 <div>
-                                    <input type="text" name="device" id="device" required={totalEnergy === 0} placeholder={x.deviceName}
+                                    <input type="text" name="device" id="device" required={i === 0 } placeholder={x.deviceName}
                                         value={x.device}
                                         onChange={(e) => setDevices(pv => pv.map((y, k) => k == i ? { ...y, device: e.target.value } : y))}
                                     />
@@ -101,8 +101,8 @@ function OffGridDataEntry(props) {
                             </label>
                             <label className="data-input " htmlFor="quantity">
                                 <div>
-                                    <input type="number" name="quantity" id="quantity" required={totalEnergy === 0}
-                                        value={x.quantity}
+                                    <input type="number" name="quantity" id="quantity" required={devices[i].device ? true : false} 
+                                        value={x.quantity===0 ? "" :x.quantity}
                                         onChange={(e) => setDevices(pv => pv.map((y, k) => k == i ? { ...y, quantity: Number(e.target.value) > 0 ? Number(e.target.value) : 0 } : y))}
                                     />
 
@@ -111,8 +111,8 @@ function OffGridDataEntry(props) {
                             </label>
                             <label className="data-input " htmlFor="power">
                                 <div>
-                                    <input type="number" name="Power" id="power" required={totalEnergy === 0}
-                                        value={x.power}
+                                    <input type="number" name="Power" id="power" required={devices[i]?.device ? true : false}
+                                        value={x.power===0 ? "" :x.power}
                                         onChange={(e) => setDevices(pv => pv.map((y, k) => k == i ? { ...y, power: Number(e.target.value) > 0 ? Number(e.target.value) : 0 } : y))}
                                     />
                                     <span>W</span>
@@ -120,8 +120,8 @@ function OffGridDataEntry(props) {
                             </label>
                             <label className="data-input " htmlFor="hours">
                                 <div>
-                                    <input type="number" name="hours" id="hours" required={totalEnergy === 0}
-                                        value={x.hours}
+                                    <input type="number" name="hours" id="hours" required={devices[i]?.device ? true : false}
+                                        value={x.hours===0 ? "" :x.hours}
                                         onChange={(e) => setDevices(pv => pv.map((y, k) => k == i ? { ...y, hours: Number(e.target.value) > 0 ? Number(e.target.value) : 0 } : y))}
                                     />
                                     <span>H</span>

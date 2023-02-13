@@ -68,3 +68,13 @@
     fill: #fff;
     text-anchor: middle;
 }
+@media screen and (max-width: 600px) {
+    .progress-bar {
+        width: 50px;
+        height: 50px;
+    }
+    .progress {
+        width: 50px;
+        height: 50px;
+    }
+}
