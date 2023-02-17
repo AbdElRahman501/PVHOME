@@ -25,20 +25,30 @@ batteryRouter.get(
 
 
 
-function choseBattery(energy, inverter, batteries) {
+function choseBattery(data) {
+  let { energy, loss, dod, autonomyDay, inverter, batteries } = data
   let chosenBat = []
   let score = []
-
+  energy = energy / (inverter.efficiency / 100) || energy / 0.97
+  energy = energy / loss || energy / 0.85
+  // console.log(energy)
   batteries.sort(function (a, b) {
     return a.ampereHour - b.ampereHour;
   });
   for (let battery of batteries) {
-    let voltage = inverter.voltage.find(x => x > battery.voltage) || inverter.voltage.find(x => x >= battery.voltage)
+    let voltage
+    if (Math.max(...inverter.voltage.map(x => x)) >= battery.voltage) {
+      voltage = Math.max(...inverter.voltage.map(x => x))
+    }
+    // = inverter.voltage.find(x => x > ) || inverter.voltage.find(x => x >= battery.voltage)
+    // console.log(voltage)
     if (voltage) {
-      let batteryOfOne = energy / (battery.dod * voltage)
+      let batteryOfOne = energy / (dod * voltage) || energy / (battery.dod * voltage)
       // console.log(batteryOfOne);
+      batteryOfOne = batteryOfOne * autonomyDay || batteryOfOne
       let branch = batteryOfOne / battery.ampereHour;
-      branch = Math.floor(branch) < branch ? Math.floor(branch) + 1 : Math.floor(branch)
+      // branch = Math.floor(branch) < branch ? Math.floor(branch) + 1 : Math.floor(branch)
+      branch = Number(branch.toFixed(0))
       let batteryPerBranch = voltage / battery.voltage
       batteryPerBranch = Math.floor(batteryPerBranch) < batteryPerBranch ? Math.floor(batteryPerBranch) + 1 : Math.floor(batteryPerBranch)
       if (batteryPerBranch >= 1) {
@@ -64,6 +74,8 @@ function choseBattery(energy, inverter, batteries) {
     let priceRate = Math.max(...chosenBat.map(x => x.totalPrice))
     // let priceRate =  chosenBat.reduce((b, a) => a.totalPrice+b, 0)
     let priceScore = 100 - ((battery.totalPrice / priceRate) * 100)
+    priceRate = Math.max(...chosenBat.map(x => (100 - ((x.totalPrice / priceRate) * 100))))
+    priceScore = (priceScore / priceRate) * 100
     let totalScore = (priceScore + numScore) / 2
     score.push({
       ...battery,
@@ -71,7 +83,7 @@ function choseBattery(energy, inverter, batteries) {
       totalScore,
       priceScore
     })
-    // console.log(battery.num,battery.amperHour,"numScore "+numScore.toFixed(2),"priceRate "+priceScore.toFixed(2),"totalScore "+totalScore.toFixed(2));
+    // console.log(battery.num, battery.ampereHour, "numScore " + numScore.toFixed(2), "priceRate " + priceScore.toFixed(2), "totalScore " + totalScore.toFixed(2));
   }
   // console.log(score.map(x => ({ total: x.totalScore?.toFixed(2), priceS: x.priceScore?.toFixed(2), numX: x.numScore?.toFixed(2) })));
 
@@ -101,7 +113,15 @@ batteryRouter.post(
     batteries = batteries.map(x => {
       return { id: x._id, name: x.name, voltage: x.voltage, ampereHour: x.ampereHour, price: x.price, dod: x.dod }
     })
-    let response = choseBattery(req.body.energy, req.body.inverter, batteries);
+    let response = choseBattery(
+      {
+        energy: req.body.energy,
+        loss: req.body.loss,
+        dod: req.body.dod,
+        autonomyDay: req.body.autonomyDay,
+        inverter: req.body.inverter,
+        batteries
+      });
     res.json(response);
   })
 );
