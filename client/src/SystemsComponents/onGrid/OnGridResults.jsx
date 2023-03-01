@@ -14,7 +14,7 @@ function OnGridResults(props) {
 
     useEffect(() => {
         if (data) {
-            choseInverter(data.power, setInverters);
+            choseInverter(data.power,data.rang, setInverters);
         }
     }, [data])
     useEffect(() => {

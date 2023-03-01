@@ -5,17 +5,16 @@ import { choseBattery, choseInverter } from '../actions/choseElements'
 
 
 function InverterComponents(props) {
-  const { data, setBattery } = props
+  const { data, setBattery,InverterState, setInverters } = props
 
   const [selectedInverter, setSelectedInverter] = useState("")
   const [height, setHeight] = useState(false)
-  const [InverterState, setInverters] = useState({})
 
   const { inverters, loading: inverterLoading, error: inverterError } = InverterState
 
   useEffect(() => {
     if (data) {
-      choseInverter(data.totalPower, setInverters);
+      choseInverter(data.totalPower,data.rang, setInverters);
     }
   }, [data])
 
@@ -27,7 +26,7 @@ function InverterComponents(props) {
   }, [inverters])
 
   useEffect(() => {
-    if (selectedInverter) {
+    if (selectedInverter&&inverters) {
       let newArr = [selectedInverter, ...inverters.filter(x => x.id !== selectedInverter.id)]
       if (newArr[0].id !== inverters[0].id) {
         setInverters({ inverters: newArr })
@@ -69,19 +68,17 @@ function InverterComponents(props) {
           </div>
         </div>
 
-        <div className='grid data' style={{ gridTemplateColumns: "repeat(6,1fr)", height: "50px" }}>
+        <div className='grid data' style={{ gridTemplateColumns: "repeat(5,1fr)", height: "50px" }}>
           <h4>NUMBER</h4>
-          <h4>PRICE</h4>
           <h4>TOTAL COST</h4>
           <h4>POWER</h4>
           {inverters[0].num > 1 && <h4>TOTAL POWER</h4>}
           <h4>VOLTAGE</h4>
 
         </div>
-        <div className='grid data' style={{ gridTemplateColumns: "repeat(6,1fr)", height: "50px" }}>
+        <div className='grid data' style={{ gridTemplateColumns: "repeat(5,1fr)", height: "50px" }}>
           <h4>{inverters[0].num} </h4>
-          <h4>{inverters[0].price} EGP </h4>
-          <h4>{inverters[0].totalPrice} EGP </h4>
+          <h4>{inverters[0].price} EGP X {inverters[0].num} = {inverters[0].totalPrice} EGP </h4>
           <h4>{inverters[0].power} W</h4>
           {inverters[0].num > 1 && <h4>{NumFormatter(inverters[0].power * inverters[0].num, 2)} W</h4>}
           

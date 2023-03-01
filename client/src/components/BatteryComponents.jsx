@@ -29,7 +29,7 @@ function BatteryComponents(props) {
                     <p>TOTAL SCORE</p>
                     <p>NUMBER SCORE</p>
                     <p>PRICE SCORE</p>
-                    <h6 className='nm'>INVERTER NAME</h6>
+                    <h6 className='nm'>BATTERY NAME</h6>
                 </div>
                 <div className='relative horizontal-slider-box'>
                     <div className='horizontal-slider' style={{ height: height ? "300%" : "100%" }}>
@@ -50,19 +50,17 @@ function BatteryComponents(props) {
                     </div>
                 </div>
 
-                <div className='grid data' style={{ gridTemplateColumns: "repeat(5,1fr)", height: "50px" }}>
-                    <h4>NUMBER</h4>
-                    <h4>PRICE</h4>
+                <div className='grid data' style={{ gridTemplateColumns: "repeat(4,1fr)", height: "50px" }}>
+                    <h4>Branch X Battery</h4>
                     <h4>TOTAL COST</h4>
                     <h4>CAPACITY</h4>
                     <h4>VOLTAGE</h4>
 
 
                 </div>
-                <div className='grid data' style={{ gridTemplateColumns: "repeat(5,1fr)", height: "50px" }}>
-                    <h4>{batteries[0].branch + "x" + batteries[0].batteryPerBranch + "=" + batteries[0].num} </h4>
-                    <h4>{batteries[0].price} EGP </h4>
-                    <h4>{batteries[0].totalPrice} EGP </h4>
+                <div className='grid data' style={{ gridTemplateColumns: "repeat(4,1fr)", height: "50px" }}>
+                    <h4>{batteries[0].branch + " X " + batteries[0].batteryPerBranch + " = " + batteries[0].num} </h4>
+                    <h4>{batteries[0].price} EGP X {batteries[0].num} = {batteries[0].totalPrice} EGP </h4>
                     <h4>{batteries[0].ampereHour} Ah</h4>
                     <h4>{batteries[0].voltage} V</h4>
 

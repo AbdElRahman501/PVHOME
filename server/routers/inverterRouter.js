@@ -51,14 +51,15 @@ function choseTheInverter(inp, loadRange, inverters) {
       sum = Math.max(...fixedInverter.map(x => (100 - ((x.num / sum) * 100))))
       numScore = (numScore / sum) * 100
       let powerScore = (inverter.powerRate * 100)
-      let sumPowerScore = Math.max(...fixedInverter.map(x => (x.powerRate * 100)))
-      powerScore = ((powerScore / sumPowerScore) * 100)
+      let maxPowerScore = Math.max(...fixedInverter.map(x => (x.powerRate * 100)))
+      powerScore = ((powerScore / maxPowerScore) * 100)
       let priceRate = Math.max(...fixedInverter.map(x => x.totalPrice))
       // let priceRate =  fixedInverter.reduce((b, a) => a.totalPrice+b, 0)
       let priceScore = 100 - ((inverter.totalPrice / priceRate) * 100)
       priceRate = Math.max(...fixedInverter.map(x => (100 - ((x.totalPrice / priceRate) * 100))))
       priceScore = (priceScore / priceRate) * 100
       let totalScore = (priceScore + numScore + (powerScore / 3)) / 3
+      totalScore = (totalScore / (((2*100)+(100/3))/3))*100
       score.push({
         ...inverter,
         numScore,

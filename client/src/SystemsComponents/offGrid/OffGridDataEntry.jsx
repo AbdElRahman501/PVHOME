@@ -5,6 +5,8 @@ function OffGridDataEntry(props) {
 
     const [totalEnergy, setTotalEnergy] = useState(0)
     const [totalPower, setTotalPower] = useState(0)
+    const [rang, setRange] = useState(25)
+
 
     const [devices, setDevices] = useState(data.devices || [{
         deviceName: "lamps",
@@ -44,7 +46,7 @@ function OffGridDataEntry(props) {
     function submitHandler(e) {
         e.preventDefault();
         setOnSubmit(true)
-        setData({ totalEnergy, totalPower, devices })
+        setData({ totalEnergy,rang,totalPower, devices })
         // console.log(devices);
     }
 

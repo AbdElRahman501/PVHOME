@@ -528,7 +528,8 @@ a .logo.active:hover path.fill {
 }
 
 .grid h6.nm {
-    font-size: 12px;
+    font-size: 22px;
+    color: #b35c01;
     margin: 0;
     font-weight: 600;
     text-align: center;
@@ -557,7 +558,9 @@ a .logo.active:hover path.fill {
     padding: 0 10px;
     margin: 0;
 }
-
+.grid.data h4{
+    margin: 10px;
+}
 .grid.scores h6.nm {
     font-size: 14px;
     padding: 0 10px;
@@ -577,7 +580,9 @@ a .logo.active:hover path.fill {
     .device.btn span {
         display: none;
     }
-
+    .grid h6.nm {
+        font-size: 16px;
+    }
     .device.btn {
         font-size: 20px;
     }
