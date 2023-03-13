@@ -1,25 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import CircleProgressBar from './CircleProgressBar'
-import { chosePanel} from '../actions/choseElements'
+import { chosePanel } from '../actions/choseElements'
 
 
 function PanelComponents(props) {
-  const { data ,InverterState} = props
+  const { data, InverterState, panelsState, setPanels } = props
 
   const [selectedPanel, setSelectedPanel] = useState("")
   const [height, setHeight] = useState(false)
-  const [panelsState, setPanels] = useState({})
 
   const { panels, loading: panelsLoading, error: panelsError } = panelsState
   const { inverters, loading: inverterLoading, error: inverterError } = InverterState
 
 
   useEffect(() => {
-    if (data && inverters) {
-        chosePanel({energy:data.totalEnergy,inverter:inverters[0],loss:0.85,peakSonHours:5,expectArea:0}, setPanels);
+    if ((data.totalEnergy || data.totalPower) && inverters) {
+      chosePanel({ energy: data.totalEnergy, powerRang: 30, totalPower: data.totalPower, inverter: inverters[0], loss: 0.85, coordinates: data.coordinates, tiltAngle: data.tiltAngle, area: data.area }, setPanels);
     }
-  }, [data,InverterState])
+  }, [data, InverterState])
 
+  useEffect(() => {
+    if (data.area && data.dailyIrradiation) {
+      chosePanel({ coordinates: data.coordinates, dailyIrradiation: data.dailyIrradiation, tiltAngle: data.tiltAngle, expectedArea: data.area }, setPanels)
+    }
+  }, [data])
 
   useEffect(() => {
     if (selectedPanel) {
@@ -33,7 +37,7 @@ function PanelComponents(props) {
 
   return (
     <div className="data-entry-box">
-      {panelsLoading || inverterLoading && <h3 className='center'>loading</h3>}
+      {panelsLoading && <h3 className='center'>loading</h3>}
       {panels?.length > 0 && <>
         <div className='grid'>
           <p>RANK</p>
@@ -71,11 +75,11 @@ function PanelComponents(props) {
 
         </div>
         <div className='grid data' style={{ gridTemplateColumns: "repeat(4,1fr)", height: "50px" }}>
-          <h4>{panels[0].numOfPanels} </h4>
+          <h4>{panels[0].numParallelString} X {panels[0].numOfSeries} = {panels[0].numOfPanels} </h4>
           <h4>{panels[0].power} W </h4>
           <h4>{panels[0].price} EGP X {panels[0].numOfPanels} = {panels[0].totalPrice} EGP </h4>
           <h4>{panels[0].totalArea.toFixed(0)} m<sup>2</sup></h4>
-          
+
 
         </div>
       </>}

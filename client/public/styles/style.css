@@ -33,11 +33,13 @@ section .bk {
 .relative {
     position: relative;
 }
-.absolute{
+
+.absolute {
     position: absolute;
     left: 10px;
     top: 0;
 }
+
 .center {
     display: flex;
     justify-content: center;
@@ -54,6 +56,11 @@ section .bk {
 
 button {
     cursor: pointer;
+}
+
+button:disabled {
+    opacity: 0.3;
+    pointer-events: none;
 }
 
 .btn {
@@ -357,6 +364,11 @@ a .logo.active:hover path.fill {
     margin: 15px;
 }
 
+div.submit {
+    margin: auto;
+    max-width: fit-content;
+}
+
 .data-entry-container {
     background: #111B36;
     border-radius: 40px;
@@ -386,17 +398,31 @@ a .logo.active:hover path.fill {
     border: 0;
     font-size: 2.5rem;
     color: #fff;
-    margin: 0;
+    margin: 5px !important;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: 1.5px solid;
+    padding: 0;
+}
+
+.data-entry-container .back button:hover,
+.data-entry-container .next button:hover {
+    color: #B35C01;
+
 }
 
 .data-entry-container .next {
     position: absolute;
-    right: -15px;
+    right: -5px;
+    bottom: -77px;
 }
 
 .data-entry-container .back {
     position: absolute;
-    left: -15px;
+    left: 5px;
+    bottom: -77px;
+
 }
 
 .data-slider .data-entry-box {
@@ -410,6 +436,7 @@ a .logo.active:hover path.fill {
     display: grid;
     margin: 10px 0;
     line-height: 1.7;
+    transition: all 0.5s linear;
 }
 
 .data-input span {
@@ -433,6 +460,14 @@ a .logo.active:hover path.fill {
 
 .data-input select {
     width: 100%;
+}
+
+.data-input select option {
+    color: black;
+}
+
+.data-input select option:disabled {
+    color: rgb(170, 170, 170) !important;
 }
 
 .data-input select:focus,
@@ -542,10 +577,12 @@ a .logo.active:hover path.fill {
     height: 80px;
     align-items: center;
 }
-.horizontal-slider-box{
+
+.horizontal-slider-box {
     height: 90px;
 }
-.horizontal-slider{
+
+.horizontal-slider {
     width: 100%;
     height: 90px;
     overflow: hidden;
@@ -553,14 +590,19 @@ a .logo.active:hover path.fill {
     background-color: #111B36;
     transition: all 0.25s linear;
 }
+.transition{
+    transition: all 0.5s linear;
+}
 .grid.scores h4 {
     font-size: 25px;
     padding: 0 10px;
     margin: 0;
 }
-.grid.data h4{
+
+.grid.data h4 {
     margin: 10px;
 }
+
 .grid.scores h6.nm {
     font-size: 14px;
     padding: 0 10px;
@@ -568,53 +610,88 @@ a .logo.active:hover path.fill {
     cursor: pointer;
 }
 
+.data-container {
+    max-width: 400px;
+    width: 100%;
+    min-width: 300px;
+    height: 300px;
+}
+
 .nm {
     grid-area: nm;
 }
+
+.flex-item.slide-left {
+    animation: slide-left 0.5s linear;
+    left: 0;
+
+}
+
+@keyframes slide-left {
+    0% {
+        left: 50%
+    }
+
+    100% {
+        left: 0;
+    }
+}
+
 @media screen and (max-width: 800px) {
     #data-entry {
         width: 100vw;
     }
 }
-@media screen and (max-width: 650px) {
+
+@media screen and (max-width: 680px) {
     .device.btn span {
         display: none;
     }
+
     .grid h6.nm {
         font-size: 16px;
     }
+
     .device.btn {
         font-size: 20px;
     }
-    
-    .data-entry-container{
+
+    .data-entry-container {
         width: calc(100% - 30px);
         padding: 0 10px;
     }
-    .grid.data{
+
+    .grid.data {
         width: 90%;
         margin: 0 auto;
 
     }
-    .grid.data h4{
+
+    .grid.data h4 {
         font-size: 10.5px;
     }
+
     .grid p {
         font-size: 10px;
         width: unset;
     }
+
     .grid.scores h6.nm {
         font-size: 10px;
     }
-    .data-entry-container .data-slider{
+
+    .data-entry-container .data-slider {
         width: 100%;
     }
-    .calc-data{
+
+    .calc-data {
         font-size: 12px;
         max-width: 80%;
         margin: 1px;
     }
-    .data-entry-container .back button, .data-entry-container .next button {
+
+    .data-entry-container .back button,
+    .data-entry-container .next button {
         font-size: 24px;
     }
 }

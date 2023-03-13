@@ -5,28 +5,38 @@ import { choseBattery, choseInverter } from '../actions/choseElements'
 
 
 function InverterComponents(props) {
-  const { data, setBattery,InverterState, setInverters } = props
+  const { data, setBattery, InverterState, panelsState, setInverters } = props
 
   const [selectedInverter, setSelectedInverter] = useState("")
   const [height, setHeight] = useState(false)
 
+  const { panels, loading: panelsLoading, error: panelsError } = panelsState
   const { inverters, loading: inverterLoading, error: inverterError } = InverterState
 
   useEffect(() => {
-    if (data) {
-      choseInverter(data.totalPower,data.rang, setInverters);
-    }
+    if (data.totalPower && !inverters) {
+      choseInverter(data.totalPower, data.rang, setInverters);
+    } 
   }, [data])
 
   useEffect(() => {
+    if (data.area && panels) {
+      let power = panels[0].power * panels[0].numOfPanels
+      choseInverter(power, 0 , setInverters);
+    }
+  }, [panels])
+
+  useEffect(() => {
     if (inverters) {
-      choseBattery(data.totalEnergy, inverters[0], setBattery)
+      if (data.totalEnergy) {
+        choseBattery(data.totalEnergy, inverters[0], setBattery)
+      }
       setSelectedInverter(inverters[0])
     }
   }, [inverters])
 
   useEffect(() => {
-    if (selectedInverter&&inverters) {
+    if (selectedInverter && inverters) {
       let newArr = [selectedInverter, ...inverters.filter(x => x.id !== selectedInverter.id)]
       if (newArr[0].id !== inverters[0].id) {
         setInverters({ inverters: newArr })
@@ -81,8 +91,8 @@ function InverterComponents(props) {
           <h4>{inverters[0].price} EGP X {inverters[0].num} = {inverters[0].totalPrice} EGP </h4>
           <h4>{inverters[0].power} W</h4>
           {inverters[0].num > 1 && <h4>{NumFormatter(inverters[0].power * inverters[0].num, 2)} W</h4>}
-          
-          <h4> {inverters[0].voltage.map((x,i) => i===0 ? x : "/"+x)} V</h4>
+
+          <h4> {inverters[0].voltage.map((x, i) => i === 0 ? x : "/" + x)} V</h4>
 
         </div>
       </>}

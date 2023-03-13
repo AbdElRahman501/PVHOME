@@ -14,6 +14,7 @@ function OffGridResults(props) {
     const dataBox = dataSlider?.querySelectorAll(".data-entry-box")
     const [BatteryState, setBattery] = useState({})
     const [InverterState, setInverters] = useState({})
+    const [panelsState, setPanels] = useState({})
 
     function slide(dec) {
         let x
@@ -37,17 +38,17 @@ function OffGridResults(props) {
             <div className='center relative'>
                 <div className='back'>{active !== 0 && <button onClick={() => slide("back")}><i className='fa fa-angle-left'></i></button>}</div>
                 <div className='data-slider'>
-                    <PanelComponents data={data} InverterState={InverterState} />
-                    <InverterComponents data={data} InverterState={InverterState} setInverters={setInverters} setBattery={setBattery} />
+                    <PanelComponents data={data} InverterState={InverterState} panelsState={panelsState} setPanels={setPanels} />
+                    <InverterComponents data={data} InverterState={InverterState} panelsState={panelsState} setInverters={setInverters} setBattery={setBattery} />
                     <BatteryComponents data={data} BatteryState={BatteryState} setBattery={setBattery} />
                 </div>
                 <div className='next'>{active < dataBox?.length - 1 ? <button onClick={() => slide("next")} ><i className='fa fa-angle-right'></i></button> : ""} </div>
             </div>
-            <div className="center relative">
-                <div className='absolute'>
+            <div className="submit">
+                {/* <div className='absolute'>
                     <p className='calc-data'>{NumFormatter(data.totalPower, 2)}* {rang} // {NumFormatter(data.totalPower * 1.3, 2)}  W</p>
                     <p className='calc-data'>{NumFormatter(data.totalEnergy, 2)} whr</p>
-                </div>
+                </div> */}
                 <button className="btn secondary" onClick={() => setOnSubmit(false)} >Change</button>
             </div>
 

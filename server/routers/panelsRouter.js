@@ -2,9 +2,12 @@ import express from 'express';
 import expressAsyncHandler from 'express-async-handler';
 import data from '../data.js';
 import Panels from '../models/panelsModel.js';
-
+import axios from 'axios';
 
 const panelRouter = express.Router();
+const PI = Math.PI;
+const RAD = PI / 180;
+const DEG = 180 / PI;
 
 panelRouter.get(
   '/',
@@ -32,27 +35,55 @@ panelRouter.post(
     panels = panels.map(x => {
       return { id: x._id, name: x.name, power: x.power, vmpp: x.vmpp, impp: x.impp, voc: x.voc, isc: x.isc, dimensions: x.dimensions, price: x.price, efficiency: x.efficiency }
     })
-    const { energy, inverter, loss, peakSonHours, expectArea } = req.body
+    const { totalPower, energy, inverter, loss, powerRang, tiltAngle, coordinates, dailyIrradiation, expectedArea } = req.body
     let response = chosePanels({
-      energy, inverter, loss, peakSonHours, panels,
-      tiltAngle: 28,
-      AzimuthAngle: 23,
-      expectArea
+      totalPower, energy, inverter, loss, panels, powerRang,
+      coordinates, dailyIrradiation, tiltAngle,
+      expectedArea
     })
     res.json(response);
   })
 );
 
+panelRouter.post(
+  '/getDailyIrradiation',
+  expressAsyncHandler(async (req, res) => {
+    const { lat, lon, tilt } = req.body
 
+    const url = `https://re.jrc.ec.europa.eu/api/MRcalc?lat=${lat}&lon=${lon}&horirrad=1&startyear=2016&endyear=2016&d2g=1&outputformat=json&angle=${tilt}`;
+
+    // Use axios.get() method to send a GET request to the API and get a promise
+    axios.get(url)
+      // Use .then() method to handle the promise and get a response object
+      .then(response => {
+        // Access the data object from the response object using dot notation
+        const data = response.data;
+        // Get the monthly data
+        const months = data.outputs.monthly;
+        //init solar irradiation per month 
+        let dailyIrradiation = 0
+        for (const month of months) {
+          dailyIrradiation += month["H(h)_m"]
+        }
+        dailyIrradiation = (dailyIrradiation * 1000) / 365
+        // Display the value of irradiation  and divide it by 365 to get the solar irradiation per day Wh/m2/day
+        res.json({ dailyIrradiation });
+      })
+      // Use .catch() method to handle any errors or rejections
+      .catch(error => {
+        // Display error message 
+        res.json({ message: error.message });
+        console.error(error.message);
+      });
+  })
+);
 
 export default panelRouter;
 
 function chosePanels(data) {
-  let { energy, inverter, loss, peakSonHours, panels, tiltAngle, AzimuthAngle, expectArea } = data
+  let { totalPower, energy, inverter, powerRang, loss, panels, tiltAngle, coordinates, dailyIrradiation, expectedArea } = data
 
-  tiltAngle = tiltAngle * (Math.PI / 180)
-  AzimuthAngle = AzimuthAngle * (Math.PI / 180)
-
+  let elevationAngle = getElevationAngle(coordinates.lat)
   let maxStringVoltage = 400;
   let maxArrayAmps = 100;
 
@@ -62,24 +93,64 @@ function chosePanels(data) {
   panels.sort(function (a, b) {
     return a.power - b.power;
   });
-
-  energy = energy / (inverter.efficiency / 100) || energy / 0.97
-  energy = energy / loss || energy / 0.85
-  let panelsPower = energy / peakSonHours || energy / 5
+  let panelsPower
+  let peakSonHours
+  if (energy) {
+    energy = energy / (inverter.efficiency / 100) || energy / 0.97
+    energy = energy / loss || energy / 0.85
+    peakSonHours = dailyIrradiation / 1000 || 5
+    panelsPower = energy / peakSonHours
+  } else if (totalPower) {
+    powerRang = (powerRang / 100) + 1
+    panelsPower = powerRang * totalPower
+  } else if (expectedArea) {
+    peakSonHours = dailyIrradiation / 1000
+  }
   for (let panel of panels) {
-    let numOfPanels = Number((panelsPower / panel.power).toFixed(0))
+    if (dailyIrradiation) {
+      energy = dailyIrradiation * expectedArea * (panel.efficiency / 100) * 0.75
+      peakSonHours = dailyIrradiation / 1000 || 5
+      panelsPower = energy / peakSonHours
+      console.log(panelsPower);
+    }
+    let numOfPanels = panelsPower / panel.power
+    numOfPanels = toBigFixed(numOfPanels)
     numOfPanels = numOfPanels > 0 ? numOfPanels : numOfPanels + 1
-    // numOfPanels = numOfPanels % 2 !== 0 && numOfPanels !== 1 ? numOfPanels + 1 : numOfPanels
+    let maxNumSeries = maxStringVoltage / panel.voc
+    maxNumSeries = Math.floor(maxNumSeries)
+    let numOfSeries
+    let numParallelString
+    if (maxNumSeries >= numOfPanels) {
+      maxNumSeries = numOfPanels
+      numOfSeries = numOfPanels
+      numParallelString = 1
+    } else {
+      // numOfPanels = numOfPanels % 2 !== 0 ? numOfPanels + 1 : numOfPanels
+      let newNumOfPanels = 0
+      numParallelString = toBigFixed(numOfPanels / maxNumSeries)
+      newNumOfPanels = toBigFixed(numOfPanels / numParallelString) * numParallelString
+      numOfSeries = newNumOfPanels / numParallelString
+      while ((newNumOfPanels - numOfPanels) > 2) {
+        numParallelString = toBigFixed(numOfPanels / maxNumSeries)
+        newNumOfPanels = toBigFixed(numOfPanels / numParallelString) * numParallelString
+        numOfSeries = newNumOfPanels / numParallelString
+        maxNumSeries = maxNumSeries - 1
+      }
+      numOfPanels = newNumOfPanels
+    }
     let totalPrice = numOfPanels * panel.price
     let height = Math.max((panel.dimensions.width / 1000), (panel.dimensions.height / 1000))
-    height = (height * Math.cos(tiltAngle)) + ((height * Math.sin(tiltAngle)) / Math.tan(AzimuthAngle))
     let width = Math.min((panel.dimensions.width / 1000), (panel.dimensions.height / 1000))
+    height = (height * Math.cos(tiltAngle * RAD)) + ((height * Math.sin(tiltAngle * RAD)) / Math.tan(elevationAngle * RAD))
+    // console.log(height);
     let area = width * height
     let totalArea = numOfPanels * area
 
     shPanels.push({
       ...panel,
       numOfPanels,
+      numOfSeries,
+      numParallelString,
       area,
       totalArea,
       totalPrice
@@ -103,7 +174,7 @@ function chosePanels(data) {
     let areaScore = 100 - ((panel.totalArea / maxArea) * 100)
     maxArea = Math.max(...shPanels.map(x => (100 - ((x.totalArea / maxArea) * 100))))
     areaScore = (areaScore / maxArea) * 100
-    // console.log( closeTo(shPanels.map(x=> x.totalArea),panel.totalArea,expectArea))
+    // console.log( closeTo(shPanels.map(x=> x.totalArea),panel.totalArea,area))
     let totalScore = (priceScore + numScore + areaScore) / 3
     // console.log(panel.id, "n " + panel.numOfPanels, "nS " + numScore.toFixed(2), "p " + panel.totalPrice, "pS " + priceScore.toFixed(2), "A " + panel.totalArea.toFixed(2), "AS " + areaScore.toFixed(2), "T " + totalScore.toFixed(2))
 
@@ -130,3 +201,23 @@ function chosePanels(data) {
 
   return ([first, second, third])
 }
+
+
+
+
+
+// Define a function to calculate the solar declination angle for a given day of the year
+function getElevationAngle(latitude) {
+  // Get the day of the year from the date object
+
+  let declinationAngle = Math.floor(23.45 * Math.sin(RAD * ((360 / 365) * (355 + 284))))
+  declinationAngle = declinationAngle < 0 ? -declinationAngle : declinationAngle
+  console.log(declinationAngle)
+  return 90 - (declinationAngle + latitude);
+}
+
+
+function toBigFixed(num) {
+  return Math.floor(num) < num ? Math.floor(num) + 1 : Math.floor(num)
+}
+

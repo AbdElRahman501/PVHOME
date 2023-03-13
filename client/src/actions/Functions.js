@@ -10,3 +10,14 @@ export function NumFormatter(num, digits) {
     });
     return item ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol : "0";
 }
+
+export function getOptimumTiltAngle(latitude) {
+    var optimumTiltAngle;
+
+    if (latitude >= 0) {
+        optimumTiltAngle = (1.3793 + latitude * (1.2011 + latitude * (-0.014404 + latitude * 0.000080509)))
+    } else {
+        optimumTiltAngle = (-0.41657 + latitude * (1.4216 + latitude * (0.024051 + latitude * 0.00021828)))
+    }
+    return optimumTiltAngle;
+}

@@ -49,6 +49,7 @@ function choseBattery(data) {
       let branch = batteryOfOne / battery.ampereHour;
       // branch = Math.floor(branch) < branch ? Math.floor(branch) + 1 : Math.floor(branch)
       branch = Number(branch.toFixed(0))
+      branch = branch > 0 ? branch : 1
       let batteryPerBranch = voltage / battery.voltage
       batteryPerBranch = Math.floor(batteryPerBranch) < batteryPerBranch ? Math.floor(batteryPerBranch) + 1 : Math.floor(batteryPerBranch)
       if (batteryPerBranch >= 1) {

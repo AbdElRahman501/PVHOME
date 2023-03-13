@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import governments from "../../components/governments.json"
+import cities from "../../components/cities.json"
+import { getOptimumTiltAngle } from '../../actions/Functions'
+import { getLocation } from '../../actions/choseElements'
 
 function OffGridDataEntry(props) {
     const { setOnSubmit, setData, data } = props
@@ -7,6 +11,21 @@ function OffGridDataEntry(props) {
     const [totalPower, setTotalPower] = useState(0)
     const [rang, setRange] = useState(25)
 
+    const [{ coordinates, loading: coordinateLoading, error: coodrinateError }, setCoordinates] = useState({});
+    const [{ dailyIrradiation, loading: irradiationLoading, error: irradiationError }, setIrradiation] = useState({});
+
+
+    useEffect(() => {
+        if (data.government) {
+            getLocation(data.government, data.city, setCoordinates)
+        }
+    }, [data?.government, data?.city])
+    useEffect(() => {
+        if (coordinates) {
+            let tiltAngle = getOptimumTiltAngle(coordinates.lat)
+            setData(pv => ({ ...pv, coordinates, tiltAngle }))
+        }
+    }, [coordinates?.lat])
 
     const [devices, setDevices] = useState(data.devices || [{
         deviceName: "lamps",
@@ -46,7 +65,7 @@ function OffGridDataEntry(props) {
     function submitHandler(e) {
         e.preventDefault();
         setOnSubmit(true)
-        setData({ totalEnergy,rang,totalPower, devices })
+        setData(pv => ({...pv, totalEnergy, rang, totalPower, devices }))
         // console.log(devices);
     }
 
@@ -62,27 +81,33 @@ function OffGridDataEntry(props) {
         });
         return item ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol : "0";
     }
-
     return (
         <form onSubmit={submitHandler}>
             <div className="data-entry-box center">
                 <div>
-                    {/* <div className="data-grid-container" >
-                        <label className="data-input device " htmlFor="area">Area
-                            <div>
-                                <input type="number" name="area" id="area" required />
-                                <span>m<sup>2</sup></span>
-                            </div>
+                    <div className="data-grid-container" >
+                        <label className="data-input hd " htmlFor="government">Government
+                            {/* <input type="text" name="" id="" onChange={(e) => setData((pv) => pv && { ...pv, government: e.target.value })} /> */}
+
+                            <select name="government" id="government" required style={{ color: data.government ? "black" : "#838383" }}
+                                value={data.government || ""}
+                                onChange={(e) => setData((pv) => pv && { ...pv, government: e.target.value, governorate_id: e.target[e.target.selectedIndex].id, city: "" })}
+                            ><option value='' disabled  >Select your government</option>
+                                {governments.map((x, i) => <option key={i} value={x.governorate_name_en} id={x.id}>{x.governorate_name_en}</option>)}
+                            </select>
+
                         </label>
-                        <label className="data-input hd" htmlFor="government">Government
-                            <select name="government" id="government" required>
-                                <option value="cairo">Cairo</option>
-                                <option value="qalubia">Qalubia</option>
-                                <option value="ealexandia">Ealexandia</option>
+
+                        <label className="data-input device" htmlFor="city" style={{ display: data.government ? "grid" : "none" }}>city
+                            <select name="city" id="city" required style={{ color: data.city ? "black" : "#838383" }}
+                                value={data.city || ""}
+                                onChange={(e) => setData((pv) => pv && { ...pv, city: e.target.value })}
+                            ><option value='' disabled  >Select your city</option>
+                                {cities.filter((x) => x.governorate_id === data.governorate_id).map((x, i) => <option key={i} value={x.city_name_en}>{x.city_name_en}</option>)}
                             </select>
                         </label>
                     </div>
-                    <hr /> */}
+                    <hr />
                     <div className="data-grid-container">
                         <p className='device'>Device</p>
                         <p>Quantity</p>
@@ -94,7 +119,7 @@ function OffGridDataEntry(props) {
                         <div className="data-grid-container" key={i}>
                             <label className="data-input device" htmlFor="device" >
                                 <div>
-                                    <input type="text" name="device" id="device" required={i === 0 } placeholder={x.deviceName}
+                                    <input type="text" name="device" id="device" required={i === 0} placeholder={x.deviceName}
                                         value={x.device}
                                         onChange={(e) => setDevices(pv => pv.map((y, k) => k == i ? { ...y, device: e.target.value } : y))}
                                     />
@@ -103,8 +128,8 @@ function OffGridDataEntry(props) {
                             </label>
                             <label className="data-input " htmlFor="quantity">
                                 <div>
-                                    <input type="number" name="quantity" id="quantity" required={devices[i].device ? true : false} 
-                                        value={x.quantity===0 ? "" :x.quantity}
+                                    <input type="number" name="quantity" id="quantity" required={devices[i].device ? true : false}
+                                        value={x.quantity === 0 ? "" : x.quantity}
                                         onChange={(e) => setDevices(pv => pv.map((y, k) => k == i ? { ...y, quantity: Number(e.target.value) > 0 ? Number(e.target.value) : 0 } : y))}
                                     />
 
@@ -114,7 +139,7 @@ function OffGridDataEntry(props) {
                             <label className="data-input " htmlFor="power">
                                 <div>
                                     <input type="number" name="Power" id="power" required={devices[i]?.device ? true : false}
-                                        value={x.power===0 ? "" :x.power}
+                                        value={x.power === 0 ? "" : x.power}
                                         onChange={(e) => setDevices(pv => pv.map((y, k) => k == i ? { ...y, power: Number(e.target.value) > 0 ? Number(e.target.value) : 0 } : y))}
                                     />
                                     <span>W</span>
@@ -123,7 +148,7 @@ function OffGridDataEntry(props) {
                             <label className="data-input " htmlFor="hours">
                                 <div>
                                     <input type="number" name="hours" id="hours" required={devices[i]?.device ? true : false}
-                                        value={x.hours===0 ? "" :x.hours}
+                                        value={x.hours === 0 ? "" : x.hours}
                                         onChange={(e) => setDevices(pv => pv.map((y, k) => k == i ? { ...y, hours: Number(e.target.value) > 0 ? Number(e.target.value) : 0 } : y))}
                                     />
                                     <span>H</span>
@@ -149,8 +174,8 @@ function OffGridDataEntry(props) {
                             <span>Remove device</span>-
                         </button>
                         <p></p>
-                        <p>total Power = {nFormatter(totalPower,1)}W</p>
-                        <p>total Energy = {nFormatter(totalEnergy,1)}Whr</p>
+                        <p>total Power = {nFormatter(totalPower, 1)}W</p>
+                        <p>total Energy = {nFormatter(totalEnergy, 1)}Whr</p>
 
                     </div>
 
@@ -160,7 +185,7 @@ function OffGridDataEntry(props) {
             </div>
 
             <div className="center">
-                <button className={totalEnergy === 0 ? "btn primary disabled" : "btn primary"} disabled={totalEnergy === 0}>next</button>
+                <button className={totalEnergy === 0 ? "btn primary disabled" : "btn primary"} disabled={totalEnergy === 0 || coordinateLoading || irradiationLoading}>{coordinateLoading || irradiationLoading ? "loading" : "submit"}</button>
             </div>
 
         </form>

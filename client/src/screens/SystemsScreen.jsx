@@ -10,7 +10,7 @@ function SystemsScreen() {
                 <div className="grid-container">
                     <div className="grid-item blur-box">
                         <div className="center">
-                            <img className="big-icon" src="/images/image4.png" alt="" />
+                            <img className="big-icon" src="/images/image5.png" alt="" />
                         </div>
                         <div className="title">
                             <h2>On Grid</h2>
@@ -39,7 +39,7 @@ function SystemsScreen() {
                     </div>
                     <div className="grid-item blur-box">
                         <div className="center">
-                            <img className="big-icon" src="/images/image5.png" alt="" />
+                            <img className="big-icon" src="/images/image4.png" alt="" />
                         </div>
                         <div className="title">
                             <h2>Off Grid</h2>
