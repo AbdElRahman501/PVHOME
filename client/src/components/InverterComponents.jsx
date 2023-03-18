@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import CircleProgressBar from './CircleProgressBar'
 import { NumFormatter } from '../actions/Functions'
 import { choseBattery, choseInverter } from '../actions/choseElements'
+import PageNotFound from "./PageNotFound";
 
 
 function InverterComponents(props) {
@@ -15,14 +16,14 @@ function InverterComponents(props) {
 
   useEffect(() => {
     if (data.totalPower && !inverters) {
-      choseInverter(data.totalPower, data.rang, setInverters);
-    } 
+      choseInverter(data.totalPower, data.rang, data.type, setInverters);
+    }
   }, [data])
 
   useEffect(() => {
     if (data.area && panels) {
       let power = panels[0].power * panels[0].numOfPanels
-      choseInverter(power, 0 , setInverters);
+      choseInverter(power, 0,data.type, setInverters);
     }
   }, [panels])
 
@@ -49,7 +50,7 @@ function InverterComponents(props) {
   return (
     <div className="data-entry-box">
       {inverterLoading && <h3 className='center'>loading</h3>}
-      {inverters?.length > 0 && <>
+      {inverters?.length > 0 && inverters[0]?.name ? <>
         <div className='grid'>
           <p>RANK</p>
           <p>TOTAL SCORE</p>
@@ -95,7 +96,8 @@ function InverterComponents(props) {
           <h4> {inverters[0].voltage.map((x, i) => i === 0 ? x : "/" + x)} V</h4>
 
         </div>
-      </>}
+      </> :
+        <h1>Somthing happend</h1>}
       {/* <h3 className='center'>{inverter?.num} of {inverter?.name} with a total price {inverter?.totalPrice || inverter?.price} EGP </h3> */}
 
 

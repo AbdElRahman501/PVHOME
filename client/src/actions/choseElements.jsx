@@ -1,10 +1,10 @@
 import Axios from "axios";
 
 
-export async function choseInverter(power, rang, setInverters) {
+export async function choseInverter(power, rang, type, setInverters) {
     setInverters({ inverters: "", loading: true, error: false })
     try {
-        const { data: inverters } = await Axios.post("/api/inverters/choseInverter", { power, rang });
+        const { data: inverters } = await Axios.post("/api/inverters/choseInverter", { type, power, rang });
         setInverters({ inverters: inverters, loading: false, error: false })
     } catch (error) {
         setInverters({ inverters: "", loading: false, error })
@@ -37,7 +37,6 @@ export async function getDailyIrradiation(lat, lon, tilt, setIrradiation) {
     setIrradiation({ dailyIrradiation: "", loading: true, error: false });
     try {
         const { data } = await Axios.post("/api/panels/getDailyIrradiation", { lat, lon, tilt, });
-        console.log(data.dailyIrradiation);
         setIrradiation({ dailyIrradiation: data.dailyIrradiation, loading: false, error: false });
     } catch (error) {
         setIrradiation({ dailyIrradiation: "", loading: false, error });
@@ -45,11 +44,10 @@ export async function getDailyIrradiation(lat, lon, tilt, setIrradiation) {
 
     }
 }
-export async function getLocation(government, city,setCoordinates) {
+export async function getLocation(government, city, setCoordinates) {
     setCoordinates({ coordinates: "", loading: true, error: "" })
     try {
         const { data } = await Axios.post(`https://nominatim.openstreetmap.org/search/egypt ${government} ${city || ""}?format=json&addressdetails=1&limit=1`);
-        console.log(data[0]?.display_name);
         if (data.length === 0) {
             getLocation(government)
         }

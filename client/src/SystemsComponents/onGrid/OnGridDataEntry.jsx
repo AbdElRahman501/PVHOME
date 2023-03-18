@@ -20,8 +20,10 @@ function OnGridDataEntry(props) {
     useEffect(() => {
         if (coordinates) {
             let tiltAngle = getOptimumTiltAngle(coordinates.lat)
-            getDailyIrradiation(coordinates.lat, coordinates.lon, tiltAngle, setIrradiation)
             setData(pv => ({ ...pv, coordinates, tiltAngle }))
+            if (data.government && data.city) {
+                getDailyIrradiation(coordinates.lat, coordinates.lon, tiltAngle, setIrradiation)
+            }
         }
     }, [coordinates?.lat])
     useEffect(() => {
@@ -34,8 +36,8 @@ function OnGridDataEntry(props) {
     return (
         <form onSubmit={submitHandler}>
             <div className="data-entry-box center ">
-                <div className='data-container'>
-                    <label className= "data-input" style={{top:!data.government?"10%":"0"}} htmlFor="government">Government
+                <div className='data-container' style={{ height: "300px" }}>
+                    <label className="data-input" style={{ top: !data.government ? "10%" : "0" }} htmlFor="government">Government
                         {/* <input type="text" name="" id="" onChange={(e) => setData((pv) => pv && { ...pv, government: e.target.value })} /> */}
 
                         <select name="government" id="government" required style={{ color: data.government ? "black" : "#838383" }}
@@ -55,8 +57,8 @@ function OnGridDataEntry(props) {
                             {cities.filter((x) => x.governorate_id === data.governorate_id).map((x, i) => <option key={i} value={x.city_name_en}>{x.city_name_en}</option>)}
                         </select>
                     </label>
-                    <div className="flex-container center relative transition" style={{bottom:!data.government?"10%":"0"}}>
-                        {!data.totalPower && <label className="data-input flex-item" style={{width:!data.area?"50%":"100%"}} htmlFor="area">Area
+                    <div className="flex-container center relative transition" style={{ bottom: !data.government ? "10%" : "0" }}>
+                        {!data.totalPower && <label className="data-input flex-item" style={{ width: !data.area ? "50%" : "100%" }} htmlFor="area">Area
                             <div>
                                 <input type="number" name="area" id="area" placeholder='E.X 50' required={!data.totalPower} min="20"
                                     value={data.area || ""}
@@ -66,7 +68,7 @@ function OnGridDataEntry(props) {
                             </div>
                         </label>}
                         {!data.area && !data.totalPower && <p>OR</p>}
-                        {!data.area && <label className={data.totalPower?"data-input flex-item slide-left":"data-input flex-item "} style={{width:!data.totalPower?"50%":"100%"}} htmlFor="total-power">Total Power
+                        {!data.area && <label className={data.totalPower ? "data-input flex-item slide-left" : "data-input flex-item "} style={{ width: !data.totalPower ? "50%" : "100%" }} htmlFor="total-power">Total Power
                             <div>
                                 <input type="number" name="total-power" id="total-power" placeholder='E.X 100' required={!data.area} min="100"
                                     value={data.totalPower || ""}
@@ -79,7 +81,7 @@ function OnGridDataEntry(props) {
                 </div>
             </div>
             <div className="center">
-                <button className="btn primary" disabled={coordinates ? false : true}>{loading || irradiationLoading ? "loading" : "Submit"}</button>
+                <button className="btn primary" disabled={coordinates && dailyIrradiation ? false : true}>{loading || irradiationLoading ? <i className="fa fa-spinner fa-pulse"></i> : "Submit"}</button>
             </div>
         </form>
     )

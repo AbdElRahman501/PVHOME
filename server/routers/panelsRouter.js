@@ -26,7 +26,16 @@ panelRouter.get(
   })
 );
 
-
+panelRouter.post(
+  '/addPanel',
+  expressAsyncHandler(async (req, res) => {
+    console.log(req.body);
+    const panel = req.body
+    const newPanel = new Panels(panel);
+    const createdPanel = await newPanel.save();
+    res.send({ message: 'inverter added', panel: createdPanel });
+  })
+);
 
 panelRouter.post(
   '/chosePanel',
@@ -84,7 +93,7 @@ function chosePanels(data) {
   let { totalPower, energy, inverter, powerRang, loss, panels, tiltAngle, coordinates, dailyIrradiation, expectedArea } = data
 
   let elevationAngle = getElevationAngle(coordinates.lat)
-  let maxStringVoltage = 400;
+  let maxStringVoltage
   let maxArrayAmps = 100;
 
   let shPanels = [];
@@ -95,6 +104,12 @@ function chosePanels(data) {
   });
   let panelsPower
   let peakSonHours
+
+  if (inverter?.type === "On Grid") {
+    maxStringVoltage = inverter.voltageRang.max
+  } else {
+    maxStringVoltage = 400
+  }
   if (energy) {
     energy = energy / (inverter.efficiency / 100) || energy / 0.97
     energy = energy / loss || energy / 0.85
@@ -111,11 +126,12 @@ function chosePanels(data) {
       energy = dailyIrradiation * expectedArea * (panel.efficiency / 100) * 0.75
       peakSonHours = dailyIrradiation / 1000 || 5
       panelsPower = energy / peakSonHours
-      console.log(panelsPower);
+      // console.log(panelsPower);
     }
     let numOfPanels = panelsPower / panel.power
     numOfPanels = toBigFixed(numOfPanels)
     numOfPanels = numOfPanels > 0 ? numOfPanels : numOfPanels + 1
+    maxStringVoltage = panel.maxStringVoltage ? Math.min(maxStringVoltage, panel.maxStringVoltage) : maxStringVoltage
     let maxNumSeries = maxStringVoltage / panel.voc
     maxNumSeries = Math.floor(maxNumSeries)
     let numOfSeries
@@ -212,7 +228,7 @@ function getElevationAngle(latitude) {
 
   let declinationAngle = Math.floor(23.45 * Math.sin(RAD * ((360 / 365) * (355 + 284))))
   declinationAngle = declinationAngle < 0 ? -declinationAngle : declinationAngle
-  console.log(declinationAngle)
+  // console.log(declinationAngle)
   return 90 - (declinationAngle + latitude);
 }
 

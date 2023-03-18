@@ -9,6 +9,7 @@ import OnGridScreen from "./screens/OnGridScreen";
 import OffGridScreen from "./screens/OffGridScreen";
 import HybridScreen from "./screens/HybridScreen";
 import PageNotFound from "./components/PageNotFound";
+import AddDevice from "./screens/AddDevicesScreen";
 
 function App() {
   // const [data, setData] = React.useState(null);
@@ -32,6 +33,7 @@ function App() {
             <Route path="/systems/Off Grid" element={<OffGridScreen />} />
             <Route path="/systems/Hybrid" element={<HybridScreen />} />
             <Route path="/*" element={<PageNotFound />} />
+            <Route path="/Add Device" element={<AddDevice />} />
         </SlideRoutes>
       </ScrollToTop>
     </div>

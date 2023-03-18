@@ -2,11 +2,13 @@ import mongoose from "mongoose"
 
 
 const batterySchema = new mongoose.Schema({
-    name: { type: String },
-    voltage: { type: Number },
-    ampereHour: { type: Number },
-    price: { type: Number },
-    dod: { type: Number }
+    name: { type: String, required: true },
+    manufacturer: { type: String, required: true },
+    model: { type: String, required: true },
+    voltage: { type: Number, required: true },
+    ampereHour: { type: Number, required: true },
+    price: { type: Number, required: true },
+    dod: { type: Number, required: false }
 }, {
     timestamps: true,
 });

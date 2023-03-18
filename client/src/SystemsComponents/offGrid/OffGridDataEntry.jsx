@@ -185,7 +185,7 @@ function OffGridDataEntry(props) {
             </div>
 
             <div className="center">
-                <button className={totalEnergy === 0 ? "btn primary disabled" : "btn primary"} disabled={totalEnergy === 0 || coordinateLoading || irradiationLoading}>{coordinateLoading || irradiationLoading ? "loading" : "submit"}</button>
+                <button className={totalEnergy === 0 ? "btn primary disabled" : "btn primary"} disabled={totalEnergy === 0 || coordinateLoading || irradiationLoading}>{coordinateLoading || irradiationLoading ? <i className="fa fa-spinner fa-pulse"></i> : "submit"}</button>
             </div>
 
         </form>

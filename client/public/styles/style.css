@@ -77,6 +77,20 @@ button:disabled {
     pointer-events: none;
 }
 
+label p {
+    margin: 0;
+}
+
+.fa-asterisk {
+    font-size: 10px !important;
+    color: #b35c01;
+}
+
+.back.top {
+    top: 15px !important;
+    left: 15px !important;
+}
+
 .primary.btn {
     background-color: #B35C01;
     color: aliceblue;
@@ -129,6 +143,16 @@ button:disabled {
     max-width: 250px;
 }
 
+.fa.icon {
+    font-size: 22px;
+}
+
+.fa-user {
+    width: 50px;
+    margin: 0 auto;
+    text-align: center;
+}
+
 .blur-box {
     background: rgba(0, 0, 0, 0.65);
     backdrop-filter: blur(4.5px);
@@ -170,6 +194,18 @@ nav::-webkit-scrollbar {
 nav div.history {
     display: flex;
     align-items: center;
+}
+
+a.user {
+    position: sticky;
+    right: 0;
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #111b36;
+    margin-left: auto;
 }
 
 nav a {
@@ -590,9 +626,11 @@ div.submit {
     background-color: #111B36;
     transition: all 0.25s linear;
 }
-.transition{
+
+.transition {
     transition: all 0.5s linear;
 }
+
 .grid.scores h4 {
     font-size: 25px;
     padding: 0 10px;
@@ -614,7 +652,8 @@ div.submit {
     max-width: 400px;
     width: 100%;
     min-width: 300px;
-    height: 300px;
+    height: 100%;
+    min-height: 300px;
 }
 
 .nm {
@@ -625,6 +664,48 @@ div.submit {
     animation: slide-left 0.5s linear;
     left: 0;
 
+}
+
+/* add devices  ******************* */
+ul.devices {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    margin: 15px;
+    margin: 15px 15px 50px;
+}
+
+ul.devices hr {
+    width: 100%;
+    transition: all 0.25s linear;
+    border: solid 2px #ffffff;
+    border-top: 0;
+
+}
+
+ul.devices a {
+    font-size: 25px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    transition: all 0.2s linear;
+    cursor: pointer;
+    text-decoration: none;
+    color: #fff;
+}
+
+ul.devices li:hover+hr {
+    width: 40%;
+    border: solid 2px #b35c01;
+    border-top: 0;
+
+}
+
+ul.devices a:hover {
+    scale: 1.1;
+    background: #ffffff2b;
+    color: #B35C01;
 }
 
 @keyframes slide-left {

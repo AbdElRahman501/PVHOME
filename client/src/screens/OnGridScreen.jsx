@@ -5,7 +5,7 @@ import OnGridDataEntry from '../SystemsComponents/onGrid/OnGridDataEntry';
 import OnGridResults from '../SystemsComponents/onGrid/OnGridResults';
 
 function OnGridScreen() {
-    const [data, setData] = useState({});
+    const [data, setData] = useState({type:"On Grid"});
     const [onSubmit, setOnSubmit] = useState(false)
 
 

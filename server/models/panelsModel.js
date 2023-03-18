@@ -2,20 +2,24 @@ import mongoose from "mongoose"
 
 
 const panelSchema = new mongoose.Schema({
-    name: { type: String },
-    power: { type: Number },
-    vmpp:{ type: Number },
-    impp:{ type: Number },
-    voc:{ type: Number },
-    isc:{ type: Number },
+    name: { type: String, required: true },
+    manufacturer: { type: String, required: true },
+    model: { type: String, required: true },
+    type: { type: String },
+    power: { type: Number, required: true },
+    maxStringVoltage: { type: Number, required: true },
+    vmpp: { type: Number, required: true },
+    impp: { type: Number, required: true },
+    voc: { type: Number, required: true },
+    isc: { type: Number, required: true },
     dimensions: {
-        width: { type: Number },
-        height: { type: Number },
-        depth: { type: Number }
+        width: { type: Number, required: true },
+        height: { type: Number, required: true },
+        depth: { type: Number, required: true }
     },
-    price: { type: Number },
-    efficiency: { type: Number },
-    type: { type: String }
+    price: { type: Number, required: true },
+    efficiency: { type: Number, required: true },
+    type: { type: String, required: true }
 }, {
     timestamps: true,
 });

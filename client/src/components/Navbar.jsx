@@ -25,7 +25,7 @@ function Navbar() {
           </div>
         })
         }
-
+        <Link to="/Add Device" className="none user"><i className='fa fa-user icon'></i></Link>
       </nav>
       <img className="bk image" src="/images/PVHOMEBG.png" alt="" />
       <div className="bk cover"></div>
