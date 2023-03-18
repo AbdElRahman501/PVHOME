@@ -17,9 +17,19 @@ inverterRouter.get(
 inverterRouter.get(
   '/seed',
   expressAsyncHandler(async (req, res) => {
-    // await Inverters.collection.drop();
+    await Inverters.collection.drop();
     // const createdInverters = await Inverters.insertMany(data.inverters);
     res.json(createdInverters);
+  })
+);
+inverterRouter.post(
+  '/addInverter',
+  expressAsyncHandler(async (req, res) => {
+    // console.log(req.body);
+    const inverter = req.body
+    const NewInverter = new Inverters(inverter);
+    const createdInverter = await NewInverter.save();
+    res.send({ message: 'inverter added', inverter: createdInverter });
   })
 );
 
@@ -28,8 +38,9 @@ function choseTheInverter(inp, loadRange, inverters) {
   inverters.sort(function (a, b) {
     return a.power - b.power;
   });
-  let rang = loadRange >= 0 && loadRange <= 50 ? ((loadRange / 100) + 1) : 1.3
+  let rang = ((loadRange / 100) + 1) 
   let power = rang * inp
+  // console.log(power,inp,rang);
   if (inverters) {
     let fixedInverter = []
     let score = []
@@ -59,7 +70,7 @@ function choseTheInverter(inp, loadRange, inverters) {
       priceRate = Math.max(...fixedInverter.map(x => (100 - ((x.totalPrice / priceRate) * 100))))
       priceScore = (priceScore / priceRate) * 100
       let totalScore = (priceScore + numScore + (powerScore / 3)) / 3
-      totalScore = (totalScore / (((2*100)+(100/3))/3))*100
+      totalScore = (totalScore / (((2 * 100) + (100 / 3)) / 3)) * 100
       score.push({
         ...inverter,
         numScore,
@@ -83,7 +94,7 @@ function choseTheInverter(inp, loadRange, inverters) {
       rank: 3
     }
 
-    return ([first, second, third])
+    return ([first, second, third].filter(x => x.name))
   }
 
 }
@@ -91,7 +102,8 @@ function choseTheInverter(inp, loadRange, inverters) {
 inverterRouter.post(
   '/choseInverter',
   expressAsyncHandler(async (req, res) => {
-    let inverters = await Inverters.find({})
+    // console.log(req.body.type);
+    let inverters = await Inverters.find({type:req.body.type})
     inverters = inverters.map(x => {
       return { id: x._id, name: x.name, voltage: x.voltage, power: x.power, price: x.price, efficiency: x.efficiency }
     })
