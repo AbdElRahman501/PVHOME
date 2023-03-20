@@ -1,3 +1,7 @@
+const PI = Math.PI;
+const RAD = PI / 180;
+const DEG = 180 / PI;
+
 export function NumFormatter(num, digits) {
     const lookup = [
         { value: 1, symbol: " " },
@@ -21,3 +25,12 @@ export function getOptimumTiltAngle(latitude) {
     }
     return optimumTiltAngle;
 }
+
+export function getElevationAngle(latitude) {
+    // Get the day of the year from the date object
+  
+    let declinationAngle = Math.floor(23.45 * Math.sin(RAD * ((360 / 365) * (355 + 284))))
+    declinationAngle = declinationAngle < 0 ? -declinationAngle : declinationAngle
+    // console.log(declinationAngle)
+    return 90 - (declinationAngle + latitude);
+  }

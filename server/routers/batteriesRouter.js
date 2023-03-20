@@ -88,21 +88,7 @@ function choseBattery(data) {
   }
   // console.log(score.map(x => ({ total: x.totalScore?.toFixed(2), priceS: x.priceScore?.toFixed(2), numX: x.numScore?.toFixed(2) })));
 
-  // console.log(score);
-  let first = {
-    ...score.find(x => x.totalScore === Math.max(...score.map(x => x.totalScore))),
-    rank: 1
-  }
-  let second = {
-    ...score.filter(x => x.id !== first.id).find(x => x.totalScore === Math.max(...score.filter(x => x.id !== first.id).map(x => x.totalScore))),
-    rank: 2
-  }
-  let third = {
-    ...score.filter(x => x.id !== first.id && x.id !== second.id).find(x => x.totalScore === Math.max(...score.filter(x => x.id !== first.id && x.id !== second.id).map(x => x.totalScore))),
-    rank: 3
-  }
-
-  return ([first, second, third])
+  return (score.sort((a, b) => b.totalScore - a.totalScore).slice(0, 3).map((x, i) => ({ ...x, rank: i + 1 })))
 
 }
 

@@ -15,13 +15,13 @@ function PanelComponents(props) {
 
   useEffect(() => {
     if ((data.totalEnergy || data.totalPower) && inverters) {
-      chosePanel({ energy: data.totalEnergy, powerRang: 30, totalPower: data.totalPower, inverter: inverters[0], loss: 0.85, coordinates: data.coordinates, tiltAngle: data.tiltAngle, area: data.area }, setPanels);
+      chosePanel({ energy: data.totalEnergy, powerRang: 30, totalPower: data.totalPower, inverter: inverters[0], loss: 0.85, coordinates: data.coordinates, area: data.area }, setPanels);
     }
   }, [data, InverterState])
 
   useEffect(() => {
     if (data.area && data.dailyIrradiation) {
-      chosePanel({ coordinates: data.coordinates, dailyIrradiation: data.dailyIrradiation, tiltAngle: data.tiltAngle, expectedArea: data.area }, setPanels)
+      chosePanel({ coordinates: data.coordinates, dailyIrradiation: data.dailyIrradiation, expectedArea: data.area }, setPanels)
     }
   }, [data])
 
@@ -37,7 +37,7 @@ function PanelComponents(props) {
 
   return (
     <div className="data-entry-box">
-      {panelsLoading && <h3 className='center'>loading</h3>}
+      {panelsLoading && <div className='center grid-item'><i style={{fontSize:"60px"}} className=" fa fa-spinner fa-pulse"></i></div>}
       {panels?.length > 0 && <>
         <div className='grid'>
           <p>RANK</p>

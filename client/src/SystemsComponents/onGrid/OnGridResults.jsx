@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { NumFormatter } from '../../actions/Functions'
 import InverterComponents from '../../components/InverterComponents'
 import PanelComponents from '../../components/PanelComponents'
 
@@ -32,7 +31,6 @@ function OnGridResults(props) {
         })
     }
 
-    // console.log(data);
     return (
         <div>
 
@@ -45,10 +43,6 @@ function OnGridResults(props) {
                 <div className='next'>{active < dataBox?.length - 1 ? <button onClick={() => slide("next")} ><i className='fa fa-angle-right'></i></button> : ""} </div>
             </div>
             <div className="submit">
-                {/* <div className='absolute'>
-                    <p className='calc-data'>{NumFormatter(data.totalPower, 2)}* {rang} // {NumFormatter(data.totalPower * 1.3, 2)}  W</p>
-                    <p className='calc-data'>{NumFormatter(data.totalEnergy, 2)} whr</p>
-                </div> */}
                 <button className="btn secondary" onClick={changeHandler} >Change</button>
             </div>
 

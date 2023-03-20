@@ -412,6 +412,7 @@ div.submit {
     /* max-width: 400px;
     max-height: 600px; */
     /* height: 500px; */
+    margin: 30px 10px;
     width: 85%;
     position: relative;
 }
@@ -649,7 +650,7 @@ div.submit {
 }
 
 .data-container {
-    max-width: 400px;
+    max-width: 550px;
     width: 100%;
     min-width: 300px;
     height: 100%;
@@ -720,7 +721,7 @@ ul.devices a:hover {
 
 @media screen and (max-width: 800px) {
     #data-entry {
-        width: 100vw;
+        width: 100%;
     }
 }
 

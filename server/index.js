@@ -36,9 +36,9 @@ app.use("/api/panels", panelRouter);
 
 
 
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
-});
+app.use((err, req, res, next) => {
+  res.status(500).send({ err ,message: err.message   })
+})
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);

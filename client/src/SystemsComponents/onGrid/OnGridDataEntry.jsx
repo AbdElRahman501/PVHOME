@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import Axios from "axios";
 import governments from "../../components/governments.json"
 import cities from "../../components/cities.json"
-import { getOptimumTiltAngle } from '../../actions/Functions';
-import { getDailyIrradiation, getLocation } from '../../actions/choseElements';
+import { getLocation } from '../../actions/choseElements';
 
 
 function OnGridDataEntry(props) {
@@ -13,25 +11,22 @@ function OnGridDataEntry(props) {
 
 
     useEffect(() => {
-        if (data.government) {
-            getLocation(data.government, data.city, setCoordinates)
+        if (data.government && data.city) {
+            getLocation(data.government, data.city, setCoordinates, setIrradiation)
+        }else{
+            setCoordinates({})
         }
-    }, [data?.government, data?.city])
+    }, [data?.city])
     useEffect(() => {
-        if (coordinates) {
-            let tiltAngle = getOptimumTiltAngle(coordinates.lat)
-            setData(pv => ({ ...pv, coordinates, tiltAngle }))
-            if (data.government && data.city) {
-                getDailyIrradiation(coordinates.lat, coordinates.lon, tiltAngle, setIrradiation)
-            }
+        if (coordinates && dailyIrradiation) {
+            setData(pv => ({ ...pv, coordinates, dailyIrradiation }))
         }
-    }, [coordinates?.lat])
+    }, [coordinates && dailyIrradiation])
     useEffect(() => {
         if (dailyIrradiation) {
             setData(pv => ({ ...pv, dailyIrradiation }))
         }
     }, [dailyIrradiation])
-
 
     return (
         <form onSubmit={submitHandler}>
@@ -42,7 +37,7 @@ function OnGridDataEntry(props) {
 
                         <select name="government" id="government" required style={{ color: data.government ? "black" : "#838383" }}
                             value={data.government || ""}
-                            onChange={(e) => setData((pv) => pv && { ...pv, government: e.target.value, governorate_id: e.target[e.target.selectedIndex].id, city: "" })}
+                            onChange={(e) => setData((pv) => pv && { ...pv, government: e.target.value, governorate_id: e.target[e.target.selectedIndex].id, city: ""})}
                         ><option value='' disabled  >Select your government</option>
                             {governments.map((x, i) => <option key={i} value={x.governorate_name_en} id={x.id}>{x.governorate_name_en}</option>)}
                         </select>
@@ -81,7 +76,7 @@ function OnGridDataEntry(props) {
                 </div>
             </div>
             <div className="center">
-                <button className="btn primary" disabled={coordinates && dailyIrradiation ? false : true}>{loading || irradiationLoading ? <i className="fa fa-spinner fa-pulse"></i> : "Submit"}</button>
+                <button className="btn primary" disabled={coordinates && dailyIrradiation ? false : true}>{loading || irradiationLoading || data.loading ? <i className="fa fa-spinner fa-pulse"></i> : "Submit"}</button>
             </div>
         </form>
     )

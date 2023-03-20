@@ -33,13 +33,12 @@ inverterRouter.post(
   })
 );
 
-function choseTheInverter(inp, loadRange, inverters) {
+function choseTheInverter(inp, safetyFactor, inverters) {
   // console.log(inp, inverters);
   inverters.sort(function (a, b) {
     return a.power - b.power;
   });
-  let rang = ((loadRange / 100) + 1) 
-  let power = rang * inp
+  let power = safetyFactor * inp
   // console.log(power,inp,rang);
   if (inverters) {
     let fixedInverter = []
@@ -81,20 +80,8 @@ function choseTheInverter(inp, loadRange, inverters) {
       // console.log(numScore.toFixed(2),powerScore.toFixed(2),priceScore.toFixed(2),totalScore.toFixed(2))
     }
     // console.log(score.map(x => ({ id:x.id ,total: x.totalScore?.toFixed(2), priceS: x.priceScore?.toFixed(2), powerX: x.powerScore?.toFixed(2), numX: x.numScore?.toFixed(2) })));
-    let first = {
-      ...score.find(x => x.totalScore === Math.max(...score.map(x => x.totalScore))),
-      rank: 1
-    }
-    let second = {
-      ...score.filter(x => x.id !== first.id).find(x => x.totalScore === Math.max(...score.filter(x => x.id !== first.id).map(x => x.totalScore))),
-      rank: 2
-    }
-    let third = {
-      ...score.filter(x => x.id !== first.id && x.id !== second.id).find(x => x.totalScore === Math.max(...score.filter(x => x.id !== first.id && x.id !== second.id).map(x => x.totalScore))),
-      rank: 3
-    }
+    return (score.sort((a, b) => b.totalScore - a.totalScore).slice(0, 3).map((x, i) => ({ ...x, rank: i + 1 })))
 
-    return ([first, second, third].filter(x => x.name))
   }
 
 }
@@ -103,11 +90,11 @@ inverterRouter.post(
   '/choseInverter',
   expressAsyncHandler(async (req, res) => {
     // console.log(req.body.type);
-    let inverters = await Inverters.find({type:req.body.type})
+    let inverters = await Inverters.find({ type: req.body.type })
     inverters = inverters.map(x => {
-      return { id: x._id, name: x.name, voltage: x.voltage, power: x.power, price: x.price, efficiency: x.efficiency }
+      return { id: x._id, name: x.name, voltageRang: x.voltageRang, type: x.type, manufacturer: x.manufacturer, voltage: x.voltage, power: x.power, price: x.price, efficiency: x.efficiency }
     })
-    let response = choseTheInverter(req.body.power, req.body.rang, inverters);
+    let response = choseTheInverter(req.body.power, req.body.safetyFactor, inverters);
     res.json(response);
   })
 );
