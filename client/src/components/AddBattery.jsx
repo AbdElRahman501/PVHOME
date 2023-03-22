@@ -1,35 +1,42 @@
 import React, { useEffect, useState } from 'react'
 import { addBattery } from '../actions/AddDevicesAction';
+import { RemoveBattery, UpdateBattery } from '../actions/DevicesList';
+import SuccessMessage from './SuccessMessage';
 
-export default function AddBattery() {
-    const [data, setData] = useState({})
+export default function AddBattery(props) {
+    const [data, setData] = useState({ ...props?.selectedBattery })
     const [{ battery, success, loading, error }, setAddBattery] = useState({});
+    const [{ success: batteryUpdateSuccess, loading: batteryUpdateLoading, error: batteryUpdateError }, setUpdateBattery] = useState({});
+    const [{ success: removeBatterySuccess, loading: removeBatteryLoading, error: removeBatteryError }, setDeleteBattery] = useState({});
 
     function submitHandler(e) {
         e.preventDefault();
-        if (data) {
+        if (data._id) {
+            UpdateBattery(data._id, data, setUpdateBattery)
+        } else {
             addBattery(data, setAddBattery)
         }
     }
     useEffect(() => {
-        if (success) {
+        if (success || batteryUpdateSuccess) {
             setData({})
         }
-    }, [success])
+    }, [success, batteryUpdateSuccess])
 
+    // console.log();
     return (
         <form onSubmit={submitHandler}>
             <div className="data-entry-box center ">
-                {success ?
-                    <div className='grid-container' style={{ width: "400px" }}>
-                        <h1>Battery Added Successfully</h1>
-                        <img className="big-icon" src="/images/icons8-checkmark-128.png" alt="" />
-                    </div>
-                    :
+                {success && <SuccessMessage>Battery Add Successfully</SuccessMessage>}
+                {batteryUpdateSuccess && <SuccessMessage>{batteryUpdateSuccess}</SuccessMessage>}
+                {removeBatterySuccess && <SuccessMessage>{removeBatterySuccess}</SuccessMessage>}
+                {!(success || batteryUpdateSuccess || removeBatterySuccess) &&
                     <div className='data-container'>
                         <label className="data-input" htmlFor="name"><p>Name<sup><i className='fa fa-asterisk'></i></sup></p>
+                            <input type="text" id='name' placeholder='Enter  Name' required onChange={(e) => setData((pv) => pv && { ...pv, name: e.target.value })}
+                                value={data.name || ""}
+                            />
 
-                            <input type="text" id='name' placeholder='Enter  Name' required onChange={(e) => setData((pv) => pv && { ...pv, name: e.target.value })} />
                         </label>
                         <label className="data-input" htmlFor="manufacturer"><p>Manufacturer<sup><i className='fa fa-asterisk'></i></sup></p>
                             <input type="text" id='manufacturer' placeholder='Enter  manufacturer' required
@@ -48,7 +55,7 @@ export default function AddBattery() {
                                 <div>
                                     <input type="number" min="11" max="96" id='voltage' placeholder='Enter  voltage' required
                                         value={data.voltage || ""}
-                                        onChange={(e) => setData((pv) => pv && { ...pv, voltage: Number(e.target.value) >= 0 ? [Number(e.target.value)] : "" })}
+                                        onChange={(e) => setData((pv) => pv && { ...pv, voltage: Number(e.target.value) >= 0 ? Number(e.target.value) : "" })}
                                     />
                                     <span>V</span>
                                 </div>
@@ -77,7 +84,7 @@ export default function AddBattery() {
                                 <div>
                                     <input type="number" min="70" max="100" placeholder='Enter Dod '
                                         value={data.dod || ""}
-                                        onChange={(e) => setData((pv) => pv && { ...pv, dod: Number(e.target.value) >= 0 ? (Number(e.target.value) / 100) : "" })}
+                                        onChange={(e) => setData((pv) => pv && { ...pv, dod: Number(e.target.value) >= 1 ? (Number(e.target.value)) : "" })}
                                     />
                                     <span>%</span>
                                 </div>
@@ -87,12 +94,15 @@ export default function AddBattery() {
                 }
             </div>
             <div className="center">
-                {success ?
+                {success &&
                     <button type='button' onClick={() => setAddBattery({})} className="btn secondary"  >Add New</button>
-                    :
-                    <button type='submit' className="btn primary" disabled={loading || !data} >{loading ? <i className="fa fa-spinner fa-pulse"></i> : "Add"}</button>
+                }{
+                    !(batteryUpdateSuccess || removeBatterySuccess) && <button type='submit' className="btn primary" disabled={loading || !data || batteryUpdateLoading} >{loading || batteryUpdateLoading ? <i className="fa fa-spinner fa-pulse"></i> : data._id ? "update" : "Add"}</button>
                 }
+                {!(success || batteryUpdateSuccess || removeBatterySuccess) && data._id && <button type='button' onClick={() => { if (window.confirm('Are you sure you want to delete "' + data.name + '" ?')) { RemoveBattery(data._id, setDeleteBattery) } }} className="btn secondary" >{removeBatteryLoading ? <i className="fa fa-spinner fa-pulse"></i> : "Remove"}</button>}
+
             </div>
+
         </form>
 
     )

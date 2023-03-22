@@ -12,6 +12,7 @@ const inverterSchema = new mongoose.Schema({
         max: { type: Number }
     },
     power: { type: Number, required: true },
+    inputPowerMax: { type: Number, required: true },
     price: { type: Number, required: true },
     efficiency: { type: Number, required: true }
 }, {

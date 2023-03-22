@@ -1,34 +1,43 @@
 import React, { useEffect, useState } from 'react'
 import { addPanel } from '../actions/AddDevicesAction';
+import { removePanel, updatePanel } from '../actions/DevicesList';
+import SuccessMessage from './SuccessMessage';
 
-export default function AddSolarPanel() {
-    const [data, setData] = useState({})
+export default function AddSolarPanel(props) {
+
+    const [data, setData] = useState({ ...props?.selectedSolarPanel })
     const [{ panel, success, loading, error }, setAddPanel] = useState({});
+    const [{ success: panelUpdateSuccess, loading: panelUpdateLoading, error: panelUpdateError }, setUpdatePanel] = useState({});
+    const [{ success: removePanelSuccess, loading: removePanelLoading, error: removePanelError }, setDeletedPanel] = useState({});
+
+
 
     function submitHandler(e) {
         e.preventDefault();
-        if (data) {
+        if (data._id) {
+            updatePanel(data._id, data, setUpdatePanel)
+        } else {
             addPanel(data, setAddPanel)
         }
     }
     useEffect(() => {
-        if (success) {
+        if (success || panelUpdateSuccess) {
             setData({})
         }
-    }, [success])
+    }, [success, panelUpdateSuccess])
 
     return (
         <form onSubmit={submitHandler}>
             <div className="data-entry-box center ">
-                {success ?
-                    <div className='grid-container' style={{ width: "400px" }}>
-                        <h1>Panel Added Successfully</h1>
-                        <img className="big-icon" src="/images/icons8-checkmark-128.png" alt="" />
-                    </div>
-                    :
+                {success && <SuccessMessage>Panel Add Successfully</SuccessMessage>}
+                {panelUpdateSuccess && <SuccessMessage>{panelUpdateSuccess}</SuccessMessage>}
+                {removePanelSuccess && <SuccessMessage>{removePanelSuccess}</SuccessMessage>}
+                {!(success || panelUpdateSuccess || removePanelSuccess) &&
                     <div className='data-container'>
                         <label className="data-input" htmlFor="name"><p>Name<sup><i className='fa fa-asterisk'></i></sup></p>
-                            <input type="text" id='name' placeholder='Enter  Name' required onChange={(e) => setData((pv) => pv && { ...pv, name: e.target.value })} />
+                            <input type="text" id='name' placeholder='Enter  Name' required
+                                value={data.name || ""}
+                                onChange={(e) => setData((pv) => pv && { ...pv, name: e.target.value })} />
                         </label>
                         <label className="data-input" htmlFor="manufacturer"><p>manufacturer<sup><i className='fa fa-asterisk'></i></sup></p>
                             <input type="text" id='manufacturer' placeholder='Enter  manufacturer' required
@@ -44,7 +53,7 @@ export default function AddSolarPanel() {
                         </label>
 
                         <label className="data-input" htmlFor="type"><p>Type</p>
-                            <select name="type" id="type"  style={{ color: data.type ? "black" : "#838383" }}
+                            <select name="type" id="type" style={{ color: data.type ? "black" : "#838383" }}
                                 value={data.type || ""}
                                 onChange={(e) => setData((pv) => pv && { ...pv, type: e.target.value })}
                             ><option value='' disabled  >Select inverter type</option>
@@ -168,8 +177,9 @@ export default function AddSolarPanel() {
                 {success ?
                     <button type='button' onClick={() => setAddPanel({})} className="btn secondary"  >Add New</button>
                     :
-                    <button type='submit' className="btn primary" disabled={loading || !data} >{loading ? <i className="fa fa-spinner fa-pulse"></i> : "Add"}</button>
+                    !panelUpdateSuccess && <button type='submit' className="btn primary" disabled={loading || !data || panelUpdateLoading} >{loading || panelUpdateLoading ? <i className="fa fa-spinner fa-pulse"></i> : data._id ? "update" : "Add"}</button>
                 }
+                {data._id && <button type='button' onClick={() => { if (window.confirm('Are you sure you want to delete "' + data.name + '" ?')) { removePanel(data._id, setDeletedPanel) } }} className="btn secondary" >{removePanelLoading ? <i className="fa fa-spinner fa-pulse"></i> : "Remove"}</button>}
             </div>
         </form>
 

@@ -6,7 +6,7 @@ import OffGridResults from '../SystemsComponents/offGrid/OffGridResults';
 function OffGridScreen() {
 
     const [onSubmit, setOnSubmit] = useState(false)
-    const [data, setData] = useState({type:"Off Grid"})
+    const [data, setData] = useState({type:"OFF Grid",safetyFactor:1.25})
 
     return (
         <section id="data-entry">

@@ -721,7 +721,7 @@ ul.devices a:hover {
 
 @media screen and (max-width: 800px) {
     #data-entry {
-        width: 100%;
+        width: 100vw;
     }
 }
 

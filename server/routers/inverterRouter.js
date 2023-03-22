@@ -10,14 +10,14 @@ inverterRouter.get(
   '/',
   expressAsyncHandler(async (req, res) => {
     const inverters = await Inverters.find({});
-    res.send(inverters);
+    res.json(inverters);
   })
 );
 
 inverterRouter.get(
   '/seed',
   expressAsyncHandler(async (req, res) => {
-    await Inverters.collection.drop();
+    // await Inverters.collection.drop();
     // const createdInverters = await Inverters.insertMany(data.inverters);
     res.json(createdInverters);
   })
@@ -32,14 +32,42 @@ inverterRouter.post(
     res.send({ message: 'inverter added', inverter: createdInverter });
   })
 );
-
+inverterRouter.post(
+  '/UpdateInverter/:id',
+  expressAsyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const inverter = await Inverters.findById(id);
+    if (inverter) {
+      inverter.name = req.body.name || inverter.name;
+      inverter.manufacturer = req.body.manufacturer || inverter.manufacturer;
+      inverter.model = req.body.model || inverter.model;
+      inverter.type = req.body.type || inverter.type;
+      inverter.power = req.body.power || inverter.power;
+      inverter.price = req.body.price || inverter.price;
+      inverter.voltage = req.body.voltage || inverter.voltage;
+      inverter.voltageRang = req.body.voltageRang || inverter.voltageRang;
+      inverter.inputPowerMax = req.body.inputPowerMax || inverter.inputPowerMax;
+      inverter.efficiency = req.body.efficiency || inverter.efficiency;
+    }
+    const updateInverter = await inverter.save();
+    res.send({ message: 'inverter Updated Successfully', updateInverter: updateInverter });
+  })
+);
+inverterRouter.delete(
+  '/deleteInverter/:id',
+  expressAsyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const inverter = await Inverters.findById(id);
+    if (inverter) {
+      const deletedInverter = await inverter.remove();
+      res.send({ message: 'inverter Deleted Successfully', deletedInverter: deletedInverter });
+    }
+  })
+);
 function choseTheInverter(inp, safetyFactor, inverters) {
-  // console.log(inp, inverters);
-  inverters.sort(function (a, b) {
-    return a.power - b.power;
-  });
   let power = safetyFactor * inp
-  // console.log(power,inp,rang);
+  // console.log(power, inp, safetyFactor);
+
   if (inverters) {
     let fixedInverter = []
     let score = []
@@ -53,7 +81,7 @@ function choseTheInverter(inp, safetyFactor, inverters) {
         powerRate,
         totalPrice: num * inverter.price
       })
-      // console.log(inverter.id,ratio,powerRate.toFixed(2),ratio*inverter.price)  
+      // console.log(inverter.id, ratio, powerRate.toFixed(2), ratio * inverter.price)
     }
     for (let inverter of fixedInverter) {
       let sum = fixedInverter.reduce((b, a) => a.num + b, 0)
@@ -77,9 +105,9 @@ function choseTheInverter(inp, safetyFactor, inverters) {
         totalScore,
         priceScore
       })
-      // console.log(numScore.toFixed(2),powerScore.toFixed(2),priceScore.toFixed(2),totalScore.toFixed(2))
+      // console.log(numScore.toFixed(2), powerScore.toFixed(2), priceScore.toFixed(2), totalScore.toFixed(2))
     }
-    // console.log(score.map(x => ({ id:x.id ,total: x.totalScore?.toFixed(2), priceS: x.priceScore?.toFixed(2), powerX: x.powerScore?.toFixed(2), numX: x.numScore?.toFixed(2) })));
+    // console.log(score.map(x => ({ id: x.id, total: x.totalScore?.toFixed(2), priceS: x.priceScore?.toFixed(2), powerX: x.powerScore?.toFixed(2), numX: x.numScore?.toFixed(2) })));
     return (score.sort((a, b) => b.totalScore - a.totalScore).slice(0, 3).map((x, i) => ({ ...x, rank: i + 1 })))
 
   }
@@ -91,6 +119,7 @@ inverterRouter.post(
   expressAsyncHandler(async (req, res) => {
     // console.log(req.body.type);
     let inverters = await Inverters.find({ type: req.body.type })
+    // console.log(inverters);
     inverters = inverters.map(x => {
       return { id: x._id, name: x.name, voltageRang: x.voltageRang, type: x.type, manufacturer: x.manufacturer, voltage: x.voltage, power: x.power, price: x.price, efficiency: x.efficiency }
     })

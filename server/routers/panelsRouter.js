@@ -33,10 +33,45 @@ panelRouter.post(
     const panel = req.body
     const newPanel = new Panels(panel);
     const createdPanel = await newPanel.save();
-    res.send({ message: 'inverter added', panel: createdPanel });
+    res.send({ message: 'Panel Added', panel: createdPanel });
   })
 );
-
+panelRouter.post(
+  '/UpdatePanel/:id',
+  expressAsyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const panel = await Panels.findById(id);
+    if (panel) {
+      panel.name = req.body.name || panel.name;
+      panel.manufacturer = req.body.manufacturer || panel.manufacturer;
+      panel.model = req.body.model || panel.model;
+      panel.type = req.body.type || panel.type;
+      panel.power = req.body.power || panel.power;
+      panel.maxStringVoltage = req.body.maxStringVoltage || panel.maxStringVoltage;
+      panel.vmpp = req.body.vmpp || panel.vmpp;
+      panel.impp = req.body.impp || panel.impp;
+      panel.voc = req.body.voc || panel.voc;
+      panel.isc = req.body.isc || panel.isc;
+      panel.dimensions = req.body.dimensions || panel.dimensions;
+      panel.price = req.body.price || panel.price;
+      panel.efficiency = req.body.efficiency || panel.efficiency;
+      panel.type = req.body.type || panel.type;
+    }
+    const updatedPanel = await panel.save();
+    res.send({ message: 'Panel Updated Successfully', updatedPanel: updatedPanel });
+  })
+);
+panelRouter.delete(
+  '/deletePanel/:id',
+  expressAsyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const panel = await Panels.findById(id);
+    if (panel) {
+      const deletedPanel = await panel.remove();
+      res.send({ message: 'Panel Deleted Successfully', deletedPanel: deletedPanel });
+    }
+  })
+);
 panelRouter.post(
   '/chosePanel',
   expressAsyncHandler(async (req, res) => {
@@ -127,7 +162,7 @@ function chosePanels(data) {
   if (energy) {
     energy = energy / (inverter.efficiency / 100)
     energy = energy / loss
-    panelsPower = energy / peakSonHours
+    panelsPower = energy / peakSonHours || energy / 5
   } else if (totalPower) {
     panelsPower = totalPower
   }

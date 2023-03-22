@@ -16,10 +16,13 @@ function OffGridDataEntry(props) {
 
 
     useEffect(() => {
-        if (data.government) {
-            getLocation(data.government, data.city, setCoordinates)
+        if (data.government && data.city) {
+            getLocation(data.government, data.city, setCoordinates, setIrradiation)
+        }else{
+            setCoordinates({})
         }
-    }, [data?.government, data?.city])
+    }, [data?.city])
+    
     useEffect(() => {
         if (coordinates) {
             let tiltAngle = getOptimumTiltAngle(coordinates.lat)

@@ -13,7 +13,7 @@ function AddDevice() {
         <section id="data-entry">
             <div className="center bk">
                 <div className="data-entry-container content relative">
-                {device && <div className='back top'> <button type='button' onClick={() => navigate("/Add Device")} ><i className='fa fa-angle-left'></i></button>  </div>}
+                {device && <div className='back top'> <button type='button' onClick={() => navigate(-1)} ><i className='fa fa-angle-left'></i></button>  </div>}
 
                     <div className="center">
                         <h1>Add {device}</h1>

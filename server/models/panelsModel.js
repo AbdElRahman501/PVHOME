@@ -19,7 +19,6 @@ const panelSchema = new mongoose.Schema({
     },
     price: { type: Number, required: true },
     efficiency: { type: Number, required: true },
-    type: { type: String, required: true }
 }, {
     timestamps: true,
 });

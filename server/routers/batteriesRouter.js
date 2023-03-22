@@ -22,7 +22,47 @@ batteryRouter.get(
     res.json(createdBatteries);
   })
 );
+batteryRouter.post(
+  '/addBattery',
+  expressAsyncHandler(async (req, res) => {
+    const battery = req.body
+    console.log(battery);
+    const newBattery = new Batteries(battery);
+    const createdBattery = await newBattery.save();
+    res.send({ message: 'battery Added Successfully', battery: createdBattery });
+  })
+);
+batteryRouter.post(
+  '/UpdateBattery/:id',
+  expressAsyncHandler(async (req, res) => {
+    const id = req.params.id;
+    // console.log(req.body);
+    const battery = await Batteries.findById(id);
+    if (battery) {
+      battery.name = req.body.name || battery.name;
+      battery.manufacturer = req.body.manufacturer || battery.manufacturer;
+      battery.model = req.body.model || battery.model;
+      battery.voltage = req.body.voltage || battery.voltage;
+      battery.ampereHour = req.body.ampereHour || battery.ampereHour;
+      battery.price = req.body.price || battery.price;
+      battery.dod = req.body.dod || battery.dod;
 
+    }
+    const updatedBattery = await battery.save();
+    res.send({ message: 'battery Updated Successfully', updatedBattery: updatedBattery });
+  })
+);
+batteryRouter.delete(
+  '/RemoveBattery/:id',
+  expressAsyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const battery = await Batteries.findById(id);
+    if (battery) {
+      const deletedBattery = await battery.remove();
+      res.send({ message: 'Panel Deleted Successfully', deletedBattery: deletedBattery });
+    }
+  })
+);
 
 
 function choseBattery(data) {
@@ -36,6 +76,7 @@ function choseBattery(data) {
     return a.ampereHour - b.ampereHour;
   });
   for (let battery of batteries) {
+    battery.dod = battery.dod / 100
     let voltage
     if (Math.max(...inverter.voltage.map(x => x)) >= battery.voltage) {
       voltage = Math.max(...inverter.voltage.map(x => x))
