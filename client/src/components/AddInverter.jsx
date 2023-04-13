@@ -4,11 +4,20 @@ import { removeInverter, UpdateInverter } from '../actions/DevicesList';
 import SuccessMessage from './SuccessMessage';
 
 export default function AddInverter(props) {
-    const [data, setData] = useState({ ...props.selectedInverter })
+    const {successMessage,selectedInverter,updateInverter,setUpdateInverter} = props
+    const [data, setData] = useState({ ...selectedInverter })
     const [{ success, loading, error }, setAddInverter] = useState({});
-    const [{ success: inverterUpdateSuccess, loading: inverterUpdateLoading, error: inverterUpdateError }, setUpdateInverter] = useState({});
+    const { success: inverterUpdateSuccess, loading: inverterUpdateLoading, error: inverterUpdateError } = updateInverter
     const [{ success: removeInverterSuccess, loading: removeInverterLoading, error: removeInverterError }, setDeleteInverter] = useState({});
 
+    const [voltage, setVoltage] = useState(data?.voltage?.join(" / "))
+
+    useEffect(() => {
+        if (voltage) {
+            let voltageArr = voltage.split("/").filter(x => x !== "").map(x => Number(x))
+            setData(pv => ({ ...pv, voltage: voltageArr }))
+        }
+    }, [voltage])
     function submitHandler(e) {
         e.preventDefault();
         if (data._id) {
@@ -27,9 +36,9 @@ export default function AddInverter(props) {
         <form onSubmit={submitHandler}>
             <div className="data-entry-box center ">
                 {success && <SuccessMessage>inverter Add Successfully</SuccessMessage>}
-                {inverterUpdateSuccess && <SuccessMessage>{inverterUpdateSuccess}</SuccessMessage>}
+                {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
                 {removeInverterSuccess && <SuccessMessage>{removeInverterSuccess}</SuccessMessage>}
-                {!(success || inverterUpdateSuccess || removeInverterSuccess) &&
+                {!(success || successMessage || removeInverterSuccess) &&
                     <div className='data-container'>
                         <label className="data-input" htmlFor="name"><p>Name<sup><i className='fa fa-asterisk'></i></sup></p>
                             <input type="text" id='name' placeholder='Enter  Name' required onChange={(e) => setData((pv) => pv && { ...pv, name: e.target.value })}
@@ -80,9 +89,9 @@ export default function AddInverter(props) {
                         </div>}
                         {data.type !== "On Grid" && <label className="data-input" htmlFor="voltage"><p>voltage<sup><i className='fa fa-asterisk'></i></sup></p>
                             <div>
-                                <input type="number" id='voltage' placeholder='Enter  voltage' required
-                                    value={data.voltage || ""}
-                                    onChange={(e) => setData((pv) => pv && { ...pv, voltage: Number(e.target.value) >= 0 ? [Number(e.target.value)] : "" })}
+                                <input type="text" id='voltage' placeholder='Enter  voltage' required
+                                    value={voltage || ""}
+                                    onChange={(e) => setVoltage(e.target.value)}
                                 />
                                 <span>V</span>
                             </div>
@@ -134,7 +143,7 @@ export default function AddInverter(props) {
                 {success ?
                     <button type='button' onClick={() => setAddInverter({})} className="btn secondary"  >Add New</button>
                     :
-                    !inverterUpdateSuccess && <button type='submit' className="btn primary" disabled={loading || !data || inverterUpdateLoading} >{loading || inverterUpdateLoading ? <i className="fa fa-spinner fa-pulse"></i> : data._id ? "update" : "Add"}</button>
+                    !successMessage && <button type='submit' className="btn primary" disabled={loading || !data || inverterUpdateLoading} >{loading || inverterUpdateLoading ? <i className="fa fa-spinner fa-pulse"></i> : data._id ? "update" : "Add"}</button>
                 }
                 {data._id && <button type='button' onClick={() => { if (window.confirm('Are you sure you want to delete "' + data.name + '" ?')) { removeInverter(data._id, setDeleteInverter) } }} className="btn secondary" >{removeInverterLoading ? <i className="fa fa-spinner fa-pulse"></i> : "Remove"}</button>}
 

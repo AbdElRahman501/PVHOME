@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom';
-import { InvertersList} from '../actions/DevicesList';
+import { InvertersList } from '../actions/DevicesList';
 import AddInverter from './AddInverter';
 
 export default function Inverters() {
     const { search } = useLocation();
     const id = new URLSearchParams(search).get('id')
 
+    const types = ["ALL", "On Grid", "OFF Grid"]
+    const [chosen, setChosen] = useState("ALL")
+
     const [{ inverters, loading, error }, setInverter] = useState({})
-    const [selectedInverter , setSelectedInverter] = useState()
+    const [selectedInverter, setSelectedInverter] = useState()
+    
+    const [updateInverter, setUpdateInverter] = useState({});
+    const [successMessage, setSuccessMessage] = useState(false)
 
     useEffect(() => {
         if (!inverters && !loading) {
@@ -20,19 +26,28 @@ export default function Inverters() {
             setSelectedInverter(inverters.find(x => x._id === id));
         } else {
             setSelectedInverter()
+            setSuccessMessage()
         }
     }, [id])
 
+    useEffect(() => {
+        if (updateInverter.success) {
+            InvertersList(setInverter)
+            setSuccessMessage(updateInverter.success)
+            setUpdateInverter({})
+        }
+    }, [updateInverter])
     return (
-        selectedInverter 
+        selectedInverter
             ?
-            <AddInverter selectedInverter ={selectedInverter } />
+            <AddInverter selectedInverter={selectedInverter} updateInverter={updateInverter} setUpdateInverter={setUpdateInverter} successMessage={successMessage} />
             :
             <div className='data-entry-box center '>
                 <ul className='devices' >
                     {loading && <div className='center grid-item'><i style={{ fontSize: "60px" }} className=" fa fa-spinner fa-pulse"></i></div>}
                     {error && <div className='center grid-item'>{error.message}</div>}
-                    {inverters?.length > 0 && !selectedInverter  && inverters.map((inverter) => <div key={inverter._id}>
+                    {inverters?.length > 0 && !selectedInverter && <div className='center options'>{types.map((x, i) => <h2 key={i} onClick={() => setChosen(x)} className={x === chosen ? "chosen choice" : "choice"}>{x}</h2>)} </div>}
+                    {inverters?.length > 0 && !selectedInverter && inverters.filter(x => chosen === "ALL" ? true : x.type === chosen).sort((a,b) => a.power-b.power ).map((inverter) => <div key={inverter._id}>
                         <li ><Link to={"/Devices?show=Inverter&id=" + inverter._id}> {inverter.name} <i className='fa fa-angle-down'></i></Link></li>
                         <hr />
                     </div>)}

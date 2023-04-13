@@ -4,10 +4,12 @@ import { removePanel, updatePanel } from '../actions/DevicesList';
 import SuccessMessage from './SuccessMessage';
 
 export default function AddSolarPanel(props) {
-
+    const {updatedPanel,
+        setUpdatedPanel,
+        successMessage} = props
     const [data, setData] = useState({ ...props?.selectedSolarPanel })
     const [{ panel, success, loading, error }, setAddPanel] = useState({});
-    const [{ success: panelUpdateSuccess, loading: panelUpdateLoading, error: panelUpdateError }, setUpdatePanel] = useState({});
+    const { success: panelUpdateSuccess, loading: panelUpdateLoading, error: panelUpdateError } = updatedPanel
     const [{ success: removePanelSuccess, loading: removePanelLoading, error: removePanelError }, setDeletedPanel] = useState({});
 
 
@@ -15,7 +17,7 @@ export default function AddSolarPanel(props) {
     function submitHandler(e) {
         e.preventDefault();
         if (data._id) {
-            updatePanel(data._id, data, setUpdatePanel)
+            updatePanel(data._id, data, setUpdatedPanel)
         } else {
             addPanel(data, setAddPanel)
         }
@@ -30,9 +32,9 @@ export default function AddSolarPanel(props) {
         <form onSubmit={submitHandler}>
             <div className="data-entry-box center ">
                 {success && <SuccessMessage>Panel Add Successfully</SuccessMessage>}
-                {panelUpdateSuccess && <SuccessMessage>{panelUpdateSuccess}</SuccessMessage>}
+                {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
                 {removePanelSuccess && <SuccessMessage>{removePanelSuccess}</SuccessMessage>}
-                {!(success || panelUpdateSuccess || removePanelSuccess) &&
+                {!(success || successMessage || removePanelSuccess) &&
                     <div className='data-container'>
                         <label className="data-input" htmlFor="name"><p>Name<sup><i className='fa fa-asterisk'></i></sup></p>
                             <input type="text" id='name' placeholder='Enter  Name' required
@@ -177,7 +179,7 @@ export default function AddSolarPanel(props) {
                 {success ?
                     <button type='button' onClick={() => setAddPanel({})} className="btn secondary"  >Add New</button>
                     :
-                    !panelUpdateSuccess && <button type='submit' className="btn primary" disabled={loading || !data || panelUpdateLoading} >{loading || panelUpdateLoading ? <i className="fa fa-spinner fa-pulse"></i> : data._id ? "update" : "Add"}</button>
+                    !successMessage && <button type='submit' className="btn primary" disabled={loading || !data || panelUpdateLoading} >{loading || panelUpdateLoading ? <i className="fa fa-spinner fa-pulse"></i> : data._id ? "update" : "Add"}</button>
                 }
                 {data._id && <button type='button' onClick={() => { if (window.confirm('Are you sure you want to delete "' + data.name + '" ?')) { removePanel(data._id, setDeletedPanel) } }} className="btn secondary" >{removePanelLoading ? <i className="fa fa-spinner fa-pulse"></i> : "Remove"}</button>}
             </div>

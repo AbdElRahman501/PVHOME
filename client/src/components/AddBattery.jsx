@@ -4,9 +4,12 @@ import { RemoveBattery, UpdateBattery } from '../actions/DevicesList';
 import SuccessMessage from './SuccessMessage';
 
 export default function AddBattery(props) {
-    const [data, setData] = useState({ ...props?.selectedBattery })
+    const { selectedBattery, successMessage,
+        updatedBattery,
+        setUpdateBattery } = props
+    const [data, setData] = useState({ ...selectedBattery })
     const [{ battery, success, loading, error }, setAddBattery] = useState({});
-    const [{ success: batteryUpdateSuccess, loading: batteryUpdateLoading, error: batteryUpdateError }, setUpdateBattery] = useState({});
+    const { success: batteryUpdateSuccess, loading: batteryUpdateLoading, error: batteryUpdateError } = updatedBattery
     const [{ success: removeBatterySuccess, loading: removeBatteryLoading, error: removeBatteryError }, setDeleteBattery] = useState({});
 
     function submitHandler(e) {
@@ -28,9 +31,9 @@ export default function AddBattery(props) {
         <form onSubmit={submitHandler}>
             <div className="data-entry-box center ">
                 {success && <SuccessMessage>Battery Add Successfully</SuccessMessage>}
-                {batteryUpdateSuccess && <SuccessMessage>{batteryUpdateSuccess}</SuccessMessage>}
+                {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
                 {removeBatterySuccess && <SuccessMessage>{removeBatterySuccess}</SuccessMessage>}
-                {!(success || batteryUpdateSuccess || removeBatterySuccess) &&
+                {!(success || successMessage || removeBatterySuccess) &&
                     <div className='data-container'>
                         <label className="data-input" htmlFor="name"><p>Name<sup><i className='fa fa-asterisk'></i></sup></p>
                             <input type="text" id='name' placeholder='Enter  Name' required onChange={(e) => setData((pv) => pv && { ...pv, name: e.target.value })}
@@ -97,9 +100,9 @@ export default function AddBattery(props) {
                 {success &&
                     <button type='button' onClick={() => setAddBattery({})} className="btn secondary"  >Add New</button>
                 }{
-                    !(batteryUpdateSuccess || removeBatterySuccess) && <button type='submit' className="btn primary" disabled={loading || !data || batteryUpdateLoading} >{loading || batteryUpdateLoading ? <i className="fa fa-spinner fa-pulse"></i> : data._id ? "update" : "Add"}</button>
+                    !(successMessage || removeBatterySuccess) && <button type='submit' className="btn primary" disabled={loading || !data || batteryUpdateLoading} >{loading || batteryUpdateLoading ? <i className="fa fa-spinner fa-pulse"></i> : data._id ? "update" : "Add"}</button>
                 }
-                {!(success || batteryUpdateSuccess || removeBatterySuccess) && data._id && <button type='button' onClick={() => { if (window.confirm('Are you sure you want to delete "' + data.name + '" ?')) { RemoveBattery(data._id, setDeleteBattery) } }} className="btn secondary" >{removeBatteryLoading ? <i className="fa fa-spinner fa-pulse"></i> : "Remove"}</button>}
+                {!(success || successMessage || removeBatterySuccess) && data._id && <button type='button' onClick={() => { if (window.confirm('Are you sure you want to delete "' + data.name + '" ?')) { RemoveBattery(data._id, setDeleteBattery) } }} className="btn secondary" >{removeBatteryLoading ? <i className="fa fa-spinner fa-pulse"></i> : "Remove"}</button>}
 
             </div>
 

@@ -668,6 +668,21 @@ div.submit {
 }
 
 /* add devices  ******************* */
+h2.choice {
+    margin: 10px;
+    border: 1px solid;
+    padding: 10px;
+    border-radius: 15px;
+    transition: all 0.5s linear;
+    scale: 1;
+    cursor: pointer;
+}
+h2.chosen.choice {
+    color: #B35C01;
+    scale: 1.1;
+}
+
+
 ul.devices {
     margin: 0;
     padding: 0;

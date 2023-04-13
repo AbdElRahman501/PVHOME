@@ -9,7 +9,7 @@ function DeviceScreen() {
     const { search } = useLocation();
     const device = new URLSearchParams(search).get('show')
     const id = new URLSearchParams(search).get('id')
-
+    
     return (
         <section id="data-entry">
             <div className="center bk">
@@ -38,7 +38,7 @@ function DeviceScreen() {
                     {device === "Solar Panel" && <SolarPanels />}
                     {/* {device === "Solar Charger" && <ShowSolarPanel />} */}
                     {device === "Battery" && <Batteries />}
-                    {!id &&
+                    {!id &&device &&
                         <div className="center">
                             <button className="btn primary" onClick={() => navigate("/Add Device?add=" + device)} >Add New</button>
                         </div>
