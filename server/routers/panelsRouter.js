@@ -33,7 +33,7 @@ panelRouter.post(
     const panel = req.body
     const newPanel = new Panels(panel);
     const createdPanel = await newPanel.save();
-    res.send({ message: 'Panel Added', panel: createdPanel });
+    res.send({ message: 'Panel Added Successfully', panel: createdPanel });
   })
 );
 panelRouter.post(

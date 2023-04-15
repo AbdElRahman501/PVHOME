@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react';
 import OnGridDataEntry from '../SystemsComponents/onGrid/OnGridDataEntry';
 import OnGridResults from '../SystemsComponents/onGrid/OnGridResults';
+import DropDown from '../components/DropDown';
 
 function OnGridScreen() {
     const [data, setData] = useState({ type: "On Grid", safetyFactor: 1.25 });
@@ -32,6 +33,7 @@ function OnGridScreen() {
                     <div className="center">
                         <h1>On Grid</h1>
                     </div>
+                    <DropDown data={data} />
                     {!onSubmit
                         ? <OnGridDataEntry submitHandler={submitHandler} data={data} setData={setData} />
                         : <OnGridResults changeHandler={changeHandler} data={data} />

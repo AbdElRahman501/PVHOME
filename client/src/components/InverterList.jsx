@@ -13,8 +13,7 @@ export default function Inverters() {
     const [{ inverters, loading, error }, setInverter] = useState({})
     const [selectedInverter, setSelectedInverter] = useState()
     
-    const [updateInverter, setUpdateInverter] = useState({});
-    const [successMessage, setSuccessMessage] = useState(false)
+    const [successMessage, setSuccessMessage] = useState("")
 
     useEffect(() => {
         if (!inverters && !loading) {
@@ -31,16 +30,14 @@ export default function Inverters() {
     }, [id])
 
     useEffect(() => {
-        if (updateInverter.success) {
+        if (successMessage) {
             InvertersList(setInverter)
-            setSuccessMessage(updateInverter.success)
-            setUpdateInverter({})
         }
-    }, [updateInverter])
+    }, [successMessage])
     return (
         selectedInverter
             ?
-            <AddInverter selectedInverter={selectedInverter} updateInverter={updateInverter} setUpdateInverter={setUpdateInverter} successMessage={successMessage} />
+            <AddInverter selectedInverter={selectedInverter} successMessage={successMessage} setSuccessMessage={setSuccessMessage} />
             :
             <div className='data-entry-box center '>
                 <ul className='devices' >

@@ -10,7 +10,6 @@ export default function Batteries() {
     const [{ batteries, loading, error }, setBatteries] = useState({})
     const [selectedBattery, setSelectedBattery] = useState()
 
-    const [updatedBattery, setUpdateBattery] = useState({});
     const [successMessage, setSuccessMessage] = useState(false)
 
     useEffect(() => {
@@ -28,17 +27,15 @@ export default function Batteries() {
     }, [id])
 
     useEffect(() => {
-        if (updatedBattery.success) {
+        if (successMessage) {
             BatteriesList(setBatteries)
-            setSuccessMessage(updatedBattery.success)
-            setUpdateBattery({})
         }
-    }, [updatedBattery])
+    }, [successMessage])
 
     return (
         selectedBattery
             ?
-            <AddBattery selectedBattery={selectedBattery} successMessage={successMessage} updatedBattery={updatedBattery} setUpdateBattery={setUpdateBattery} />
+            <AddBattery selectedBattery={selectedBattery} successMessage={successMessage} setSuccessMessage={setSuccessMessage} />
             :
             <div className='data-entry-box center '>
                 <ul className='devices' >

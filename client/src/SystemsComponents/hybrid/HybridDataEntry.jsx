@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import governments from "../../components/governments.json"
 import cities from "../../components/cities.json"
-import { getOptimumTiltAngle } from '../../actions/Functions'
 import { getLocation } from '../../actions/choseElements'
 
-function OffGridDataEntry(props) {
+export default function HybridDataEntry(props) {
     const { setOnSubmit, setData, data } = props
 
     const [totalEnergy, setTotalEnergy] = useState(0)
     const [totalPower, setTotalPower] = useState(0)
-    const [rang, setRange] = useState(25)
 
     const [{ coordinates, loading: coordinateLoading, error: coodrinateError }, setCoordinates] = useState({});
     const [{ dailyIrradiation, loading: irradiationLoading, error: irradiationError }, setIrradiation] = useState({});
@@ -67,7 +65,7 @@ function OffGridDataEntry(props) {
     function submitHandler(e) {
         e.preventDefault();
         setOnSubmit(true)
-        setData(pv => ({...pv, totalEnergy, rang, totalPower, devices }))
+        setData(pv => ({...pv, totalEnergy, totalPower, devices }))
         // console.log(devices);
     }
 
@@ -194,4 +192,3 @@ function OffGridDataEntry(props) {
     )
 }
 
-export default OffGridDataEntry

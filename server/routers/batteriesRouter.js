@@ -59,7 +59,7 @@ batteryRouter.delete(
     const battery = await Batteries.findById(id);
     if (battery) {
       const deletedBattery = await battery.remove();
-      res.send({ message: 'Panel Deleted Successfully', deletedBattery: deletedBattery });
+      res.send({ message: 'battery Deleted Successfully', deletedBattery: deletedBattery });
     }
   })
 );

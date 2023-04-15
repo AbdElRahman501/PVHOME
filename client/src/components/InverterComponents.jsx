@@ -29,7 +29,7 @@ function InverterComponents(props) {
   useEffect(() => {
     if (inverters) {
       if (data.totalEnergy) {
-        choseBattery(data.totalEnergy, inverters[0], setBattery)
+        choseBattery(data.totalEnergy, inverters[0], setBattery, data.dod, data.autonomyDay)
       }
       setSelectedInverter(inverters[0])
     }
@@ -48,7 +48,7 @@ function InverterComponents(props) {
 
   return (
     <div className="data-entry-box">
-      {inverterLoading && <div className='center grid-item'><i style={{fontSize:"60px"}} className=" fa fa-spinner fa-pulse"></i></div>}
+      {inverterLoading && <div className='center grid-item'><i style={{ fontSize: "60px" }} className=" fa fa-spinner fa-pulse"></i></div>}
       {inverters?.length > 0 && <>
         <div className='grid'>
           <p>RANK</p>
@@ -92,10 +92,10 @@ function InverterComponents(props) {
           <h4>{inverters[0].power} W</h4>
           {inverters[0].num > 1 && <h4>{NumFormatter(inverters[0].power * inverters[0].num, 2)} W</h4>}
 
-          <h4> {inverters[0].voltage.map((x, i) => i === 0 ? x : "/" + x)} V</h4>
+          <h4> {inverters[0].type === "On Grid" ? inverters[0].voltageRang.min + " >> " + inverters[0].voltageRang.max : inverters[0].voltage.map((x, i) => i === 0 ? x : " / " + x)} V</h4>
 
         </div>
-      </> }
+      </>}
       {/* <h3 className='center'>{inverter?.num} of {inverter?.name} with a total price {inverter?.totalPrice || inverter?.price} EGP </h3> */}
 
 

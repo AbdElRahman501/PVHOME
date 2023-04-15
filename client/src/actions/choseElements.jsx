@@ -12,10 +12,10 @@ export async function choseInverter(power, safetyFactor, type, setInverters) {
 
     }
 }
-export async function choseBattery(energy, inverter, setBattery) {
+export async function choseBattery(energy, inverter, setBattery,dod,autonomyDay) {
     setBattery({ batteries: "", loading: true, error: false })
     try {
-        const { data: batteries } = await Axios.post("/api/batteries/choseBattery", { energy, loss: 0.85, dod: 0.8, autonomyDay: 1, inverter });
+        const { data: batteries } = await Axios.post("/api/batteries/choseBattery", { energy, loss: 0.85, dod, autonomyDay, inverter });
         setBattery({ batteries, loading: false, error: false })
 
     } catch (error) {

@@ -10,7 +10,6 @@ export default function SolarPanels() {
     const [{ panels, loading, error }, setPanels] = useState({})
     const [selectedSolarPanel, setSelectedSolarPanel] = useState()
 
-    const [updatedPanel, setUpdatedPanel] = useState({});
     const [successMessage, setSuccessMessage] = useState(false)
     useEffect(() => {
         if (!panels && !loading) {
@@ -27,17 +26,15 @@ export default function SolarPanels() {
     }, [id])
 
     useEffect(() => {
-        if (updatedPanel.success) {
+        if (successMessage) {
             panelsList(setPanels)
-            setSuccessMessage(updatedPanel.success)
-            setUpdatedPanel({})
         }
-    }, [updatedPanel])
+    }, [successMessage])
 
     return (
         selectedSolarPanel
             ?
-            <AddSolarPanel selectedSolarPanel={selectedSolarPanel} updatedPanel={updatedPanel} setUpdatedPanel={setUpdatedPanel} successMessage={successMessage} />
+            <AddSolarPanel selectedSolarPanel={selectedSolarPanel} setSuccessMessage={setSuccessMessage} successMessage={successMessage} />
             :
             <div className='data-entry-box center '>
                 <ul className='devices' >

@@ -4,12 +4,11 @@ import { removePanel, updatePanel } from '../actions/DevicesList';
 import SuccessMessage from './SuccessMessage';
 
 export default function AddSolarPanel(props) {
-    const {updatedPanel,
-        setUpdatedPanel,
-        successMessage} = props
-    const [data, setData] = useState({ ...props?.selectedSolarPanel })
+    const { successMessage,selectedSolarPanel,setSuccessMessage } = props
+    const [data, setData] = useState({ ...selectedSolarPanel })
+
     const [{ panel, success, loading, error }, setAddPanel] = useState({});
-    const { success: panelUpdateSuccess, loading: panelUpdateLoading, error: panelUpdateError } = updatedPanel
+    const [{ success: panelUpdateSuccess, loading: panelUpdateLoading, error: panelUpdateError }, setUpdatedPanel] = useState({});
     const [{ success: removePanelSuccess, loading: removePanelLoading, error: removePanelError }, setDeletedPanel] = useState({});
 
 
@@ -23,18 +22,20 @@ export default function AddSolarPanel(props) {
         }
     }
     useEffect(() => {
-        if (success || panelUpdateSuccess) {
+        if (success ) {
+            setData({})
+        }else if(removePanelSuccess || panelUpdateSuccess){
+            setSuccessMessage(removePanelSuccess || panelUpdateSuccess)
             setData({})
         }
-    }, [success, panelUpdateSuccess])
+    }, [success,removePanelSuccess, panelUpdateSuccess])
 
     return (
         <form onSubmit={submitHandler}>
             <div className="data-entry-box center ">
-                {success && <SuccessMessage>Panel Add Successfully</SuccessMessage>}
+                {success && <SuccessMessage>{success}</SuccessMessage>}
                 {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
-                {removePanelSuccess && <SuccessMessage>{removePanelSuccess}</SuccessMessage>}
-                {!(success || successMessage || removePanelSuccess) &&
+                {!(success || successMessage ) &&
                     <div className='data-container'>
                         <label className="data-input" htmlFor="name"><p>Name<sup><i className='fa fa-asterisk'></i></sup></p>
                             <input type="text" id='name' placeholder='Enter  Name' required
@@ -181,7 +182,7 @@ export default function AddSolarPanel(props) {
                     :
                     !successMessage && <button type='submit' className="btn primary" disabled={loading || !data || panelUpdateLoading} >{loading || panelUpdateLoading ? <i className="fa fa-spinner fa-pulse"></i> : data._id ? "update" : "Add"}</button>
                 }
-                {data._id && <button type='button' onClick={() => { if (window.confirm('Are you sure you want to delete "' + data.name + '" ?')) { removePanel(data._id, setDeletedPanel) } }} className="btn secondary" >{removePanelLoading ? <i className="fa fa-spinner fa-pulse"></i> : "Remove"}</button>}
+                {data._id &&!successMessage && <button type='button' onClick={() => { if (window.confirm('Are you sure you want to delete "' + data.name + '" ?')) { removePanel(data._id, setDeletedPanel) } }} className="btn secondary" >{removePanelLoading ? <i className="fa fa-spinner fa-pulse"></i> : "Remove"}</button>}
             </div>
         </form>
 

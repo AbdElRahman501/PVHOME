@@ -29,7 +29,7 @@ inverterRouter.post(
     const inverter = req.body
     const NewInverter = new Inverters(inverter);
     const createdInverter = await NewInverter.save();
-    res.send({ message: 'inverter added', inverter: createdInverter });
+    res.send({ message: 'inverter added Successfully', inverter: createdInverter });
   })
 );
 inverterRouter.post(
