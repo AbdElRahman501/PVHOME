@@ -69,43 +69,32 @@ function choseBattery(data) {
   let { energy, loss, dod, autonomyDay, inverter, batteries } = data
   let chosenBat = []
   let score = []
-  energy = energy / (inverter.efficiency / 100) || energy / 0.97
-  energy = energy / loss || energy / 0.85
-  // console.log(energy)
-  batteries.sort(function (a, b) {
-    return a.ampereHour - b.ampereHour;
-  });
-  for (let battery of batteries) {
-    battery.dod = battery.dod / 100
-    let voltage
-    if (Math.max(...inverter.voltage.map(x => x)) >= battery.voltage) {
-      voltage = Math.max(...inverter.voltage.map(x => x))
-    }
-    // = inverter.voltage.find(x => x > ) || inverter.voltage.find(x => x >= battery.voltage)
-    // console.log(voltage)
-    if (voltage) {
-      let batteryOfOne = energy / (dod * voltage) || energy / (battery.dod * voltage)
-      // console.log(batteryOfOne);
-      batteryOfOne = batteryOfOne * autonomyDay || batteryOfOne
-      let branch = batteryOfOne / battery.ampereHour;
-      // branch = Math.floor(branch) < branch ? Math.floor(branch) + 1 : Math.floor(branch)
-      branch = Number(branch.toFixed(0))
-      branch = branch > 0 ? branch : 1
-      let batteryPerBranch = voltage / battery.voltage
-      batteryPerBranch = Math.floor(batteryPerBranch) < batteryPerBranch ? Math.floor(batteryPerBranch) + 1 : Math.floor(batteryPerBranch)
-      if (batteryPerBranch >= 1) {
+  energy = energy / ((inverter.efficiency / 100) * loss)
 
-        // console.log(batteryOfOne,branch,batteryPerBranch) 
-        let num = branch * batteryPerBranch
-        let totalPrice = (num * battery.price);
-        chosenBat.push({
-          ...battery,
-          branch,
-          batteryPerBranch,
-          num,
-          totalPrice
-        })
-      }
+  for (let battery of batteries) {
+    dod = dod || battery.dod / 100
+    let voltage = bestVoltage(inverter.voltage, battery.ampereHour, energy, dod, autonomyDay, battery.voltage)
+    let batteryOfOne = (energy * autonomyDay) / (dod * voltage)
+    let branch = batteryOfOne / battery.ampereHour;
+
+    // branch = Math.floor(branch) < branch ? Math.floor(branch) + 1 : Math.floor(branch)
+    branch = Number(branch.toFixed(0))
+    branch = branch > 0 ? branch : 1
+
+    let batteryPerBranch = voltage / battery.voltage
+    batteryPerBranch = Math.floor(batteryPerBranch) < batteryPerBranch ? Math.floor(batteryPerBranch) + 1 : Math.floor(batteryPerBranch)
+    if (batteryPerBranch >= 1) {
+
+      // console.log(batteryOfOne,branch,batteryPerBranch) 
+      let num = branch * batteryPerBranch
+      let totalPrice = (num * battery.price);
+      chosenBat.push({
+        ...battery,
+        branch,
+        batteryPerBranch,
+        num,
+        totalPrice
+      })
     }
 
   }
@@ -129,8 +118,25 @@ function choseBattery(data) {
   }
   // console.log(score.map(x => ({ total: x.totalScore?.toFixed(2), priceS: x.priceScore?.toFixed(2), numX: x.numScore?.toFixed(2) })));
 
-  return (score.sort((a, b) => b.totalScore - a.totalScore).slice(0, 3).map((x, i) => ({ ...x, rank: i + 1 })))
+  return (score.sort((a, b) => b.totalScore - a.totalScore).slice(0, 3).map((x, i) => ({
+    ...x,
+    rank: i + 1
+  })))
 
+}
+
+function bestVoltage(voltageArr, capacity, energy, dod, autonomyDay, batteryVolt) {
+  let vs = []
+  for (let volt of voltageArr) {
+    let batteryOfOne = (energy * autonomyDay) / (dod * volt)
+    if ((volt / batteryVolt) >= 1) { vs.push({ r: batteryOfOne / capacity, volt }) }
+  }
+  return (vs.find(x => x.r == closestNum(vs.map(x => x.r), 1))?.volt)
+}
+function closestNum(array, target) {
+  return array.reduce(function (prev, curr) {
+    return (Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev);
+  });
 }
 
 batteryRouter.post(

@@ -88,14 +88,15 @@ function choseTheInverter(inp, safetyFactor, inverters) {
       let numScore = 100 - ((inverter.num / sum) * 100)
       sum = Math.max(...fixedInverter.map(x => (100 - ((x.num / sum) * 100))))
       numScore = (numScore / sum) * 100
+      numScore = adjustScoreToLower(numScore)
       let powerScore = (inverter.powerRate * 100)
       let maxPowerScore = Math.max(...fixedInverter.map(x => (x.powerRate * 100)))
-      powerScore = ((powerScore / maxPowerScore) * 100)
+      powerScore = adjustScoreToBigger((powerScore / maxPowerScore) * 100)
       let priceRate = Math.max(...fixedInverter.map(x => x.totalPrice))
       // let priceRate =  fixedInverter.reduce((b, a) => a.totalPrice+b, 0)
       let priceScore = 100 - ((inverter.totalPrice / priceRate) * 100)
       priceRate = Math.max(...fixedInverter.map(x => (100 - ((x.totalPrice / priceRate) * 100))))
-      priceScore = (priceScore / priceRate) * 100
+      priceScore = adjustScoreToBigger((priceScore / priceRate) * 100)
       let totalScore = (priceScore + numScore + (powerScore / 3)) / 3
       totalScore = (totalScore / (((2 * 100) + (100 / 3)) / 3)) * 100
       score.push({
@@ -113,7 +114,40 @@ function choseTheInverter(inp, safetyFactor, inverters) {
   }
 
 }
-
+function adjustScoreToLower(score) {
+  if (score >= 95 && score <= 100) {
+    return score ;
+  } else if (score >= 85 && score < 95) {
+    return score - 3;
+  } else if (score >= 70 && score < 85) {
+    return score - 15;
+  } else if (score >= 50 && score < 70) {
+    return score - 20;
+  } else if (score >= 30 && score < 50) {
+    return score - 25;
+  } else if(score > 10 && score < 30) {
+    return score - 10;
+  }else{
+    return score
+  }
+}
+function adjustScoreToBigger(score) {
+  if (score >= 95 && score < 99) {
+    return score+2 ;
+  } else if (score >= 90 && score < 95) {
+    return score +4;
+  } else if (score >= 85 && score < 90) {
+    return score +6;
+  } else if (score >= 70 && score < 85) {
+    return score + 7;
+  } else if (score >= 50 && score < 70) {
+    return score +20;
+  } else if (score >= 30 && score < 50) {
+    return score +25;
+  }else{
+    return score
+  }
+}
 inverterRouter.post(
   '/choseInverter',
   expressAsyncHandler(async (req, res) => {
