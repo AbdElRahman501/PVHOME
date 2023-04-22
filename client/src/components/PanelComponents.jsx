@@ -15,13 +15,13 @@ function PanelComponents(props) {
 
   useEffect(() => {
     if ((data.totalEnergy || data.totalPower) && inverters) {
-      chosePanel({ energy: data.totalEnergy, powerRang: 30, totalPower: data.totalPower, inverter: inverters[0], loss: 0.85, coordinates: data.coordinates, area: data.area }, setPanels);
+      chosePanel({ data, inverter: inverters[0] }, setPanels);
     }
   }, [data, InverterState])
 
   useEffect(() => {
     if (data.area && data.dailyIrradiation) {
-      chosePanel({ coordinates: data.coordinates, dailyIrradiation: data.dailyIrradiation, expectedArea: data.area }, setPanels)
+      chosePanel({ data }, setPanels)
     }
   }, [data])
 
@@ -35,9 +35,20 @@ function PanelComponents(props) {
 
   }, [selectedPanel])
 
+  const Slider = document.querySelector(".horizontal-slider.panel")
+  useEffect(() => {
+    if (!height && Slider) {
+      Slider.scrollTo({
+        left: 0,
+        top: 0,
+        behavior: 'smooth'
+      })
+    }
+  }, [height,Slider])
+
   return (
     <div className="data-entry-box">
-      {panelsLoading && <div className='center grid-item'><i style={{fontSize:"60px"}} className=" fa fa-spinner fa-pulse"></i></div>}
+      {panelsLoading && <div className='center grid-item'><i style={{ fontSize: "60px" }} className=" fa fa-spinner fa-pulse"></i></div>}
       {panels?.length > 0 && <>
         <div className='grid'>
           <p>RANK</p>
@@ -48,7 +59,7 @@ function PanelComponents(props) {
           <h6 className='nm'>PANEL NAME</h6>
         </div>
         <div className='relative horizontal-slider-box'>
-          <div className='horizontal-slider' style={{ height: height ? "300%" : "100%" }}>
+          <div className='horizontal-slider panel' style={{ height: height ? "300%" : "100%", overflow: height ? "scroll" : "hidden" }}>
             {panels.map(panel => <div key={panel.id} className='grid scores '>
               <h4>#{panel?.rank}</h4>
               <CircleProgressBar>{panel.totalScore.toFixed(0)}</CircleProgressBar>

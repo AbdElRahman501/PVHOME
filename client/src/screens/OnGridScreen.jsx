@@ -5,7 +5,7 @@ import OnGridResults from '../SystemsComponents/onGrid/OnGridResults';
 import DropDown from '../components/DropDown';
 
 function OnGridScreen() {
-    const [data, setData] = useState({ type: "On Grid", safetyFactor: 1.25 });
+    const [data, setData] = useState({ type: "On Grid", safetyFactor: 25 });
     const [onSubmit, setOnSubmit] = useState(false)
 
 
@@ -33,7 +33,7 @@ function OnGridScreen() {
                     <div className="center">
                         <h1>On Grid</h1>
                     </div>
-                    <DropDown data={data} />
+                    <DropDown setData={setData} data={data} onSubmit={onSubmit} />
                     {!onSubmit
                         ? <OnGridDataEntry submitHandler={submitHandler} data={data} setData={setData} />
                         : <OnGridResults changeHandler={changeHandler} data={data} />

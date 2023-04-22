@@ -18,7 +18,16 @@ function BatteryComponents(props) {
         }
 
     }, [selectedBattery])
-
+    const Slider = document.querySelector(".horizontal-slider.battery")
+    useEffect(() => {
+      if (!height && Slider) {
+        Slider.scrollTo({
+          left: 0,
+          top: 0,
+          behavior: 'smooth'
+        })
+      }
+    }, [height, Slider])
     return (
         <div className="data-entry-box">
             {batteryLoading && <h3 className='center'>loading</h3>}
@@ -32,7 +41,8 @@ function BatteryComponents(props) {
                     <h6 className='nm'>BATTERY NAME</h6>
                 </div>
                 <div className='relative horizontal-slider-box'>
-                    <div className='horizontal-slider' style={{ height: height ? "300%" : "100%" }}>
+                    <div className='horizontal-slider battery' style={{ height: height ? "300%" : "100%", overflow: height ? "scroll" : "hidden" }}>
+
                         {batteries.map(battery => <div key={battery.id} className='grid scores '>
                             <h4>#{battery?.rank}</h4>
                             <CircleProgressBar>{battery.totalScore?.toFixed(0)}</CircleProgressBar>

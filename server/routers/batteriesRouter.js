@@ -65,16 +65,16 @@ batteryRouter.delete(
 );
 
 
-function choseBattery(data) {
-  let { energy, loss, dod, autonomyDay, inverter, batteries } = data
+function choseBattery(data,inverter,batteries) {
+  let { totalEnergy, loss, dod, autonomyDay , topResults } = data
   let chosenBat = []
   let score = []
-  energy = energy / ((inverter.efficiency / 100) * loss)
+  totalEnergy = totalEnergy / ((inverter.efficiency / 100) * loss)
 
   for (let battery of batteries) {
     dod = dod || battery.dod / 100
-    let voltage = bestVoltage(inverter.voltage, battery.ampereHour, energy, dod, autonomyDay, battery.voltage)
-    let batteryOfOne = (energy * autonomyDay) / (dod * voltage)
+    let voltage = bestVoltage(inverter.voltage, battery.ampereHour, totalEnergy, dod, autonomyDay, battery.voltage)
+    let batteryOfOne = (totalEnergy * autonomyDay) / (dod * voltage)
     let branch = batteryOfOne / battery.ampereHour;
 
     // branch = Math.floor(branch) < branch ? Math.floor(branch) + 1 : Math.floor(branch)
@@ -118,7 +118,7 @@ function choseBattery(data) {
   }
   // console.log(score.map(x => ({ total: x.totalScore?.toFixed(2), priceS: x.priceScore?.toFixed(2), numX: x.numScore?.toFixed(2) })));
 
-  return (score.sort((a, b) => b.totalScore - a.totalScore).slice(0, 3).map((x, i) => ({
+  return (score.sort((a, b) => b.totalScore - a.totalScore).slice(0, topResults).map((x, i) => ({
     ...x,
     rank: i + 1
   })))
@@ -142,20 +142,13 @@ function closestNum(array, target) {
 batteryRouter.post(
   '/choseBattery',
   expressAsyncHandler(async (req, res) => {
-    // console.log(req.body);
+    console.log(req.body);
     let batteries = await Batteries.find({})
     batteries = batteries.map(x => {
       return { id: x._id, name: x.name, voltage: x.voltage, ampereHour: x.ampereHour, price: x.price, dod: x.dod }
     })
-    let response = choseBattery(
-      {
-        energy: req.body.energy,
-        loss: req.body.loss,
-        dod: req.body.dod,
-        autonomyDay: req.body.autonomyDay,
-        inverter: req.body.inverter,
-        batteries
-      });
+    const {data, inverter} = req.body
+    let response = choseBattery(data,inverter,batteries);
     res.json(response);
   })
 );

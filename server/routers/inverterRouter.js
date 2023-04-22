@@ -64,17 +64,19 @@ inverterRouter.delete(
     }
   })
 );
-function choseTheInverter(inp, safetyFactor, inverters) {
-  let power = safetyFactor * inp
-  // console.log(power, inp, safetyFactor);
+function choseTheInverter(data, inverters) {
+  let  {safetyFactor ,totalPower,topResults } = data
+  
+  safetyFactor = 1 + (safetyFactor / 100)
+  totalPower = safetyFactor * totalPower
 
   if (inverters) {
     let fixedInverter = []
     let score = []
     for (let inverter of inverters) {
-      let ratio = (power / inverter.power);
+      let ratio = (totalPower / inverter.power);
       let num = Math.floor(ratio) < ratio ? Math.floor(ratio) + 1 : Math.floor(ratio)
-      let powerRate = power / (num * inverter.power);
+      let powerRate = totalPower / (num * inverter.power);
       fixedInverter.push({
         ...inverter,
         num,
@@ -109,14 +111,14 @@ function choseTheInverter(inp, safetyFactor, inverters) {
       // console.log(numScore.toFixed(2), powerScore.toFixed(2), priceScore.toFixed(2), totalScore.toFixed(2))
     }
     // console.log(score.map(x => ({ id: x.id, total: x.totalScore?.toFixed(2), priceS: x.priceScore?.toFixed(2), powerX: x.powerScore?.toFixed(2), numX: x.numScore?.toFixed(2) })));
-    return (score.sort((a, b) => b.totalScore - a.totalScore).slice(0, 3).map((x, i) => ({ ...x, rank: i + 1 })))
+    return (score.sort((a, b) => b.totalScore - a.totalScore).slice(0, topResults).map((x, i) => ({ ...x, rank: i + 1 })))
 
   }
 
 }
 function adjustScoreToLower(score) {
   if (score >= 95 && score <= 100) {
-    return score ;
+    return score;
   } else if (score >= 85 && score < 95) {
     return score - 3;
   } else if (score >= 70 && score < 85) {
@@ -125,26 +127,26 @@ function adjustScoreToLower(score) {
     return score - 20;
   } else if (score >= 30 && score < 50) {
     return score - 25;
-  } else if(score > 10 && score < 30) {
+  } else if (score > 10 && score < 30) {
     return score - 10;
-  }else{
+  } else {
     return score
   }
 }
 function adjustScoreToBigger(score) {
   if (score >= 95 && score < 99) {
-    return score+2 ;
+    return score + 2;
   } else if (score >= 90 && score < 95) {
-    return score +4;
+    return score + 4;
   } else if (score >= 85 && score < 90) {
-    return score +6;
+    return score + 6;
   } else if (score >= 70 && score < 85) {
     return score + 7;
   } else if (score >= 50 && score < 70) {
-    return score +20;
+    return score + 20;
   } else if (score >= 30 && score < 50) {
-    return score +25;
-  }else{
+    return score + 25;
+  } else {
     return score
   }
 }
@@ -157,7 +159,7 @@ inverterRouter.post(
     inverters = inverters.map(x => {
       return { id: x._id, name: x.name, voltageRang: x.voltageRang, type: x.type, manufacturer: x.manufacturer, voltage: x.voltage, power: x.power, price: x.price, efficiency: x.efficiency }
     })
-    let response = choseTheInverter(req.body.power, req.body.safetyFactor, inverters);
+    let response = choseTheInverter(req.body, inverters);
     res.json(response);
   })
 );

@@ -2,20 +2,20 @@ import Axios from "axios";
 import { getElevationAngle, getOptimumTiltAngle } from "./Functions";
 
 
-export async function choseInverter(power, safetyFactor, type, setInverters) {
+export async function choseInverter(data, setInverters) {
     setInverters({ inverters: "", loading: true, error: false })
     try {
-        const { data: inverters } = await Axios.post("/api/inverters/choseInverter", { type, power, safetyFactor });
+        const { data: inverters } = await Axios.post("/api/inverters/choseInverter", data);
         setInverters({ inverters: inverters, loading: false, error: false })
     } catch (error) {
         setInverters({ inverters: "", loading: false, error })
 
     }
 }
-export async function choseBattery(energy, inverter, setBattery,dod,autonomyDay) {
+export async function choseBattery(data, inverter, setBattery) {
     setBattery({ batteries: "", loading: true, error: false })
     try {
-        const { data: batteries } = await Axios.post("/api/batteries/choseBattery", { energy, loss: 0.85, dod, autonomyDay, inverter });
+        const { data: batteries } = await Axios.post("/api/batteries/choseBattery", { data, inverter });
         setBattery({ batteries, loading: false, error: false })
 
     } catch (error) {

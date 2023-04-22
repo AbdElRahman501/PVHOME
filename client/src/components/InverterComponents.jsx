@@ -15,21 +15,21 @@ function InverterComponents(props) {
 
   useEffect(() => {
     if (data.totalPower && !inverters) {
-      choseInverter(data.totalPower, data.safetyFactor, data.type, setInverters);
+      choseInverter(data, setInverters);
     }
   }, [data])
 
   useEffect(() => {
     if (data.area && panels) {
       let power = panels[0].power * panels[0].numOfPanels
-      choseInverter(power, data.safetyFactor, data.type, setInverters);
+      choseInverter(data, setInverters);
     }
   }, [panels])
 
   useEffect(() => {
     if (inverters) {
       if (data.totalEnergy) {
-        choseBattery(data.totalEnergy, inverters[0], setBattery, data.dod, data.autonomyDay)
+        choseBattery(data, inverters[0], setBattery)
       }
       setSelectedInverter(inverters[0])
     }
@@ -45,6 +45,16 @@ function InverterComponents(props) {
 
   }, [selectedInverter])
 
+  const Slider = document.querySelector(".horizontal-slider.inverter")
+  useEffect(() => {
+    if (!height && Slider) {
+      Slider.scrollTo({
+        left: 0,
+        top: 0,
+        behavior: 'smooth'
+      })
+    }
+  }, [height, Slider])
 
   return (
     <div className="data-entry-box">
@@ -59,7 +69,8 @@ function InverterComponents(props) {
           <h6 className='nm'>INVERTER NAME</h6>
         </div>
         <div className='relative horizontal-slider-box'>
-          <div className='horizontal-slider' style={{ height: height ? "300%" : "100%" }}>
+          <div className='horizontal-slider inverter' style={{ height: height ? "300%" : "100%", overflow: height ? "scroll" : "hidden" }}>
+
             {inverters.map(inverter => <div key={inverter.id} className='grid scores '>
               <h4>#{inverter?.rank}</h4>
               <CircleProgressBar>{inverter.totalScore.toFixed(0)}</CircleProgressBar>

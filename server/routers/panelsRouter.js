@@ -93,55 +93,18 @@ panelRouter.post(
         efficiency: x.efficiency
       }
     })
-    const { totalPower, energy, inverter, loss, coordinates, dailyIrradiation, expectedArea } = req.body
-    let response = chosePanels({
-      totalPower, energy, inverter, loss, panels,
-      coordinates, dailyIrradiation,
-      expectedArea
-    })
+    const { data, inverter } = req.body
+    let response = chosePanels(data,panels, inverter)
     res.json(response);
   })
 );
 
-panelRouter.post(
-  '/getDailyIrradiation',
-  expressAsyncHandler(async (req, res) => {
-    const { lat, lon, tilt } = req.body
 
-    const url = `https://re.jrc.ec.europa.eu/api/MRcalc?lat=${lat}&lon=${lon}&horirrad=1&startyear=2016&endyear=2016&d2g=1&outputformat=json&angle=${tilt}`;
 
-    // Use axios.get() method to send a GET request to the API and get a promise
-    axios.get(url)
-      // Use .then() method to handle the promise and get a response object
-      .then(response => {
-        // Access the data object from the response object using dot notation
-        const data = response.data;
-        // Get the monthly data
-        const months = data.outputs.monthly;
-        //init solar irradiation per month 
-        let dailyIrradiation = 0
-        for (const month of months) {
-          dailyIrradiation += month["H(h)_m"]
-        }
-        dailyIrradiation = (dailyIrradiation * 1000) / 365
-        // Display the value of irradiation  and divide it by 365 to get the solar irradiation per day Wh/m2/day
-        res.json({ dailyIrradiation });
-      })
-      // Use .catch() method to handle any errors or rejections
-      .catch(error => {
-        // Display error message 
-        res.json({ message: error.message });
-        console.error(error.message);
-      });
-  })
-);
-
-export default panelRouter;
-
-function chosePanels(data) {
-  let { totalPower, energy, inverter, loss, panels, coordinates, expectedArea } = data
-
-  let { elevationAngle, tiltAngle, peakSonHours } = coordinates
+function chosePanels(data,panels,inverter) {
+  let { totalPower, totalEnergy, loss, coordinates, expectedArea, peakSonHours,topResults } = data
+  let { elevationAngle, tiltAngle } = coordinates
+  
   let maxStringVoltage
   let maxArrayAmps = 100;
 
@@ -159,10 +122,10 @@ function chosePanels(data) {
     maxStringVoltage = 400
   }
 
-  if (energy) {
-    energy = energy / (inverter.efficiency / 100)
-    energy = energy / loss
-    panelsPower = energy / peakSonHours || energy / 5
+  if (totalEnergy) {
+    totalEnergy = totalEnergy / (inverter.efficiency / 100)
+    totalEnergy = totalEnergy / loss
+    panelsPower = totalEnergy / peakSonHours
   } else if (totalPower) {
     panelsPower = totalPower
   }
@@ -170,7 +133,7 @@ function chosePanels(data) {
   for (let panel of panels) {
     let height = (panel.dimensions.height / 1000)
     let width = (panel.dimensions.width / 1000)
-    height = (height * Math.cos(tiltAngle * RAD)) + ((height * Math.sin(tiltAngle * RAD)) / Math.tan(elevationAngle * RAD))
+    height = tiltAngle > 0 && elevationAngle > 0 ? (height * Math.cos(tiltAngle * RAD)) + ((height * Math.sin(tiltAngle * RAD)) / Math.tan(elevationAngle * RAD)) : height
     let area = width * height
     let numOfPanels
     if (expectedArea) {
@@ -213,7 +176,7 @@ function chosePanels(data) {
       totalArea,
       totalPrice
     })
-    // console.log(energy,panelsPower,numOfPanels,numOfPanels % 2==0)
+    // console.log(totalEnergy,panelsPower,numOfPanels,numOfPanels % 2==0)
   }
   // console.log(shPanels)
   for (let panel of shPanels) {
@@ -244,10 +207,44 @@ function chosePanels(data) {
       priceScore
     })
   }
-  return (score.sort((a, b) => b.totalScore - a.totalScore).slice(0, 3).map((x, i) => ({ ...x, rank: i + 1 })))
+  return (score.sort((a, b) => b.totalScore - a.totalScore).slice(0, topResults).map((x, i) => ({ ...x, rank: i + 1 })))
 }
 
 function toBigFixed(num) {
   return Math.floor(num) < num ? Math.floor(num) + 1 : Math.floor(num)
 }
 
+panelRouter.post(
+  '/getDailyIrradiation',
+  expressAsyncHandler(async (req, res) => {
+    const { lat, lon, tilt } = req.body
+
+    const url = `https://re.jrc.ec.europa.eu/api/MRcalc?lat=${lat}&lon=${lon}&horirrad=1&startyear=2016&endyear=2016&d2g=1&outputformat=json&angle=${tilt}`;
+
+    // Use axios.get() method to send a GET request to the API and get a promise
+    axios.get(url)
+      // Use .then() method to handle the promise and get a response object
+      .then(response => {
+        // Access the data object from the response object using dot notation
+        const data = response.data;
+        // Get the monthly data
+        const months = data.outputs.monthly;
+        //init solar irradiation per month 
+        let dailyIrradiation = 0
+        for (const month of months) {
+          dailyIrradiation += month["H(h)_m"]
+        }
+        dailyIrradiation = (dailyIrradiation * 1000) / 365
+        // Display the value of irradiation  and divide it by 365 to get the solar irradiation per day Wh/m2/day
+        res.json({ dailyIrradiation });
+      })
+      // Use .catch() method to handle any errors or rejections
+      .catch(error => {
+        // Display error message 
+        res.json({ message: error.message });
+        console.error(error.message);
+      });
+  })
+);
+
+export default panelRouter;

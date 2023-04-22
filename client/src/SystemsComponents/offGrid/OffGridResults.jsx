@@ -9,13 +9,15 @@ import PanelComponents from '../../components/PanelComponents'
 function OffGridResults(props) {
     const { setOnSubmit, data } = props
 
-    const [active, setActive] = useState(0)
-    const dataSlider = document.querySelector(".data-slider")
-    const dataBox = dataSlider?.querySelectorAll(".data-entry-box")
+  
     const [BatteryState, setBattery] = useState({})
     const [InverterState, setInverters] = useState({})
     const [panelsState, setPanels] = useState({})
 
+    const [active, setActive] = useState(0)
+    const dataSlider = document.querySelector(".data-slider")
+    const dataBox = dataSlider?.querySelectorAll(".data-entry-box")
+    
     function slide(dec) {
         let x
         if (dec === "next") {
@@ -45,10 +47,6 @@ function OffGridResults(props) {
                 <div className='next'>{active < dataBox?.length - 1 ? <button onClick={() => slide("next")} ><i className='fa fa-angle-right'></i></button> : ""} </div>
             </div>
             <div className="submit">
-                {/* <div className='absolute'>
-                    <p className='calc-data'>{NumFormatter(data.totalPower, 2)}* {rang} // {NumFormatter(data.totalPower * 1.3, 2)}  W</p>
-                    <p className='calc-data'>{NumFormatter(data.totalEnergy, 2)} whr</p>
-                </div> */}
                 <button className="btn secondary" onClick={() => setOnSubmit(false)} >Change</button>
             </div>
 

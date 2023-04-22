@@ -13,7 +13,7 @@ function OnGridDataEntry(props) {
     useEffect(() => {
         if (data.government && data.city) {
             getLocation(data.government, data.city, setCoordinates, setIrradiation)
-        }else{
+        } else {
             setCoordinates({})
         }
     }, [data?.city])
@@ -22,11 +22,6 @@ function OnGridDataEntry(props) {
             setData(pv => ({ ...pv, coordinates, dailyIrradiation }))
         }
     }, [coordinates && dailyIrradiation])
-    useEffect(() => {
-        if (dailyIrradiation) {
-            setData(pv => ({ ...pv, dailyIrradiation }))
-        }
-    }, [dailyIrradiation])
 
     return (
         <form onSubmit={submitHandler}>
@@ -37,7 +32,7 @@ function OnGridDataEntry(props) {
 
                         <select name="government" id="government" required style={{ color: data.government ? "black" : "#838383" }}
                             value={data.government || ""}
-                            onChange={(e) => setData((pv) => pv && { ...pv, government: e.target.value, governorate_id: e.target[e.target.selectedIndex].id, city: ""})}
+                            onChange={(e) => setData((pv) => pv && { ...pv, government: e.target.value, governorate_id: e.target[e.target.selectedIndex].id, city: "" })}
                         ><option value='' disabled  >Select your government</option>
                             {governments.map((x, i) => <option key={i} value={x.governorate_name_en} id={x.id}>{x.governorate_name_en}</option>)}
                         </select>

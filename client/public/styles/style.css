@@ -217,6 +217,7 @@ a.user {
     align-items: center;
     background: #111b36;
     margin-left: auto;
+    width: 60px;
 }
 
 nav a {
@@ -418,17 +419,21 @@ a .logo.active:hover path.fill {
     background: #111b36;
     z-index: 2;
     border-radius: 35px;
-    padding: 30px 15px 0px;
+    padding: 40px 15px 0px;
     border: 1px solid #ffffff;
-    height: 10px;
+    height: 0px;
     width: 10px;
     overflow: hidden;
     transition: all 0.5s linear;
 }
 
 .dropdown.info p {
-    min-width: 250px;
     font-size: 14px;
+    margin: 0;
+}
+
+.dropdown.info .flex-container {
+    margin: 10px 0;
 }
 
 .dropdown.info p.center {
@@ -454,12 +459,46 @@ a .logo.active:hover path.fill {
 }
 
 .dropdown.info.active {
-    height: calc(100% - 50px);
+    height: calc(100% - 60px);
     width: 250px;
     border: 1px solid #B35C01;
 
 }
 
+.dropdown hr {
+    border-bottom: 0;
+    margin: 15px 0;
+}
+
+.dropdown .flex-container .fa {
+    margin: 0px 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    position: absolute;
+    left: 180px;
+
+}
+
+.fa-pencil {
+    color: #B35C01;
+}
+
+.fa-check {
+    color: green;
+}
+
+.dropdown input.edit {
+    width: 45px;
+    text-align: center;
+    padding: 0 6px;
+    margin: 0;
+    border: 0;
+    border-radius: 6px;
+}
+
+.dropdown button {
+    display: contents;
+}
 
 div.submit {
     margin: auto;
@@ -568,8 +607,8 @@ div.submit {
     color: rgb(170, 170, 170) !important;
 }
 
-.data-input select:focus,
-.data-input input:focus {
+select:focus,
+input:focus {
     outline: #B35C01;
     border: 2px solid #B35C01;
 
@@ -683,10 +722,20 @@ div.submit {
 .horizontal-slider {
     width: 100%;
     height: 90px;
-    overflow: hidden;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+    scrollbar-width: none;
+    /* Firefox */
     position: absolute;
     background-color: #111B36;
     transition: all 0.25s linear;
+}
+
+
+.horizontal-slider::-webkit-scrollbar {
+    display: none;
+    /* Safari and Chrome */
 }
 
 .transition {
