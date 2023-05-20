@@ -102,6 +102,8 @@ function choseBattery(data,inverter,batteries) {
     const battery = chosenBat[i];
     let sum = chosenBat.reduce((b, a) => a.num + b, 0)
     let numScore = 100 - ((battery.num / sum) * 100)
+    sum = Math.max(...chosenBat.map(x => (100 - ((x.num / sum) * 100))))
+    numScore = (numScore / sum) * 100
     let priceRate = Math.max(...chosenBat.map(x => x.totalPrice))
     // let priceRate =  chosenBat.reduce((b, a) => a.totalPrice+b, 0)
     let priceScore = 100 - ((battery.totalPrice / priceRate) * 100)
@@ -142,7 +144,6 @@ function closestNum(array, target) {
 batteryRouter.post(
   '/choseBattery',
   expressAsyncHandler(async (req, res) => {
-    console.log(req.body);
     let batteries = await Batteries.find({})
     batteries = batteries.map(x => {
       return { id: x._id, name: x.name, voltage: x.voltage, ampereHour: x.ampereHour, price: x.price, dod: x.dod }

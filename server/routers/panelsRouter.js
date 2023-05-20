@@ -94,19 +94,17 @@ panelRouter.post(
       }
     })
     const { data, inverter } = req.body
-    let response = chosePanels(data,panels, inverter)
+    let response = chosePanels(data, panels, inverter)
     res.json(response);
   })
 );
 
 
 
-function chosePanels(data,panels,inverter) {
-  let { totalPower, totalEnergy, loss, coordinates, expectedArea, peakSonHours,topResults } = data
+function chosePanels(data, panels, inverter) {
+  let { totalPower, totalEnergy, loss, coordinates, expectedArea, peakSonHours, topResults } = data
   let { elevationAngle, tiltAngle } = coordinates
-  
-  let maxStringVoltage
-  let maxArrayAmps = 100;
+
 
   let shPanels = [];
   let score = []
@@ -116,11 +114,6 @@ function chosePanels(data,panels,inverter) {
   });
   let panelsPower
 
-  if (inverter?.type === "On Grid") {
-    maxStringVoltage = inverter.voltageRang.max
-  } else {
-    maxStringVoltage = 400
-  }
 
   if (totalEnergy) {
     totalEnergy = totalEnergy / (inverter.efficiency / 100)
@@ -139,39 +132,19 @@ function chosePanels(data,panels,inverter) {
     if (expectedArea) {
       numOfPanels = Math.floor(expectedArea / area)
     } else {
-      numOfPanels = toBigFixed(panelsPower / panel.power)
+      if (inverter?.type === "On Grid") {
+        numOfPanels = Math.ceil(panelsPower / panel.power)
+      } else {
+        numOfPanels = Math.floor(panelsPower / panel.power)
+      }
       numOfPanels = numOfPanels > 0 ? numOfPanels : numOfPanels + 1
     }
-    maxStringVoltage = panel.maxStringVoltage ? Math.min(maxStringVoltage, panel.maxStringVoltage) : maxStringVoltage
-    let maxNumSeries = maxStringVoltage / panel.voc
-    maxNumSeries = Math.floor(maxNumSeries)
-    let numOfSeries
-    let numParallelString
-    if (maxNumSeries >= numOfPanels) {
-      maxNumSeries = numOfPanels
-      numOfSeries = numOfPanels
-      numParallelString = 1
-    } else {
-      let newNumOfPanels = 0
-      numParallelString = toBigFixed(numOfPanels / maxNumSeries)
-      newNumOfPanels = toBigFixed(numOfPanels / numParallelString) * numParallelString
-      numOfSeries = newNumOfPanels / numParallelString
-      // console.log(newNumOfPanels, numOfPanels);
-      while ((newNumOfPanels - numOfPanels) > 1) {
-        numParallelString = toBigFixed(numOfPanels / maxNumSeries)
-        newNumOfPanels = toBigFixed(numOfPanels / numParallelString) * numParallelString
-        numOfSeries = newNumOfPanels / numParallelString
-        maxNumSeries = maxNumSeries - 1
-      }
-      numOfPanels = newNumOfPanels
-    }
+
     let totalPrice = numOfPanels * panel.price
     let totalArea = numOfPanels * area
     shPanels.push({
       ...panel,
       numOfPanels,
-      numOfSeries,
-      numParallelString,
       area,
       totalArea,
       totalPrice
@@ -210,9 +183,6 @@ function chosePanels(data,panels,inverter) {
   return (score.sort((a, b) => b.totalScore - a.totalScore).slice(0, topResults).map((x, i) => ({ ...x, rank: i + 1 })))
 }
 
-function toBigFixed(num) {
-  return Math.floor(num) < num ? Math.floor(num) + 1 : Math.floor(num)
-}
 
 panelRouter.post(
   '/getDailyIrradiation',

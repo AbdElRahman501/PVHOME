@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import CircleProgressBar from './CircleProgressBar'
 import { chosePanel } from '../actions/choseElements'
-
+import { getArrangements } from '../actions/GetArrangements'
 
 function PanelComponents(props) {
   const { data, InverterState, panelsState, setPanels } = props
@@ -11,7 +11,7 @@ function PanelComponents(props) {
 
   const { panels, loading: panelsLoading, error: panelsError } = panelsState
   const { inverters, loading: inverterLoading, error: inverterError } = InverterState
-
+  const [arrangement, setArrangement] = useState("")
 
   useEffect(() => {
     if ((data.totalEnergy || data.totalPower) && inverters) {
@@ -32,7 +32,7 @@ function PanelComponents(props) {
         setPanels({ panels: newArr })
       }
     }
-
+    setArrangement("")
   }, [selectedPanel])
 
   const Slider = document.querySelector(".horizontal-slider.panel")
@@ -44,7 +44,13 @@ function PanelComponents(props) {
         behavior: 'smooth'
       })
     }
-  }, [height,Slider])
+  }, [height, Slider])
+
+  useEffect(() => {
+    if (panels?.length > 0 && !arrangement) {
+      setArrangement(getArrangements(panels[0], { maxStringVoltage: 400, maxArrCurrent: 100, maxPower: 10000 })?.message)
+    }
+  }, [panels])
 
   return (
     <div className="data-entry-box">
@@ -86,10 +92,10 @@ function PanelComponents(props) {
 
         </div>
         <div className='grid data' style={{ gridTemplateColumns: "repeat(4,1fr)", height: "50px" }}>
-          <h4>{panels[0].numParallelString} X {panels[0].numOfSeries} = {panels[0].numOfPanels} </h4>
-          <h4>{panels[0].power} W </h4>
-          <h4>{panels[0].price} EGP X {panels[0].numOfPanels} = {panels[0].totalPrice} EGP </h4>
-          <h4>{panels[0].totalArea.toFixed(0)} m<sup>2</sup></h4>
+          <h4>{arrangement}</h4>
+          <h4>{panels[0]?.power} W </h4>
+          <h4>{panels[0]?.price} EGP X {panels[0].numOfPanels} = {panels[0].totalPrice} EGP </h4>
+          <h4>{panels[0]?.totalArea?.toFixed(0)} m<sup>2</sup></h4>
 
 
         </div>

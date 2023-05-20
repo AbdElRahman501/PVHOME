@@ -9,7 +9,6 @@ function HybridScreen() {
 
     const [onSubmit, setOnSubmit] = useState(false)
     const [data, setData] = useState({ type: "OFF Grid", safetyFactor: 25, dod: 0.8, autonomyDay: 1 })
-    console.log(data);
     return (
         <section id="data-entry">
             <div className="center bk">
