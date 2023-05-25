@@ -64,69 +64,46 @@ batteryRouter.delete(
   })
 );
 
-
-function choseBattery(data,inverter,batteries) {
-  let { totalEnergy, loss, dod, autonomyDay , topResults } = data
-  let chosenBat = []
-  let score = []
+function choseBattery(data, inverter, batteries) {
+  let { totalEnergy, loss, dod, autonomyDay, topResults } = data
   totalEnergy = totalEnergy / ((inverter.efficiency / 100) * loss)
 
-  for (let battery of batteries) {
-    dod = dod || battery.dod / 100
-    let voltage = bestVoltage(inverter.voltage, battery.ampereHour, totalEnergy, dod, autonomyDay, battery.voltage)
-    let batteryOfOne = (totalEnergy * autonomyDay) / (dod * voltage)
-    let branch = batteryOfOne / battery.ampereHour;
+  let initBatteries = []
+  let score = []
 
-    // branch = Math.floor(branch) < branch ? Math.floor(branch) + 1 : Math.floor(branch)
-    branch = Number(branch.toFixed(0))
-    branch = branch > 0 ? branch : 1
-
-    let batteryPerBranch = voltage / battery.voltage
-    batteryPerBranch = Math.floor(batteryPerBranch) < batteryPerBranch ? Math.floor(batteryPerBranch) + 1 : Math.floor(batteryPerBranch)
-    if (batteryPerBranch >= 1) {
-
-      // console.log(batteryOfOne,branch,batteryPerBranch) 
+  batteries.forEach(battery => {
+      dod = dod || battery.dod / 100
+      let systemVoltage = bestVoltage(inverter.voltage, battery.ampereHour, totalEnergy, dod, autonomyDay, battery.voltage)
+      let totalCapacity = (totalEnergy * autonomyDay) / (dod * systemVoltage)
+      let branch = Math.ceil(totalCapacity / battery.ampereHour);
+      let batteryPerBranch = Math.ceil(systemVoltage / battery.voltage)
       let num = branch * batteryPerBranch
       let totalPrice = (num * battery.price);
-      chosenBat.push({
-        ...battery,
-        branch,
-        batteryPerBranch,
-        num,
-        totalPrice
-      })
-    }
-
-  }
-  for (let i = 0; i < chosenBat.length; i++) {
-    const battery = chosenBat[i];
-    let sum = chosenBat.reduce((b, a) => a.num + b, 0)
-    let numScore = 100 - ((battery.num / sum) * 100)
-    sum = Math.max(...chosenBat.map(x => (100 - ((x.num / sum) * 100))))
-    numScore = (numScore / sum) * 100
-    let priceRate = Math.max(...chosenBat.map(x => x.totalPrice))
-    // let priceRate =  chosenBat.reduce((b, a) => a.totalPrice+b, 0)
-    let priceScore = 100 - ((battery.totalPrice / priceRate) * 100)
-    priceRate = Math.max(...chosenBat.map(x => (100 - ((x.totalPrice / priceRate) * 100))))
-    priceScore = (priceScore / priceRate) * 100
-    let totalScore = (priceScore + numScore) / 2
-    score.push({
-      ...battery,
-      numScore,
-      totalScore,
-      priceScore
-    })
-    // console.log(battery.num, battery.ampereHour, "numScore " + numScore.toFixed(2), "priceRate " + priceScore.toFixed(2), "totalScore " + totalScore.toFixed(2));
-  }
-  // console.log(score.map(x => ({ total: x.totalScore?.toFixed(2), priceS: x.priceScore?.toFixed(2), numX: x.numScore?.toFixed(2) })));
-
-  return (score.sort((a, b) => b.totalScore - a.totalScore).slice(0, topResults).map((x, i) => ({
-    ...x,
-    rank: i + 1
-  })))
-
+      if (systemVoltage) {
+          initBatteries.push({ ...battery, systemVoltage, branch, batteryPerBranch, num, totalPrice })
+      }
+  });
+  initBatteries.forEach(battery => {
+      let numScore = getScore("num", battery, initBatteries)
+      let priceScore = getScore("totalPrice", battery, initBatteries)
+      let totalScore = (priceScore + numScore) / 2
+      score.push({ ...battery, numScore, totalScore, priceScore })
+  });
+  return (score.sort((a, b) => b.totalScore - a.totalScore).slice(0, topResults).map((x, i) => ({ ...x, rank: i + 1 })))
 }
+function getScore(scoreName, item, array, sum) {
+  let max
+  if (sum) {
+      max = array.reduce((b, a) => a[scoreName] + b, 0)
+  } else {
+      max = Math.max(...array.map(x => x[scoreName]))
 
+  }
+  max = max === Math.min(...array.map(x => x[scoreName])) ? 2 * max : max
+  let initScore = 100 - ((item[scoreName] / max) * 100)
+  max = Math.max(...array.map(x => (100 - ((x[scoreName] / max) * 100))))
+  return ((initScore / max) * 100)
+}
 function bestVoltage(voltageArr, capacity, energy, dod, autonomyDay, batteryVolt) {
   let vs = []
   for (let volt of voltageArr) {

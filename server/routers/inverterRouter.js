@@ -65,56 +65,42 @@ inverterRouter.delete(
   })
 );
 function choseTheInverter(data, inverters) {
-  let  {safetyFactor ,totalPower,topResults } = data
-  
-  safetyFactor = 1 + (safetyFactor / 100)
-  totalPower = safetyFactor * totalPower
+  let { safetyFactor, totalPower, topResults } = data
+  totalPower = (1 + (safetyFactor / 100)) * totalPower
 
-  if (inverters) {
-    let fixedInverter = []
-    let score = []
-    for (let inverter of inverters) {
-      let ratio = (totalPower / inverter.power);
-      let num = Math.floor(ratio) < ratio ? Math.floor(ratio) + 1 : Math.floor(ratio)
-      let powerRate = totalPower / (num * inverter.power);
-      fixedInverter.push({
-        ...inverter,
-        num,
-        powerRate,
-        totalPrice: num * inverter.price
-      })
-      // console.log(inverter.id, ratio, powerRate.toFixed(2), ratio * inverter.price)
-    }
-    for (let inverter of fixedInverter) {
-      let sum = fixedInverter.reduce((b, a) => a.num + b, 0)
-      let numScore = 100 - ((inverter.num / sum) * 100)
-      sum = Math.max(...fixedInverter.map(x => (100 - ((x.num / sum) * 100))))
-      numScore = (numScore / sum) * 100
-      numScore = adjustScoreToLower(numScore)
-      let powerScore = (inverter.powerRate * 100)
-      let maxPowerScore = Math.max(...fixedInverter.map(x => (x.powerRate * 100)))
-      powerScore = adjustScoreToBigger((powerScore / maxPowerScore) * 100)
-      let priceRate = Math.max(...fixedInverter.map(x => x.totalPrice))
-      // let priceRate =  fixedInverter.reduce((b, a) => a.totalPrice+b, 0)
-      let priceScore = 100 - ((inverter.totalPrice / priceRate) * 100)
-      priceRate = Math.max(...fixedInverter.map(x => (100 - ((x.totalPrice / priceRate) * 100))))
-      priceScore = adjustScoreToBigger((priceScore / priceRate) * 100)
-      let totalScore = (priceScore + numScore + (powerScore / 3)) / 3
-      totalScore = (totalScore / (((2 * 100) + (100 / 3)) / 3)) * 100
-      score.push({
-        ...inverter,
-        numScore,
-        powerScore,
-        totalScore,
-        priceScore
-      })
-      // console.log(numScore.toFixed(2), powerScore.toFixed(2), priceScore.toFixed(2), totalScore.toFixed(2))
-    }
-    // console.log(score.map(x => ({ id: x.id, total: x.totalScore?.toFixed(2), priceS: x.priceScore?.toFixed(2), powerX: x.powerScore?.toFixed(2), numX: x.numScore?.toFixed(2) })));
-    return (score.sort((a, b) => b.totalScore - a.totalScore).slice(0, topResults).map((x, i) => ({ ...x, rank: i + 1 })))
+  let initInverters = []
+  let score = []
+  for (let inverter of inverters) {
+    let num = Math.ceil(totalPower / inverter.power)
+    // let powerDiff = 1 - (totalPower / (num * inverter.power))
+    let powerDiff = (totalPower / (num * inverter.power))
+    let totalPrice = num * inverter.price
+    initInverters.push({ ...inverter, num, powerDiff, totalPrice })
+  }
+  for (let inverter of initInverters) {
+    let numScore = adjustScoreToLower(getScore("num", inverter, initInverters, true))
+    let powerScore = adjustScoreToBigger(((inverter.powerDiff * 100) / Math.max(...initInverters.map(x => (x.powerDiff * 100)))) * 100)
+    // let powerScore = adjustScoreToBigger(getScore("powerDiff", inverter, initInverters))
+    let priceScore = adjustScoreToBigger(getScore("totalPrice", inverter, initInverters, true))
+    let totalScore = (priceScore + numScore + (powerScore / 3)) / 3
+    totalScore = (totalScore / (((2 * 100) + (100 / 3)) / 3)) * 100
+    totalScore = (totalScore + inverter.efficiency) / 2
+    score.push({ ...inverter, numScore, powerScore, totalScore, priceScore })
+  }
+  return (score.sort((a, b) => b.totalScore - a.totalScore).slice(0, topResults).map((x, i) => ({ ...x, rank: i + 1 })))
+}
+function getScore(scoreName, item, array, sum) {
+  let max
+  if (sum) {
+    max = array.reduce((b, a) => a[scoreName] + b, 0)
+  } else {
+    max = Math.max(...array.map(x => x[scoreName]))
 
   }
-
+  max = max === Math.min(...array.map(x => x[scoreName])) ? 2 * max : max
+  let initScore = 100 - ((item[scoreName] / max) * 100)
+  max = Math.max(...array.map(x => (100 - ((x[scoreName] / max) * 100))))
+  return ((initScore / max) * 100)
 }
 function adjustScoreToLower(score) {
   if (score >= 95 && score <= 100) {

@@ -105,82 +105,34 @@ function chosePanels(data, panels, inverter) {
   let { totalPower, totalEnergy, loss, coordinates, expectedArea, peakSonHours, topResults } = data
   let { elevationAngle, tiltAngle } = coordinates
 
-
   let shPanels = [];
   let score = []
 
-  panels.sort(function (a, b) {
-    return a.power - b.power;
-  });
-  let panelsPower
-
-
-  if (totalEnergy) {
-    totalEnergy = totalEnergy / (inverter.efficiency / 100)
-    totalEnergy = totalEnergy / loss
-    panelsPower = totalEnergy / peakSonHours
-  } else if (totalPower) {
-    panelsPower = totalPower
-  }
-
+  totalPower = inverter.type === "OFF Grid" ? totalEnergy / ((inverter.efficiency / 100) * loss * peakSonHours) : totalPower
   for (let panel of panels) {
-    let height = (panel.dimensions.height / 1000)
-    let width = (panel.dimensions.width / 1000)
-    height = tiltAngle > 0 && elevationAngle > 0 ? (height * Math.cos(tiltAngle * RAD)) + ((height * Math.sin(tiltAngle * RAD)) / Math.tan(elevationAngle * RAD)) : height
-    let area = width * height
-    let numOfPanels
-    if (expectedArea) {
-      numOfPanels = Math.floor(expectedArea / area)
-    } else {
-      if (inverter?.type === "On Grid") {
-        numOfPanels = Math.ceil(panelsPower / panel.power)
-      } else {
-        numOfPanels = Math.floor(panelsPower / panel.power)
-      }
-      numOfPanels = numOfPanels > 0 ? numOfPanels : numOfPanels + 1
-    }
-
-    let totalPrice = numOfPanels * panel.price
-    let totalArea = numOfPanels * area
-    shPanels.push({
-      ...panel,
-      numOfPanels,
-      area,
-      totalArea,
-      totalPrice
-    })
-    // console.log(totalEnergy,panelsPower,numOfPanels,numOfPanels % 2==0)
+      let area = getArea(panel, tiltAngle, elevationAngle)
+      let numOfPanels = expectedArea ? Math.floor(expectedArea / area) : inverter?.type === "On Grid" ? Math.ceil(totalPower / panel.power) : Math.floor(totalPower / panel.power) || 1
+      let totalPrice = numOfPanels * panel.price
+      let totalArea = numOfPanels * area
+      shPanels.push({ ...panel, numOfPanels, area, totalArea, totalPrice })
   }
-  // console.log(shPanels)
+
   for (let panel of shPanels) {
-    let sum = shPanels.reduce((b, a) => a.numOfPanels + b, 0)
-    // let sum = Math.max(...shPanels.map(x => x.numOfPanels))
-    let numScore = 100 - ((panel.numOfPanels / sum) * 100)
-    sum = Math.max(...shPanels.map(x => (100 - ((x.numOfPanels / sum) * 100))))
-    numScore = (numScore / sum) * 100
-    let priceRate = Math.max(...shPanels.map(x => x.totalPrice))
-    // let priceRate =  shPanels.reduce((b, a) => a.totalPrice+b, 0)
-    let priceScore = 100 - ((panel.totalPrice / priceRate) * 100)
-    priceRate = Math.max(...shPanels.map(x => (100 - ((x.totalPrice / priceRate) * 100))))
-    priceScore = (priceScore / priceRate) * 100
-
-    let maxArea = Math.max(...shPanels.map(x => x.totalArea))
-    let areaScore = 100 - ((panel.totalArea / maxArea) * 100)
-    maxArea = Math.max(...shPanels.map(x => (100 - ((x.totalArea / maxArea) * 100))))
-    areaScore = (areaScore / maxArea) * 100
-    // console.log( closeTo(shPanels.map(x=> x.totalArea),panel.totalArea,area))
-    let totalScore = (priceScore + numScore + areaScore) / 3
-    // console.log(panel.id, "n " + panel.numOfPanels, "nS " + numScore.toFixed(2), "p " + panel.totalPrice, "pS " + priceScore.toFixed(2), "A " + panel.totalArea.toFixed(2), "AS " + areaScore.toFixed(2), "T " + totalScore.toFixed(2))
-
-    score.push({
-      ...panel,
-      numScore,
-      areaScore,
-      totalScore,
-      priceScore
-    })
+      let numScore = getScore("numOfPanels", panel, shPanels)
+      let priceScore = getScore("totalPrice", panel, shPanels)
+      let areaScore = getScore("totalArea", panel, shPanels)
+      let totalScore = (priceScore + numScore + areaScore) / 3
+      score.push({ ...panel, numScore, areaScore, totalScore, priceScore })
   }
   return (score.sort((a, b) => b.totalScore - a.totalScore).slice(0, topResults).map((x, i) => ({ ...x, rank: i + 1 })))
+}
+function getScore(scoreName, item, array) {
+  // let max = array.reduce((b, a) => a[scoreName] + b, 0)
+  let max = Math.max(...array.map(x => x[scoreName]))
+  max = max > 1 ? max : 2
+  let initScore = 100 - ((item[scoreName] / max) * 100)
+  max = Math.max(...array.map(x => (100 - ((x[scoreName] / max) * 100))))
+  return ((initScore / max) * 100)
 }
 
 
