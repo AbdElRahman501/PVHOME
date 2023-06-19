@@ -1,9 +1,9 @@
 import React from 'react'
 import { useState } from 'react'
-import { NumFormatter } from '../../actions/Functions'
 import BatteryComponents from '../../components/BatteryComponents'
 import InverterComponents from '../../components/InverterComponents'
 import PanelComponents from '../../components/PanelComponents'
+import SolarChargerComponent from '../../components/SolarChargerComponent'
 
 
 function OffGridResults(props) {
@@ -13,6 +13,7 @@ function OffGridResults(props) {
     const [BatteryState, setBattery] = useState({})
     const [InverterState, setInverters] = useState({})
     const [panelsState, setPanels] = useState({})
+    const [chargerState, setSolarCharger] = useState({})
 
     const [active, setActive] = useState(0)
     const dataSlider = document.querySelector(".data-slider")
@@ -34,7 +35,6 @@ function OffGridResults(props) {
             behavior: 'smooth'
         })
     }
-    let rang = (data.rang/100)+1
     return (
         <div>
             <div className='center relative'>
@@ -43,6 +43,7 @@ function OffGridResults(props) {
                     <PanelComponents data={data} InverterState={InverterState} panelsState={panelsState} setPanels={setPanels} />
                     <InverterComponents data={data} InverterState={InverterState} panelsState={panelsState} setInverters={setInverters} setBattery={setBattery} />
                     <BatteryComponents data={data} BatteryState={BatteryState} setBattery={setBattery} />
+                    <SolarChargerComponent data={data} BatteryState={BatteryState} panelsState={panelsState} chargerState={chargerState} setSolarCharger={setSolarCharger} />
                 </div>
                 <div className='next'>{active < dataBox?.length - 1 ? <button onClick={() => slide("next")} ><i className='fa fa-angle-right'></i></button> : ""} </div>
             </div>

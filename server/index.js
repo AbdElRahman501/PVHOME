@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import inverterRouter from './routers/inverterRouter.js';
 import batteryRouter from './routers/batteriesRouter.js';
 import panelRouter from './routers/panelsRouter.js';
+import solarChargerRouter from './routers/solarChargerRouter.js';
 
 const PORT = process.env.PORT || 3001;
 
@@ -33,7 +34,7 @@ app.get("/api", (req, res) => {
 app.use("/api/inverters", inverterRouter);
 app.use("/api/batteries", batteryRouter);
 app.use("/api/panels", panelRouter);
-
+app.use("/api/solarCharger", solarChargerRouter);
 
 
 // app.use((err, req, res, next) => {

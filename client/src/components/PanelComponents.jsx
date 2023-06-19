@@ -50,7 +50,7 @@ function PanelComponents(props) {
     if (panels?.length > 0 && !arrangement) {
       setArrangement(getArrangements(panels[0], { maxStringVoltage: 400, maxArrCurrent: 100, maxPower: 10000 })?.message)
     }
-  }, [panels])
+  }, [panels,arrangement])
 
   return (
     <div className="data-entry-box">

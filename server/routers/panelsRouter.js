@@ -134,7 +134,12 @@ function getScore(scoreName, item, array) {
   max = Math.max(...array.map(x => (100 - ((x[scoreName] / max) * 100))))
   return ((initScore / max) * 100)
 }
-
+function getArea(panel, tiltAngle, elevationAngle) {
+  let height = (panel.dimensions.height / 1000)
+  let width = (panel.dimensions.width / 1000)
+  height = tiltAngle > 0 && elevationAngle > 0 ? (height * Math.cos(tiltAngle * RAD)) + ((height * Math.sin(tiltAngle * RAD)) / Math.tan(elevationAngle * RAD)) : height
+  return width * height
+}
 
 panelRouter.post(
   '/getDailyIrradiation',

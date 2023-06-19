@@ -139,7 +139,259 @@ const data = {
         efficiency: 20.07,
         type: "Monocrystalline",
         price: 7
-    },]
+    },],
+    solarChargers: [
+        {
+            "name": "B96-30A",
+            "model": "B96-70A",
+            "manufacturer": "Galaxy",
+            "maxPower": 2000,
+            "rateCurrent": 30,
+            "systemVoltage": [24, 48],
+            "maxStringVoltage": 120,
+            "type": "pmw",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
+            "price": 700
+        }, {
+            "name": "B12-24-20A",
+            "model": "B96-70A",
+            "manufacturer": "Galaxy",
+            "maxPower": 220,
+            "rateCurrent": 20,
+            "systemVoltage": [12, 24],
+            "maxStringVoltage": 40,
+            "type": "pmw",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
+            "price": 350
+        }, {
+            "name": "B96-20A",
+            "model": "B96-70A",
+            "manufacturer": "Galaxy",
+            "maxPower": 1000,
+            "rateCurrent": 20,
+            "systemVoltage": [12, 24],
+            "maxStringVoltage": 100,
+            "type": "pmw",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
+            "price": 500
+        }, {
+            "name": "B96-70A",
+            "model": "B96-70A",
+            "manufacturer": "Galaxy",
+            "maxPower": 7280,
+            "rateCurrent": 70,
+            "systemVoltage": [96],
+            "maxStringVoltage": 430,
+            "type": "MPPT",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
+            "price": 1500
+        },
+        {
+            "name": "B96-80A",
+            "model": "B96-80A",
+            "manufacturer": "Galaxy",
+            "maxPower": 8320,
+            "rateCurrent": 80,
+            "systemVoltage": [96],
+            "maxStringVoltage": 430,
+            "type": "MPPT",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
+            "price": 1700
+        },
+        {
+            "name": "B96-100A",
+            "model": "B96-100A",
+            "manufacturer": "Galaxy",
+            "maxPower": 10400,
+            "rateCurrent": 100,
+            "systemVoltage": [96],
+            "maxStringVoltage": 430,
+            "type": "MPPT",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
+            "price": 2000
+        },
+        {
+            "name": "B192-50A",
+            "model": "B192-50A",
+            "manufacturer": "Galaxy",
+            "maxPower": 10400,
+            "rateCurrent": 50,
+            "systemVoltage": [192],
+            "maxStringVoltage": 430,
+            "type": "MPPT",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
+            "price": 1800
+        },
+        {
+            "name": "B192-60A",
+            "model": "B192-60A",
+            "manufacturer": "Galaxy",
+            "maxPower": 11700,
+            "rateCurrent": 60,
+            "systemVoltage": [192],
+            "maxStringVoltage": 430,
+            "type": "MPPT",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
+            "price": 2000
+        },
+        {
+            "name": "B192-70A",
+            "model": "B192-70A",
+            "manufacturer": "Galaxy",
+            "maxPower": 13000,
+            "rateCurrent": 70,
+            "systemVoltage": [192],
+            "maxStringVoltage": 660,
+            "type": "MPPT",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
+            "price": 2300
+        },
+        {
+            "name": "B192-80A",
+            "model": "B192-80A",
+            "manufacturer": "Galaxy",
+            "maxPower": 12480,
+            "rateCurrent": 80,
+            "systemVoltage": [192],
+            "maxStringVoltage": 660,
+            "type": "MPPT",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
 
+
+            "price": 2500
+        },
+        {
+            "name": "B192-100A",
+            "model": "B192-100A",
+            "manufacturer": "Galaxy",
+            "maxPower": 14040,
+            "rateCurrent": 100,
+            "systemVoltage": [192],
+            "maxStringVoltage": 660,
+            "type": "MPPT",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
+            "price": 2800
+        },
+        {
+            "name": "B216-50A",
+            "model": "B216-50A",
+            "manufacturer": "Galaxy",
+            "maxPower": 14560,
+            "rateCurrent": 50,
+            "systemVoltage": [216],
+            "maxStringVoltage": 660,
+            "type": "MPPT",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
+            "price": 1900
+        },
+        {
+            "name": "B216-60A",
+            "model": "B216-60A",
+            "manufacturer": "Galaxy",
+            "maxPower": 16380,
+            "rateCurrent": 60,
+            "systemVoltage": [216],
+            "maxStringVoltage": 660,
+            "type": "MPPT",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
+            "price": 2200
+        },
+        {
+            "name": "B216-70A",
+            "model": "B216-70A",
+            "manufacturer": "Galaxy",
+            "maxPower": 18200,
+            "rateCurrent": 70,
+            "systemVoltage": [216],
+            "maxStringVoltage": 660,
+            "type": "MPPT",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
+            "price": 2500
+        },
+        {
+            "name": "B216-80A",
+            "model": "B216-80A",
+            "manufacturer": "Galaxy",
+            "maxPower": 20800,
+            "rateCurrent": 80,
+            "systemVoltage": [216],
+            "maxStringVoltage": 660,
+            "type": "MPPT",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
+            "price": 2800
+        },
+        {
+            "name": "B216-100A",
+            "model": "B216-100A",
+            "manufacturer": "Galaxy",
+            "maxPower": 20800,
+            "rateCurrent": 100,
+            "systemVoltage": [216],
+            "maxStringVoltage": 660,
+            "type": "MPPT",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
+            "price": 3000
+        },
+        {
+            "name": "B240-50A",
+            "model": "B240-50A",
+            "manufacturer": "Galaxy",
+            "maxPower": 23400,
+            "rateCurrent": 50,
+            "systemVoltage": [240],
+            "maxStringVoltage": 660,
+            "type": "MPPT",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
+            "price": 2100
+        },
+        {
+            "name": "B240- 60A",
+            "model": "B240-60A",
+            "manufacturer": "Galaxy",
+            "maxPower": 26040,
+            "rateCurrent": 60,
+            "systemVoltage": [240],
+            "maxStringVoltage": 660,
+            "type": "MPPT",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
+            "price": 2300
+        },
+        {
+            "name": "B240-70A",
+            "model": "B240-70A",
+            "manufacturer": "Galaxy",
+            "maxPower": 28680,
+            "rateCurrent": 70,
+            "systemVoltage": [240],
+            "maxStringVoltage": 660,
+            "type": "MPPT",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
+            "price": 2500
+        },
+        {
+            "name": "B240-80A",
+            "model": "B240-80A",
+            "manufacturer": "Galaxy",
+            "maxPower": 31280,
+            "rateCurrent": 80,
+            "systemVoltage": [240],
+            "maxStringVoltage": 660,
+            "type": "MPPT",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
+            "price": 2700
+        },
+        {
+            "name": "B240-100A",
+            "model": "B240-100A",
+            "manufacturer": "Galaxy",
+            "maxPower": 36400,
+            "rateCurrent": 100,
+            "systemVoltage": [240],
+            "maxStringVoltage": 660,
+            "type": "MPPT",
+            "features": ["Three stages: constant current (fast charge)", "constant voltage", "floating charge"],
+            "price": 3000
+        }
+    ]
 }
 export default data;
