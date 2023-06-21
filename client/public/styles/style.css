@@ -29,6 +29,16 @@ body {
     z-index: 1;
     width: 100%;
     height: 100%;
+    animation: fade 0.5s linear;
+}
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 a.none {
@@ -658,11 +668,20 @@ input:focus {
 .data-grid-container {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    grid-template-areas: "dv dv hd hd hd ";
+    grid-template-areas:
+        "dv dv hd hd hd ";
     gap: 15px;
-    align-items: flex-end;
+    align-items: flex-start;
 }
 
+.data-grid-container:hover .btn.remove
+,.bbtn.delete:hover>.btn.remove {
+    display: block;
+}
+
+.data-grid-container:hover .bbtn.delete {
+    background: #111b36;
+}
 .device {
     grid-area: dv;
 }
@@ -672,12 +691,44 @@ input:focus {
 }
 
 .device.btn {
-    grid-area: unset;
+    /* grid-area: unset; */
     margin: 0 !important;
     color: white;
     height: 40px;
     padding: 0;
     border-radius: 10px;
+}
+
+.btn.add {
+    background: #ffffff0a;
+    border: 1px solid #422e2566;
+}
+
+.btn.add:hover {
+    color: #b35c01;
+    border: 1px solid #b35c01;
+}
+
+.bbtn.delete {
+    position: absolute;
+    left: 25px;
+    background: none;
+    width: 20px;
+    text-align: left;
+    height: 55px;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+}
+
+.btn.remove {
+    display: none;
+    background: none;
+    height: auto;
+}
+
+.btn.remove :hover {
+    color: #b35c01;
 }
 
 .results p {
@@ -867,6 +918,22 @@ ul.devices a:hover {
     .data-entry-container {
         width: calc(100% - 30px);
         padding: 0 10px;
+    }
+
+    .bbtn.delete {
+        top: -1px;
+        left: -5px;
+        height: 25px;
+        width: 25px;
+        border-radius: 50%;
+        justify-content: center;
+        z-index: 1;
+    }
+    .btn.remove {
+        font-size: 12px;
+    }
+    .data-grid-container {
+        position: relative;
     }
 
     .grid.data {

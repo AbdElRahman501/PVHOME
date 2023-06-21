@@ -36,7 +36,7 @@ export async function chosePanel(data, setPanels) {
 export async function choseSolarCharger(data, setSolarCharger) {
     setSolarCharger({ chargers: "", loading: true, error: false })
     try {
-        const { data: chargers } = await Axios.post("/api/solarCharger/choseSolarCharger", data);
+        const { data: chargers } = await Axios.post("/api/solarChargers/choseSolarCharger", data);
         setSolarCharger({ chargers, loading: false, error: false })
     } catch (error) {
         setSolarCharger({ chargers: "", loading: false, error })

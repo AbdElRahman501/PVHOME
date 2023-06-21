@@ -28,3 +28,12 @@ export async function addPanel(panel, setAddPanel) {
         setAddPanel({ success: false, loading: false, error })
     }
 }
+export async function addSolarCharger(solarCharger, setAddSolarCharger) {
+    setAddSolarCharger({ success: false, loading: true, error: false })
+    try {
+        const { data } = await Axios.post("/api/solarChargers/addSolarCharger", solarCharger);
+        setAddSolarCharger({ solarCharger: data, success: data.message, loading: false, error: false })
+    } catch (error) {
+        setAddSolarCharger({ success: false, loading: false, error })
+    }
+}

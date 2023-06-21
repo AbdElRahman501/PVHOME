@@ -86,3 +86,31 @@ export async function RemoveBattery(id, setDeleteBattery) {
         setDeleteBattery({ success: false, loading: false, error })
     }
 }
+//// Solar Chargers 
+export async function SolarChargersList(setChargers) {
+    setChargers({ chargers: "", loading: true, error: false })
+    try {
+        const { data } = await Axios.get("/api/solarChargers");
+        setChargers({ chargers: data, loading: false, error: false })
+    } catch (error) {
+        setChargers({ chargers: "", loading: false, error })
+    }
+}
+export async function updateSolarCharger(id, newData, setUpdateCharger) {
+    setUpdateCharger({ success: false, loading: true, error: false })
+    try {
+        const { data } = await Axios.post("/api/solarChargers/UpdateCharger/" + id, newData);
+        setUpdateCharger({ success: data.message, loading: false, error: false })
+    } catch (error) {
+        setUpdateCharger({ success: false, loading: false, error })
+    }
+}
+export async function removeSolarCharger(id, setDeleteCharger) {
+    setDeleteCharger({ success: false, loading: true, error: false })
+    try {
+        const { data } = await Axios.delete("/api/solarChargers/deleteCharger/" + id);
+        setDeleteCharger({ success: data.message, loading: false, error: false })
+    } catch (error) {
+        setDeleteCharger({ success: false, loading: false, error })
+    }
+}

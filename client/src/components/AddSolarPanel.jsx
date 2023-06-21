@@ -59,7 +59,7 @@ export default function AddSolarPanel(props) {
                             <select name="type" id="type" style={{ color: data.type ? "black" : "#838383" }}
                                 value={data.type || ""}
                                 onChange={(e) => setData((pv) => pv && { ...pv, type: e.target.value })}
-                            ><option value='' disabled  >Select inverter type</option>
+                            ><option value='' disabled  >Select Solar Panel type</option>
                                 <option value="monocrystalline" >monocrystalline</option>
                                 <option value="polycrystalline" >polycrystalline</option>
                                 <option value="thin-film" >thin-film</option>

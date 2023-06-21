@@ -38,7 +38,6 @@ function SolarChargerComponent(props) {
       })
     }
   }, [height, Slider])
-  console.log(panelsState);
   return (
     <div className="data-entry-box">
       {chargerLoading && <div className='center grid-item'><i style={{ fontSize: "60px" }} className=" fa fa-spinner fa-pulse"></i></div>}

@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Batteries from '../components/BatteriesList';
 import Inverters from '../components/InverterList';
 import SolarPanels from '../components/SolarPanelsList';
+import SolarChargers from '../components/SolarChargerList';
 
 function DeviceScreen() {
     let navigate = useNavigate();
@@ -29,14 +30,14 @@ function DeviceScreen() {
                                 <hr />
                                 <li><Link to="/Devices?show=Inverter">Inverter<i className='fa fa-angle-down'></i></Link></li>
                                 <hr />
-                                {/* <li><Link to="/Show Device?show=Solar Charger">Solar Charger<i className='fa fa-angle-down'></i></Link></li>
-                                <hr /> */}
+                                <li><Link to="/Devices?show=Solar Charger">Solar Charger<i className='fa fa-angle-down'></i></Link></li>
+                                <hr />
                             </ul>
                         </div>}
 
                     {device === "Inverter" && <Inverters />}
                     {device === "Solar Panel" && <SolarPanels />}
-                    {/* {device === "Solar Charger" && <ShowSolarPanel />} */}
+                    {device === "Solar Charger" && <SolarChargers />}
                     {device === "Battery" && <Batteries />}
                     {!id &&device &&
                         <div className="center">

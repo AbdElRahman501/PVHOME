@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import Logo from './logo';
 
@@ -7,6 +7,15 @@ function Navbar() {
   pathname = pathname.slice(1, pathname.length)
   const pages = pathname.split("/")
 
+  const dataSlider = document.querySelector("nav")
+
+  useEffect(() => {
+    dataSlider?.scrollTo({
+      left: 200,
+      top: 0,
+      behavior: 'smooth'
+    })
+  }, [pages,dataSlider])
   return (
     <div>
       <nav>

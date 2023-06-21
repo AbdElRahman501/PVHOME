@@ -21,7 +21,49 @@ solarChargerRouter.get(
     res.json(createdSolarChargers);
   })
 );
-
+solarChargerRouter.post(
+  '/addSolarCharger',
+  expressAsyncHandler(async (req, res) => {
+    // console.log(req.body);
+    const charger = req.body
+    const NewCharger = new SolarCharger(charger);
+    const createdCharger = await NewCharger.save();
+    res.send({ message: 'Solar Charge added Successfully', charger: createdCharger });
+  })
+);
+solarChargerRouter.post(
+  '/UpdateCharger/:id',
+  expressAsyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const charger = await SolarCharger.findById(id);
+    if (charger) {
+      charger.name = req.body.name || charger.name;
+      charger.manufacturer = req.body.manufacturer || charger.manufacturer;
+      charger.model = req.body.model || charger.model;
+      charger.type = req.body.type || charger.type;
+      charger.maxPower = req.body.maxPower || charger.maxPower;
+      charger.price = req.body.price || charger.price;
+      charger.systemVoltage = req.body.systemVoltage || charger.systemVoltage;
+      charger.maxStringVoltage = req.body.maxStringVoltage || charger.maxStringVoltage;
+      charger.rateCurrent = req.body.rateCurrent || charger.rateCurrent;
+      charger.efficiency = req.body.efficiency || charger.efficiency;
+      charger.features = req.body.features || charger.features;
+    }
+    const updateCharger = await charger.save();
+    res.send({ message: 'charger Updated Successfully', updateCharger: updateCharger });
+  })
+);
+solarChargerRouter.delete(
+  '/deleteCharger/:id',
+  expressAsyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const charger = await SolarCharger.findById(id);
+    if (charger) {
+      const deletedCharger = await charger.remove();
+      res.send({ message: 'charger Deleted Successfully', deletedCharger: deletedCharger });
+    }
+  })
+);
 solarChargerRouter.post(
   '/choseSolarCharger',
   expressAsyncHandler(async (req, res) => {

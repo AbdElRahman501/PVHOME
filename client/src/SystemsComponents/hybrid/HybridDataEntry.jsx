@@ -16,11 +16,11 @@ export default function HybridDataEntry(props) {
     useEffect(() => {
         if (data.government && data.city) {
             getLocation(data.government, data.city, setCoordinates, setIrradiation)
-        }else{
+        } else {
             setCoordinates({})
         }
     }, [data?.city])
-    
+
     useEffect(() => {
         if (coordinates && dailyIrradiation) {
             setData(pv => ({ ...pv, coordinates, dailyIrradiation }))
@@ -65,7 +65,7 @@ export default function HybridDataEntry(props) {
     function submitHandler(e) {
         e.preventDefault();
         setOnSubmit(true)
-        setData(pv => ({...pv, totalEnergy, totalPower, devices }))
+        setData(pv => ({ ...pv, totalEnergy, totalPower, devices }))
         // console.log(devices);
     }
 
@@ -117,6 +117,12 @@ export default function HybridDataEntry(props) {
                     </div>
                     {devices.map((x, i) =>
                         <div className="data-grid-container" key={i}>
+                            <div className='bbtn delete'>
+                                <button type='button' disabled={devices.length === 1} className={devices.length > 1 ? 'device btn remove' : "device btn remove disabled "}
+                                    onClick={() => setDevices(pv => pv.filter((x, index) => i !== index))}>
+                                    <i className='fa fa-trash'></i>
+                                </button>
+                            </div>
                             <label className="data-input device" htmlFor="device" >
                                 <div>
                                     <input type="text" name="device" id="device" required={i === 0} placeholder={x.deviceName}
@@ -128,7 +134,7 @@ export default function HybridDataEntry(props) {
                             </label>
                             <label className="data-input " htmlFor="quantity">
                                 <div>
-                                    <input type="number" name="quantity" id="quantity" required={devices[i].device ? true : false}
+                                    <input type="number" name="quantity" id="quantity" required={devices[i].device ? true : false} placeholder={0}
                                         value={x.quantity === 0 ? "" : x.quantity}
                                         onChange={(e) => setDevices(pv => pv.map((y, k) => k == i ? { ...y, quantity: Number(e.target.value) > 0 ? Number(e.target.value) : 0 } : y))}
                                     />
@@ -138,7 +144,7 @@ export default function HybridDataEntry(props) {
                             </label>
                             <label className="data-input " htmlFor="power">
                                 <div>
-                                    <input type="number" name="Power" id="power" required={devices[i]?.device ? true : false}
+                                    <input type="number" name="Power" id="power" required={devices[i]?.device ? true : false} placeholder={0}
                                         value={x.power === 0 ? "" : x.power}
                                         onChange={(e) => setDevices(pv => pv.map((y, k) => k == i ? { ...y, power: Number(e.target.value) > 0 ? Number(e.target.value) : 0 } : y))}
                                     />
@@ -147,7 +153,7 @@ export default function HybridDataEntry(props) {
                             </label>
                             <label className="data-input " htmlFor="hours">
                                 <div>
-                                    <input type="number" name="hours" id="hours" required={devices[i]?.device ? true : false}
+                                    <input type="number" name="hours" id="hours" required={devices[i]?.device ? true : false} placeholder={0}
                                         value={x.hours === 0 ? "" : x.hours}
                                         onChange={(e) => setDevices(pv => pv.map((y, k) => k == i ? { ...y, hours: Number(e.target.value) > 0 ? Number(e.target.value) : 0 } : y))}
                                     />
@@ -158,7 +164,7 @@ export default function HybridDataEntry(props) {
                         </div>
                     )}
                     <div className="data-grid-container results">
-                        <button type='button' className='device btn success'
+                        <button type='button' className='device btn add'
                             onClick={() => setDevices(pv => [...pv, {
                                 deviceName: "Device Name",
                                 device: "",
@@ -169,10 +175,7 @@ export default function HybridDataEntry(props) {
                             }])}>
                             <span>Add device</span>+
                         </button>
-                        <button type='button' className={devices.length > 1 ? 'device btn failed' : "device btn failed disabled "}
-                            onClick={() => setDevices(pv => pv.length > 1 ? pv.filter((x, i) => i !== pv.length - 1) : pv)}>
-                            <span>Remove device</span>-
-                        </button>
+                        
                         <p></p>
                         <p>total Power = {nFormatter(totalPower, 1)}W</p>
                         <p>total Energy = {nFormatter(totalEnergy, 1)}Whr</p>

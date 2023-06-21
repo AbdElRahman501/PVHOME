@@ -84,7 +84,7 @@ function choseTheInverter(data, inverters) {
     let priceScore = adjustScoreToBigger(getScore("totalPrice", inverter, initInverters, true))
     let totalScore = (priceScore + numScore + (powerScore / 3)) / 3
     totalScore = (totalScore / (((2 * 100) + (100 / 3)) / 3)) * 100
-    totalScore = (totalScore + inverter.efficiency) / 2
+    // totalScore = (totalScore + inverter.efficiency) / 2
     score.push({ ...inverter, numScore, powerScore, totalScore, priceScore })
   }
   return (score.sort((a, b) => b.totalScore - a.totalScore).slice(0, topResults).map((x, i) => ({ ...x, rank: i + 1 })))
