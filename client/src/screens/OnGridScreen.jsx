@@ -22,8 +22,13 @@ function OnGridScreen() {
     function submitHandler(e) {
         e.preventDefault();
         setOnSubmit(true)
+        localStorage.setItem("DATA-" + data.type, JSON.stringify(data))
     }
+    let localData = JSON.parse((localStorage.getItem("DATA-" + data.type)))
 
+    if (localData && localData.type === data.type && !data.government) {
+        setData(localData)
+    }
 
 
     return (
@@ -33,10 +38,10 @@ function OnGridScreen() {
                     <div className="center">
                         <h1>On Grid</h1>
                     </div>
-                    <DropDown setData={setData} data={data} onSubmit={onSubmit} />
+                    <DropDown setData={setData} localData={localData} data={data} onSubmit={onSubmit} />
                     {!onSubmit
-                        ? <OnGridDataEntry submitHandler={submitHandler} data={data} setData={setData} />
-                        : <OnGridResults changeHandler={changeHandler} data={data} />
+                        ? <OnGridDataEntry localData={localData} submitHandler={submitHandler} data={data} setData={setData} />
+                        : <OnGridResults changeHandler={changeHandler} setData={setData} data={data} />
                     }
                 </div>
             </div>

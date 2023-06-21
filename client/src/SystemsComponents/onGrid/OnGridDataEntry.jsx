@@ -2,16 +2,17 @@ import React, { useEffect, useState } from 'react'
 import governments from "../../components/governments.json"
 import cities from "../../components/cities.json"
 import { getLocation } from '../../actions/choseElements';
+import Priority from '../../components/Priority';
 
 
 function OnGridDataEntry(props) {
-    const { data, setData, submitHandler } = props
+    const { data, setData, localData, submitHandler } = props
     const [{ coordinates, loading, error }, setCoordinates] = useState({});
     const [{ dailyIrradiation, loading: irradiationLoading, error: irradiationError }, setIrradiation] = useState({});
 
 
     useEffect(() => {
-        if (data.government && data.city) {
+        if (data.government && data.city && (localData?.city !== data?.city)) {
             getLocation(data.government, data.city, setCoordinates, setIrradiation)
         } else {
             setCoordinates({})
@@ -26,7 +27,7 @@ function OnGridDataEntry(props) {
     return (
         <form onSubmit={submitHandler}>
             <div className="data-entry-box center ">
-                <div className='data-container' style={{ height: "300px" }}>
+                <div className='data-container' style={{ height: "320px" }} >
                     <label className="data-input" style={{ top: !data.government ? "10%" : "0" }} htmlFor="government">Government
                         {/* <input type="text" name="" id="" onChange={(e) => setData((pv) => pv && { ...pv, government: e.target.value })} /> */}
 
@@ -48,30 +49,31 @@ function OnGridDataEntry(props) {
                         </select>
                     </label>
                     <div className="flex-container center relative transition" style={{ bottom: !data.government ? "10%" : "0" }}>
-                        {!data.totalPower && <label className="data-input flex-item" style={{ width: !data.area ? "50%" : "100%" }} htmlFor="area">Area
+                        {(!data.totalPower || data.expectedArea) && <label className="data-input flex-item" style={{ width: !data.expectedArea ? "50%" : "100%" }} htmlFor="expectedArea">expectedArea
                             <div>
-                                <input type="number" name="area" id="area" placeholder='E.X 50' required={!data.totalPower} min="20"
-                                    value={data.area || ""}
-                                    onChange={(e) => setData({ ...data, totalPower: "", area: Number(e.target.value) >= 0 ? Number(e.target.value) : "" })}
+                                <input type="number" name="expectedArea" id="expectedArea" placeholder='E.X 50' required={!data.totalPower} min="20"
+                                    value={data.expectedArea || ""}
+                                    onChange={(e) => setData({ ...data, totalPower: "", expectedArea: Number(e.target.value) >= 0 ? Number(e.target.value) : "" })}
                                 />
                                 <span>m<sup>2</sup></span>
                             </div>
                         </label>}
-                        {!data.area && !data.totalPower && <p>OR</p>}
-                        {!data.area && <label className={data.totalPower ? "data-input flex-item slide-left" : "data-input flex-item "} style={{ width: !data.totalPower ? "50%" : "100%" }} htmlFor="total-power">Total Power
+                        {!data.expectedArea && !data.totalPower && <p>OR</p>}
+                        {!data.expectedArea && <label className={data.totalPower ? "data-input flex-item slide-left" : "data-input flex-item "} style={{ width: !data.totalPower ? "50%" : "100%" }} htmlFor="total-power">Total Power
                             <div>
-                                <input type="number" name="total-power" id="total-power" placeholder='E.X 100' required={!data.area} min="100"
+                                <input type="number" name="total-power" id="total-power" placeholder='E.X 100' required={!data.expectedArea} min="100"
                                     value={data.totalPower || ""}
-                                    onChange={(e) => setData({ ...data, area: "", totalPower: Number(e.target.value) >= 0 ? Number(e.target.value) : "" })}
+                                    onChange={(e) => setData({ ...data, expectedArea: "", totalPower: Number(e.target.value) >= 0 ? Number(e.target.value) : "" })}
                                 />
                                 <span>W</span>
                             </div>
                         </label>}
                     </div>
+                    <Priority data={data} setData={setData} priority={{ price: 1, num: 1, area: 1 }} />
                 </div>
             </div>
             <div className="center">
-                <button className="btn primary" disabled={coordinates && dailyIrradiation ? false : true}>{loading || irradiationLoading || data.loading ? <i className="fa fa-spinner fa-pulse"></i> : "Submit"}</button>
+                <button className="btn primary" disabled={data?.coordinates && data?.dailyIrradiation ? false : true}>{loading || irradiationLoading || data.loading ? <i className="fa fa-spinner fa-pulse"></i> : "Submit"}</button>
             </div>
         </form>
     )

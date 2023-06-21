@@ -5,7 +5,7 @@ import { choseBattery, choseInverter } from '../actions/choseElements'
 
 
 function InverterComponents(props) {
-  const { data, setBattery, InverterState, panelsState, setInverters } = props
+  const { data, setData, setBattery, InverterState, panelsState, setInverters } = props
 
   const [selectedInverter, setSelectedInverter] = useState("")
   const [height, setHeight] = useState(false)
@@ -20,9 +20,9 @@ function InverterComponents(props) {
   }, [data])
 
   useEffect(() => {
-    if (data.area && panels) {
-      let power = panels[0].power * panels[0].numOfPanels
-      choseInverter(data, setInverters);
+    if (data.expectedArea && panels) {
+      setData(pv => ({ ...pv, totalPower: panels[0].power * panels[0].numOfPanels }))
+      // choseInverter(data, setInverters);
     }
   }, [panels])
 

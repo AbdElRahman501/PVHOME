@@ -66,6 +66,7 @@ export default function HybridDataEntry(props) {
         e.preventDefault();
         setOnSubmit(true)
         setData(pv => ({ ...pv, totalEnergy, totalPower, devices }))
+        localStorage.setItem("DATA-" + data.type, JSON.stringify(data))
         // console.log(devices);
     }
 

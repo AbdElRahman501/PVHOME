@@ -102,27 +102,26 @@ panelRouter.post(
 
 
 function chosePanels(data, panels, inverter) {
-  let { totalPower, totalEnergy, loss, coordinates, expectedArea, peakSonHours, topResults } = data
+  let { totalPower, totalEnergy, loss, coordinates, expectedArea, peakSonHours, topResults, priority } = data
   let { elevationAngle, tiltAngle } = coordinates
 
   let shPanels = [];
   let score = []
-
-  totalPower = inverter.type === "OFF Grid" ? totalEnergy / ((inverter.efficiency / 100) * loss * peakSonHours) : totalPower
+  totalPower = inverter?.type === "OFF Grid" ? totalEnergy / ((inverter.efficiency / 100) * loss * peakSonHours) : totalPower
   for (let panel of panels) {
-      let area = getArea(panel, tiltAngle, elevationAngle)
-      let numOfPanels = expectedArea ? Math.floor(expectedArea / area) : inverter?.type === "On Grid" ? Math.ceil(totalPower / panel.power) : Math.floor(totalPower / panel.power) || 1
-      let totalPrice = numOfPanels * panel.price
-      let totalArea = numOfPanels * area
-      shPanels.push({ ...panel, numOfPanels, area, totalArea, totalPrice })
+    let area = getArea(panel, tiltAngle, elevationAngle)
+    let numOfPanels = expectedArea ? Math.floor(expectedArea / area) : inverter?.type === "On Grid" ? Math.ceil(totalPower / panel.power) : Math.floor(totalPower / panel.power) || 1
+    let totalPrice = numOfPanels * panel.price
+    let totalArea = numOfPanels * area
+    shPanels.push({ ...panel, numOfPanels, area, totalArea, totalPrice })
   }
 
   for (let panel of shPanels) {
-      let numScore = getScore("numOfPanels", panel, shPanels)
-      let priceScore = getScore("totalPrice", panel, shPanels)
-      let areaScore = getScore("totalArea", panel, shPanels)
-      let totalScore = (priceScore + numScore + areaScore) / 3
-      score.push({ ...panel, numScore, areaScore, totalScore, priceScore })
+    let numScore = getScore("numOfPanels", panel, shPanels)
+    let priceScore = getScore("totalPrice", panel, shPanels)
+    let areaScore = getScore("totalArea", panel, shPanels)
+    let totalScore = Math.sqrt(((Math.pow(priceScore, 2) * priority.price) + (Math.pow(numScore, 2) * priority.num) + (Math.pow(areaScore, 2) * priority.area)) / (priority.price + priority.num + priority.area))
+    score.push({ ...panel, numScore, areaScore, totalScore, priceScore })
   }
   return (score.sort((a, b) => b.totalScore - a.totalScore).slice(0, topResults).map((x, i) => ({ ...x, rank: i + 1 })))
 }

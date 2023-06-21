@@ -3,12 +3,12 @@ import { NumFormatter } from '../actions/Functions'
 import AdjustItem from './AdjustItem'
 
 function DropDown(props) {
-    const { data, setData , onSubmit } = props
+    const { data, setData, localData, onSubmit } = props
     const [dropDown, setDropDown] = useState(false)
 
 
     useEffect(() => {
-        if (data?.coordinates || data?.error) {
+        if ((data?.coordinates || data?.error) && (localData?.city !== data?.city)) {
             setDropDown(true)
         }
 
@@ -16,7 +16,7 @@ function DropDown(props) {
 
     useEffect(() => {
         if (data) {
-            setData(pv => ({ ...pv, peakSonHours: data?.dailyIrradiation / 1000, loss: 0.85 , topResults: 3 }))
+            setData(pv => ({ ...pv, peakSonHours: (localData?.city === data?.city) ? data.peakSonHours : data?.dailyIrradiation / 1000, loss: 0.85, topResults: 3 }))
         }
     }, [data?.dailyIrradiation])
 

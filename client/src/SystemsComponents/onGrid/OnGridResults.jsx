@@ -4,7 +4,7 @@ import PanelComponents from '../../components/PanelComponents'
 
 
 function OnGridResults(props) {
-    const { data, changeHandler } = props
+    const { data,setData, changeHandler } = props
 
     const [active, setActive] = useState(0)
     const dataSlider = document.querySelector(".data-slider")
@@ -38,7 +38,7 @@ function OnGridResults(props) {
                 <div className='back'>{active !== 0 && <button onClick={() => slide("back")}><i className='fa fa-angle-left'></i></button>}</div>
                 <div className='data-slider'>
                     <PanelComponents data={data} InverterState={InverterState} panelsState={panelsState} setPanels={setPanels} />
-                    <InverterComponents data={data} InverterState={InverterState} setInverters={setInverters} panelsState={panelsState} />
+                    <InverterComponents data={data} setData={setData} InverterState={InverterState} setInverters={setInverters} panelsState={panelsState} />
                 </div>
                 <div className='next'>{active < dataBox?.length - 1 ? <button onClick={() => slide("next")} ><i className='fa fa-angle-right'></i></button> : ""} </div>
             </div>

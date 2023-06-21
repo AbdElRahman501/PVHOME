@@ -14,13 +14,13 @@ function PanelComponents(props) {
   const [arrangement, setArrangement] = useState("")
 
   useEffect(() => {
-    if ((data.totalEnergy || data.totalPower) && inverters) {
+    if ((data.totalEnergy || data.totalPower) && inverters && !panels) {
       chosePanel({ data, inverter: inverters[0] }, setPanels);
     }
   }, [data, InverterState])
 
   useEffect(() => {
-    if (data.area && data.dailyIrradiation) {
+    if (data.expectedArea && !panels) {
       chosePanel({ data }, setPanels)
     }
   }, [data])

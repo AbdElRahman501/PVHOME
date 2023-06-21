@@ -1,6 +1,7 @@
 import React from 'react'
 import governments from "../../components/governments.json"
 import cities from "../../components/cities.json"
+import Priority from '../../components/Priority'
 
 
 function LocationData(props) {
@@ -29,6 +30,7 @@ function LocationData(props) {
                         {cities.filter((x) => x.governorate_id === data.governorate_id).map((x, i) => <option key={i} value={x.city_name_en}>{x.city_name_en}</option>)}
                     </select>
                 </label>
+                <Priority data={data} setData={setData} priority={{ price: 1, num: 1, area: 1 }} />
 
             </div>
         </div>

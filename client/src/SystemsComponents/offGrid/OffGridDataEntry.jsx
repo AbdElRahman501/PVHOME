@@ -4,7 +4,7 @@ import LocationData from './LocationData'
 import { getLocation } from '../../actions/choseElements';
 
 function OffGridDataEntry(props) {
-    const { setOnSubmit, setData, data } = props
+    const { setOnSubmit, setData, data, localData } = props
 
     const [{ coordinates, loading: coordinateLoading, error: coordinateError }, setCoordinates] = useState({});
 
@@ -17,7 +17,7 @@ function OffGridDataEntry(props) {
     }, [coordinateError, irradiationError])
 
     useEffect(() => {
-        if (data.government && data.city) {
+        if (data.government && data.city && (localData?.city !== data?.city)) {
             getLocation(data.government, data.city, setCoordinates, setIrradiation)
         } else {
             setCoordinates({})
@@ -32,7 +32,6 @@ function OffGridDataEntry(props) {
 
     const [totalEnergy, setTotalEnergy] = useState(0)
     const [totalPower, setTotalPower] = useState(0)
-
     const [devices, setDevices] = useState(data.devices || [{
         deviceName: "ex: lamps",
         device: "",
@@ -63,6 +62,11 @@ function OffGridDataEntry(props) {
 
     }])
     useEffect(() => {
+        if (totalPower > 0) {
+            setData(pv => ({ ...pv, devices }))
+        }
+    }, [devices])
+    useEffect(() => {
         setTotalEnergy(devices.map(x => x.power * x.hours * x.quantity).reduce((a, b) => a + b))
         setTotalPower(devices.map(x => x.power * x.quantity).reduce((a, b) => a + b))
     }, [devices])
@@ -73,6 +77,7 @@ function OffGridDataEntry(props) {
         e.preventDefault();
         setOnSubmit(true)
         setData(pv => ({ ...pv, totalEnergy, totalPower, devices }))
+        localStorage.setItem("DATA-" + data.type, JSON.stringify(data))
         // console.log(devices);
     }
 
@@ -106,13 +111,13 @@ function OffGridDataEntry(props) {
                 </div>
             </div>
             {active < dataBox?.length - 1 ? <div className="center">
-                <button type='button' onClick={() => slide("next")} className={totalEnergy === 0 ? "btn primary disabled" : "btn primary"} disabled={totalEnergy === 0 }>Next</button>
+                <button type='button' onClick={() => slide("next")} className={totalEnergy === 0 ? "btn primary disabled" : "btn primary"} disabled={totalEnergy === 0}>Next</button>
             </div> : <div className="center">
-            <div className="flex-container">
-                <button type='button' onClick={() => slide("back")} className="btn secondary" >back</button>
-                <button className={totalEnergy === 0 || !data?.coordinates ? "btn primary disabled" : "btn primary"} disabled={totalEnergy === 0 || !data?.coordinates}>submit</button>
+                <div className="flex-container">
+                    <button type='button' onClick={() => slide("back")} className="btn secondary" >back</button>
+                    <button className={totalEnergy === 0 || !data?.coordinates ? "btn primary disabled" : "btn primary"} disabled={totalEnergy === 0 || !data?.coordinates}>submit</button>
 
-            </div>
+                </div>
             </div>}
 
         </form>
