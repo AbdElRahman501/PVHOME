@@ -84,7 +84,7 @@ solarChargerRouter.post(
         efficiency: x.efficiency
       }
     })
-    console.log(req.body);
+    // console.log(req.body);
     let response = choseSolarCharger(req.body, solarChargers)
     res.json(response);
   })
@@ -120,7 +120,7 @@ function findNumbers(minDivisor, maxDivisor, start, end) {
   return numbers;
 }
 function choseSolarCharger(data, solarChargers) {
-  console.log(data);
+  // console.log(data);
   let { systemVoltage, topResults, panel } = data
 
   let initArr = [];

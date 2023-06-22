@@ -29,7 +29,7 @@ panelRouter.get(
 panelRouter.post(
   '/addPanel',
   expressAsyncHandler(async (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     const panel = req.body
     const newPanel = new Panels(panel);
     const createdPanel = await newPanel.save();

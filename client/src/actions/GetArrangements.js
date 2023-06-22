@@ -1,14 +1,14 @@
 export function getArrangements(panel, solarCharger) {
     let numOfPanels = panel.numOfPanels
     let maxStringVoltage = Math.min(solarCharger.maxStringVoltage, panel.maxStringVoltage)
-    let panelsPerString = Math.floor(maxStringVoltage / panel.voc)
-    let maxPanelsPerArr = Math.floor(solarCharger.maxPower / panel.power)
-    let numOfArr = Math.ceil(numOfPanels / maxPanelsPerArr)
+    let panelsPerString = Math.floor(maxStringVoltage / panel.voc) || 1
+    let maxPanelsPerArr = Math.floor(solarCharger.maxPower / panel.power) || 1
+    let numOfArr = solarCharger.num
 
 
     const numOfBasePanels = numOfPanels
 
-    if (numOfPanels < panelsPerString) {
+    if (numOfPanels <= panelsPerString) {
         return { message: "( 1 X " + numOfPanels + " )" }
     }
 
@@ -16,8 +16,8 @@ export function getArrangements(panel, solarCharger) {
     let result
     let combinations
 
-    let minDivisor = Math.floor(panelsPerString / 2)
-    let minStartArr = Math.floor(maxPanelsPerArr / 2)
+    let minDivisor = Math.floor(panelsPerString / 2) || 1
+    let minStartArr = Math.floor(maxPanelsPerArr / 2) || 1
 
     while (count >= 0) {
         result = findNumbers(minDivisor, panelsPerString, minStartArr, maxPanelsPerArr);

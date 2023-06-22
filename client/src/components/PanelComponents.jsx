@@ -50,18 +50,18 @@ function PanelComponents(props) {
   useEffect(() => {
     if (panels?.length > 0) {
       if (data?.type === "On Grid" && inverters?.length > 0) {
-        let newArrangement = getArrangements(panels[0], { maxStringVoltage: inverters[0].voltageRang.max, maxArrCurrent: inverters[0].maxCurrent, maxPower: inverters[0].inputPowerMax })?.message
+        let newArrangement = getArrangements(panels[0], { maxStringVoltage: inverters[0].voltageRang.max, maxArrCurrent: inverters[0].maxCurrent, maxPower: inverters[0].inputPowerMax, num: inverters[0].num })?.message
         if (arrangement !== newArrangement) {
           setArrangement(newArrangement)
         }
       } else if (data?.type === "OFF Grid" && chargers?.length > 0) {
-        let newArrangement = (getArrangements(panels[0], { maxStringVoltage: chargers[0].maxStringVoltage, maxArrCurrent: chargers[0].rateCurrent, maxPower: chargers[0].maxPower })?.message)
+        let newArrangement = (getArrangements(panels[0], { maxStringVoltage: chargers[0].maxStringVoltage, maxArrCurrent: chargers[0].rateCurrent, maxPower: chargers[0].maxPower, num: chargers[0].num })?.message)
         if (arrangement !== newArrangement) {
           setArrangement(newArrangement)
         }
       }
     }
-  }, [panels, inverters,arrangement, chargers])
+  }, [panels, inverters, arrangement, chargers])
 
   return (
     <div className="data-entry-box">
