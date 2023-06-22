@@ -4,13 +4,14 @@ import { chosePanel } from '../actions/choseElements'
 import { getArrangements } from '../actions/GetArrangements'
 
 function PanelComponents(props) {
-  const { data, InverterState, panelsState, setPanels } = props
+  const { data, InverterState, chargerState, panelsState, setPanels } = props
 
   const [selectedPanel, setSelectedPanel] = useState("")
   const [height, setHeight] = useState(false)
 
   const { panels, loading: panelsLoading, error: panelsError } = panelsState
   const { inverters, loading: inverterLoading, error: inverterError } = InverterState
+  const { chargers, loading: chargerLoading, error: chargerError } = chargerState ? chargerState : {}
   const [arrangement, setArrangement] = useState("")
 
   useEffect(() => {
@@ -47,10 +48,20 @@ function PanelComponents(props) {
   }, [height, Slider])
 
   useEffect(() => {
-    if (panels?.length > 0 && !arrangement) {
-      setArrangement(getArrangements(panels[0], { maxStringVoltage: 400, maxArrCurrent: 100, maxPower: 10000 })?.message)
+    if (panels?.length > 0) {
+      if (data?.type === "On Grid" && inverters?.length > 0) {
+        let newArrangement = getArrangements(panels[0], { maxStringVoltage: inverters[0].voltageRang.max, maxArrCurrent: inverters[0].maxCurrent, maxPower: inverters[0].inputPowerMax })?.message
+        if (arrangement !== newArrangement) {
+          setArrangement(newArrangement)
+        }
+      } else if (data?.type === "OFF Grid" && chargers?.length > 0) {
+        let newArrangement = (getArrangements(panels[0], { maxStringVoltage: chargers[0].maxStringVoltage, maxArrCurrent: chargers[0].rateCurrent, maxPower: chargers[0].maxPower })?.message)
+        if (arrangement !== newArrangement) {
+          setArrangement(newArrangement)
+        }
+      }
     }
-  }, [panels,arrangement])
+  }, [panels, inverters,arrangement, chargers])
 
   return (
     <div className="data-entry-box">
@@ -92,7 +103,7 @@ function PanelComponents(props) {
 
         </div>
         <div className='grid data' style={{ gridTemplateColumns: "repeat(4,1fr)", height: "50px" }}>
-          <h4>{arrangement}</h4>
+          <h4>{(inverterLoading || chargerLoading) ? <i style={{ fontSize: "16px" }} className=" fa fa-spinner fa-pulse"></i> : arrangement}</h4>
           <h4>{panels[0]?.power} W </h4>
           <h4>{panels[0]?.price} EGP X {panels[0].numOfPanels} = {panels[0].totalPrice} EGP </h4>
           <h4>{panels[0]?.totalArea?.toFixed(0)} m<sup>2</sup></h4>

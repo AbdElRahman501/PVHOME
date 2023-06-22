@@ -40,7 +40,7 @@ function OffGridResults(props) {
             <div className='center relative'>
                 <div className='back'>{active !== 0 && <button onClick={() => slide("back")}><i className='fa fa-angle-left'></i></button>}</div>
                 <div className='data-slider'>
-                    <PanelComponents data={data} InverterState={InverterState} panelsState={panelsState} setPanels={setPanels} />
+                    <PanelComponents data={data} InverterState={InverterState} panelsState={panelsState} setPanels={setPanels} chargerState={chargerState} />
                     <InverterComponents data={data} InverterState={InverterState} panelsState={panelsState} setInverters={setInverters} setBattery={setBattery} />
                     <BatteryComponents data={data} BatteryState={BatteryState} setBattery={setBattery} />
                     <SolarChargerComponent data={data} BatteryState={BatteryState} panelsState={panelsState} chargerState={chargerState} setSolarCharger={setSolarCharger} />

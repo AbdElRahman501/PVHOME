@@ -41,7 +41,7 @@ export default function AddInverter(props) {
             <div className="data-entry-box center ">
                 {success && <SuccessMessage>inverter Add Successfully</SuccessMessage>}
                 {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
-                {!(success || successMessage ) &&
+                {!(success || successMessage) &&
                     <div className='data-container'>
                         <label className="data-input" htmlFor="name"><p>Name<sup><i className='fa fa-asterisk'></i></sup></p>
                             <input type="text" id='name' placeholder='Enter  Name' required onChange={(e) => setData((pv) => pv && { ...pv, name: e.target.value })}
@@ -119,6 +119,11 @@ export default function AddInverter(props) {
                                 </div>
                             </label>
                         </div>
+                        <label className="data-input" htmlFor="name"><p>Max Input Current<sup><i className='fa fa-asterisk'></i></sup></p>
+                            <input type="number" min="10" max="1000" id='name' placeholder='Enter  Current' required onChange={(e) => setData((pv) => pv && { ...pv, maxCurrent: Number(e.target.value) >= 0 ? Number(e.target.value) : "" })}
+                                value={data.maxCurrent || ""}
+                            />
+                        </label>
                         <div className="flex-container center relative transition" >
                             <label className="data-input flex-item" htmlFor="Price"><p>Price<sup><i className='fa fa-asterisk'></i></sup></p>
                                 <div>

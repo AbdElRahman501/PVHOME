@@ -102,12 +102,12 @@ panelRouter.post(
 
 
 function chosePanels(data, panels, inverter) {
-  let { totalPower, totalEnergy, loss, coordinates, expectedArea, peakSonHours, topResults, priority } = data
+  let { totalPower, totalEnergy, loss, coordinates, expectedArea, peakSonHours,safetyFactor, topResults, priority } = data
   let { elevationAngle, tiltAngle } = coordinates
 
   let shPanels = [];
   let score = []
-  totalPower = inverter?.type === "OFF Grid" ? totalEnergy / ((inverter.efficiency / 100) * loss * peakSonHours) : totalPower
+  totalPower = inverter?.type === "OFF Grid" ? totalEnergy / ((inverter.efficiency / 100) * loss * peakSonHours) : ((100 + safetyFactor) * totalPower) / 100
   for (let panel of panels) {
     let area = getArea(panel, tiltAngle, elevationAngle)
     let numOfPanels = expectedArea ? Math.floor(expectedArea / area) : inverter?.type === "On Grid" ? Math.ceil(totalPower / panel.power) : Math.floor(totalPower / panel.power) || 1

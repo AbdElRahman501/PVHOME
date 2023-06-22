@@ -47,7 +47,7 @@ function SolarChargerComponent(props) {
           <p>TOTAL SCORE</p>
           <p>NUMBER SCORE</p>
           <p>PRICE SCORE</p>
-          <h6 className='nm'>NAME</h6>
+          <h6 className='nm'>CHARGER NAME</h6>
         </div>
         <div className='relative horizontal-slider-box'>
           <div className='horizontal-slider panel' style={{ height: height ? "300%" : "100%", overflow: height ? "scroll" : "hidden" }}>

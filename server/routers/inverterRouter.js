@@ -48,6 +48,7 @@ inverterRouter.post(
       inverter.voltageRang = req.body.voltageRang || inverter.voltageRang;
       inverter.inputPowerMax = req.body.inputPowerMax || inverter.inputPowerMax;
       inverter.efficiency = req.body.efficiency || inverter.efficiency;
+      inverter.maxCurrent = req.body.maxCurrent || inverter.maxCurrent;
     }
     const updateInverter = await inverter.save();
     res.send({ message: 'inverter Updated Successfully', updateInverter: updateInverter });
@@ -65,13 +66,13 @@ inverterRouter.delete(
   })
 );
 function choseTheInverter(data, inverters) {
-  let { safetyFactor, totalPower, topResults } = data
-  totalPower = (1 + (safetyFactor / 100)) * totalPower
+  let { safetyFactor, totalPower, topResults, expectedArea } = data
+  totalPower = expectedArea ? totalPower : ((100 + safetyFactor) * totalPower) / 100
 
   let initInverters = []
   let score = []
   for (let inverter of inverters) {
-    let num = Math.ceil(totalPower / inverter.power)
+    let num =expectedArea ?  Math.ceil(totalPower / inverter.inputPowerMax) : Math.ceil(totalPower / inverter.power)
     // let powerDiff = 1 - (totalPower / (num * inverter.power))
     let powerDiff = (totalPower / (num * inverter.power))
     let totalPrice = num * inverter.price
@@ -143,7 +144,7 @@ inverterRouter.post(
     let inverters = await Inverters.find({ type: req.body.type })
     // console.log(inverters);
     inverters = inverters.map(x => {
-      return { id: x._id, name: x.name, voltageRang: x.voltageRang, type: x.type, manufacturer: x.manufacturer, voltage: x.voltage, power: x.power, price: x.price, efficiency: x.efficiency }
+      return { id: x._id, name: x.name, voltageRang: x.voltageRang, type: x.type, manufacturer: x.manufacturer, voltage: x.voltage, power: x.power, price: x.price, maxCurrent: x.maxCurrent, inputPowerMax: x.inputPowerMax, efficiency: x.efficiency }
     })
     let response = choseTheInverter(req.body, inverters);
     res.json(response);

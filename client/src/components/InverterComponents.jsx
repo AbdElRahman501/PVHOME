@@ -14,15 +14,14 @@ function InverterComponents(props) {
   const { inverters, loading: inverterLoading, error: inverterError } = InverterState
 
   useEffect(() => {
-    if (data.totalPower && !inverters) {
+    if (data.totalPower) {
       choseInverter(data, setInverters);
     }
-  }, [data])
+  }, [data.totalPower])
 
   useEffect(() => {
-    if (data.expectedArea && panels) {
-      setData(pv => ({ ...pv, totalPower: panels[0].power * panels[0].numOfPanels }))
-      // choseInverter(data, setInverters);
+    if (data.expectedArea && panels?.length > 0) {
+      setData(pv => ({ ...pv, totalPower: (panels[0].power * panels[0].numOfPanels) }))
     }
   }, [panels])
 
