@@ -107,7 +107,7 @@ function chosePanels(data, panels, inverter) {
 
   let shPanels = [];
   let score = []
-  totalPower = inverter?.type === "OFF Grid" ? totalEnergy / ((inverter.efficiency / 100) * loss * peakSonHours) : ((100 + safetyFactor) * totalPower) / 100
+  totalPower = (inverter?.type === "OFF Grid" || inverter?.type === "Hybrid" ) ? totalEnergy / ((inverter.efficiency / 100) * loss * peakSonHours) : ((100 + safetyFactor) * totalPower) / 100
   for (let panel of panels) {
     let area = getArea(panel, tiltAngle, elevationAngle)
     let numOfPanels = expectedArea ? Math.floor(expectedArea / area) : inverter?.type === "On Grid" ? Math.ceil(totalPower / panel.power) : Math.floor(totalPower / panel.power) || 1

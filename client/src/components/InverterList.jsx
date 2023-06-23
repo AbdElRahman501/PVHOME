@@ -7,12 +7,12 @@ export default function Inverters() {
     const { search } = useLocation();
     const id = new URLSearchParams(search).get('id')
 
-    const types = ["ALL", "On Grid", "OFF Grid"]
+    const types = ["ALL", "On Grid", "OFF Grid", "Hybrid"]
     const [chosen, setChosen] = useState("ALL")
 
     const [{ inverters, loading, error }, setInverter] = useState({})
     const [selectedInverter, setSelectedInverter] = useState()
-    
+
     const [successMessage, setSuccessMessage] = useState("")
 
     useEffect(() => {
@@ -44,12 +44,12 @@ export default function Inverters() {
                     {loading && <div className='center grid-item'><i style={{ fontSize: "60px" }} className=" fa fa-spinner fa-pulse"></i></div>}
                     {error && <div className='center grid-item'>{error.message}</div>}
                     {inverters?.length > 0 && !selectedInverter && <div className='center options'>{types.map((x, i) => <h2 key={i} onClick={() => setChosen(x)} className={x === chosen ? "chosen choice" : "choice"}>{x}</h2>)} </div>}
-                    {inverters?.length > 0 && !selectedInverter && inverters.filter(x => chosen === "ALL" ? true : x.type === chosen).sort((a,b) => a.power-b.power ).map((inverter) => <div key={inverter._id}>
+                    {inverters?.length > 0 && !selectedInverter && inverters.filter(x => chosen === "ALL" ? true : x.type === chosen).sort((a, b) => a.power - b.power).map((inverter) => <div key={inverter._id}>
                         <li ><Link to={"/Devices?show=Inverter&id=" + inverter._id}> {inverter.name} <i className='fa fa-angle-down'></i></Link></li>
                         <hr />
                     </div>)}
                 </ul>
-                
+
             </div>
     )
 }

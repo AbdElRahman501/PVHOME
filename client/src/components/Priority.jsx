@@ -12,8 +12,8 @@ function Priority(props) {
                     value={data.priority?.price || ""}
                     onChange={(e) => setData((pv) => pv && { ...pv, priority: { ...pv.priority, price: Number(e.target.value) } })}
                 ><option value='' disabled  >select how much priority</option>
-                    <option value="4" style={{ color: "red" }} >high</option>
-                    <option value="2" style={{ color: "green" }} >medium</option>
+                    <option value="4" style={{ color: "red" }} >Top</option>
+                    <option value="2" style={{ color: "green" }} >Normal</option>
                     <option value="1" style={{ color: "blue" }}>low</option>
                 </select>
             </label>}
@@ -23,8 +23,8 @@ function Priority(props) {
                     value={data.priority?.num || ""}
                     onChange={(e) => setData((pv) => pv && { ...pv, priority: { ...pv.priority, num: Number(e.target.value) } })}
                 ><option value='' disabled  >select how much priority</option>
-                    <option value="4" style={{ color: "red" }} >high</option>
-                    <option value="2" style={{ color: "green" }} >medium</option>
+                    <option value="4" style={{ color: "red" }} >Top</option>
+                    <option value="2" style={{ color: "green" }} >Normal</option>
                     <option value="1" style={{ color: "blue" }}>low</option>
                 </select>
             </label>}
@@ -34,8 +34,8 @@ function Priority(props) {
                     value={data.priority?.area || ""}
                     onChange={(e) => setData((pv) => pv && { ...pv, priority: { ...pv.priority, area: Number(e.target.value) } })}
                 ><option value='' disabled  >select how much priority</option>
-                    <option value="4" style={{ color: "red" }} >high</option>
-                    <option value="2" style={{ color: "green" }} >medium</option>
+                    <option value="4" style={{ color: "red" }} >Top</option>
+                    <option value="2" style={{ color: "green" }} >Normal</option>
                     <option value="1" style={{ color: "blue" }}>low</option>
                 </select>
             </label>}

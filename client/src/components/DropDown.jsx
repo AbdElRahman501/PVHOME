@@ -46,7 +46,7 @@ function DropDown(props) {
                 <hr />
                 <AdjustItem data={data} setData={setData} onSubmit={onSubmit} rang={[0, 100]} fixed={true} >Safety Factor : safetyFactor : %</AdjustItem>
 
-                {data.type === "OFF Grid" && <>
+                {(data.type === "OFF Grid" || data?.type === "Hybrid") && <>
                     <AdjustItem data={data} setData={setData} onSubmit={onSubmit} toPercentage={true} rang={[10, 100]} fixed={true} >Depth of Discharge : dod</AdjustItem>
                     <AdjustItem data={data} setData={setData} onSubmit={onSubmit} rang={[0.1, 10]} >Autonomy Day : autonomyDay : D</AdjustItem>
                 </>}

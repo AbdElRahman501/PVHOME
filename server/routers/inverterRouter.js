@@ -66,13 +66,18 @@ inverterRouter.delete(
   })
 );
 function choseTheInverter(data, inverters) {
-  let { safetyFactor, totalPower, topResults, expectedArea } = data
+  let { safetyFactor, totalPower, topResults, expectedArea, totalEnergy, loss, peakSonHours } = data
   totalPower = expectedArea ? totalPower : ((100 + safetyFactor) * totalPower) / 100
 
   let initInverters = []
   let score = []
   for (let inverter of inverters) {
-    let num =expectedArea ?  Math.ceil(totalPower / inverter.inputPowerMax) : Math.ceil(totalPower / inverter.power)
+    let num = expectedArea ? Math.ceil(totalPower / inverter.inputPowerMax) : Math.ceil(totalPower / inverter.power)
+    if (data.type === "Hybrid") {
+      let pvPower = totalEnergy / ((inverter.efficiency / 100) * loss * peakSonHours)
+      let newNum = Math.ceil(pvPower / inverter.inputPowerMax)
+      num = Math.max(newNum, num)
+    }
     // let powerDiff = 1 - (totalPower / (num * inverter.power))
     let powerDiff = (totalPower / (num * inverter.power))
     let totalPrice = num * inverter.price

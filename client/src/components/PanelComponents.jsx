@@ -49,7 +49,7 @@ function PanelComponents(props) {
 
   useEffect(() => {
     if (panels?.length > 0) {
-      if (data?.type === "On Grid" && inverters?.length > 0) {
+      if ((data?.type === "On Grid" || data?.type === "Hybrid") && inverters?.length > 0) {
         let newArrangement = getArrangements(panels[0], { maxStringVoltage: inverters[0].voltageRang.max, maxArrCurrent: inverters[0].maxCurrent, maxPower: inverters[0].inputPowerMax, num: inverters[0].num })?.message
         if (arrangement !== newArrangement) {
           setArrangement(newArrangement)

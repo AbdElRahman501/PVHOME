@@ -8,7 +8,14 @@ import HybridResults from '../SystemsComponents/hybrid/HybridResults';
 function HybridScreen() {
 
     const [onSubmit, setOnSubmit] = useState(false)
-    const [data, setData] = useState({ type: "OFF Grid", safetyFactor: 25, dod: 0.8, autonomyDay: 1 })
+    const [data, setData] = useState({ type: "Hybrid", safetyFactor: 25, dod: 0.85, autonomyDay: 1 })
+
+
+    let localData = JSON.parse((localStorage.getItem("DATA-" + data.type)))
+
+    if (localData && localData.type === data.type && !data.government) {
+        setData(localData)
+    }
     return (
         <section id="data-entry">
             <div className="center bk">
@@ -16,9 +23,9 @@ function HybridScreen() {
                     <div className="center">
                         <h1>Hybrid</h1>
                     </div>
-                    <DropDown setData={setData} data={data} onSubmit={onSubmit}  />
+                    <DropDown setData={setData} localData={localData} data={data} onSubmit={onSubmit} />
                     {!onSubmit
-                        ? <HybridDataEntry data={data} setData={setData} setOnSubmit={setOnSubmit} />
+                        ? <HybridDataEntry data={data} localData={localData} setData={setData} setOnSubmit={setOnSubmit} />
                         : <HybridResults data={data} setOnSubmit={setOnSubmit} />
                     }
 

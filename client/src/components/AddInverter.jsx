@@ -67,10 +67,10 @@ export default function AddInverter(props) {
                             ><option value='' disabled  >Select inverter type</option>
                                 <option value="On Grid" >On Grid</option>
                                 <option value="OFF Grid" >OFF Grid</option>
-                                <option value="hybrid" >hybrid</option>
+                                <option value="Hybrid" >hybrid</option>
                             </select>
                         </label>
-                        {data.type === "On Grid" && <div className="flex-container center" >
+                        {(data.type === "On Grid" || data.type === "Hybrid") && <div className="flex-container center" >
                             <label className="data-input flex-item" htmlFor="Min Voltage"><p>Min Voltage<sup><i className='fa fa-asterisk'></i></sup></p>
                                 <div>
                                     <input type="number" min="0" max="2000" step="any" id='Max-voltage' placeholder='Enter Min Voltage' required
@@ -136,7 +136,7 @@ export default function AddInverter(props) {
                             </label>
                             <label className="data-input flex-item" htmlFor="Efficiency"><p>Efficiency<sup><i className='fa fa-asterisk'></i></sup></p>
                                 <div>
-                                    <input type="number" min="50" max="100" placeholder='Enter efficiency ' required
+                                    <input type="number" min="50" max="100" placeholder='Enter efficiency ' step="any" required
                                         value={data.efficiency || ""}
                                         onChange={(e) => setData((pv) => pv && { ...pv, efficiency: Number(e.target.value) >= 0 ? Number(e.target.value) : "" })}
                                     />
