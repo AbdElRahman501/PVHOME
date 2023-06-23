@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { NumFormatter } from '../../actions/Functions'
+import devicesTemps from "../../components/devices.json"
 
 export default function LoadData(props) {
     const { data, totalEnergy, totalPower, devices, setDevices } = props
+    const [addDevice, setAddDevice] = useState([])
 
 
     return (
@@ -18,17 +20,37 @@ export default function LoadData(props) {
                 <div className="data-grid-container" key={i}>
                     <div className='bbtn delete'>
                         <button type='button' disabled={devices.length === 1} className={devices.length > 1 ? 'device btn remove' : "device btn remove disabled "}
-                            onClick={() => setDevices(pv =>  pv.filter((x, index) => i !== index ) )}>
+                            onClick={() => setDevices(pv => pv.filter((x, index) => i !== index))}>
                             <i className='fa fa-trash'></i>
                         </button>
                     </div>
                     <label className="data-input device" htmlFor="device" >
                         <div>
-                            <input type="text" name="device" id="device" required={i === 0} placeholder={x.deviceName}
-                                value={x.device}
-                                onChange={(e) => setDevices(pv => pv.map((y, k) => k == i ? { ...y, device: e.target.value } : y))}
-                            />
 
+                            {addDevice.includes(x.id) ?
+                                <input type="text" name="device" id="device" required={(i === 0) || x.power || x.hours || x.quantity} placeholder={x.deviceName}
+                                    value={x.device}
+                                    onChange={(e) => setDevices(pv => pv.map((y, k) => k == i ? { ...y, device: e.target.value } : y))}
+                                /> :
+                                <select name="devices" id="devices" style={{ color: x.device ? "black" : "#838383" }}
+                                    value={x.device}
+                                    onChange={(e) => {
+                                        if (e.target.value === "add device") {
+                                            setAddDevice(pv => ([...pv, x.id]))
+                                        } else {
+                                            let selectedOption = e.target.options[e.target.selectedIndex];
+                                            setDevices(pv => pv.map((y, k) => k == i ? { ...y, device: selectedOption.value, power: Number(selectedOption.getAttribute("power")) } : y))
+                                        }
+                                    }}
+                                >
+                                    <option value='' disabled  >select device</option>
+                                    <option value='add device' style={{ color: "green" }} > ADD NEW DEVICE</option>
+                                    {devicesTemps.sort((a, b) => a.name.localeCompare(b.name)).map((devicesName, index) =>
+                                        <option key={index} power={devicesName.power} value={devicesName.name} > {devicesName.name}  </option>
+                                    )}
+                                </select>
+
+                            }
                         </div>
                     </label>
                     <label className="data-input " htmlFor="quantity">
@@ -66,6 +88,7 @@ export default function LoadData(props) {
                 <button type='button' className='device btn add'
                     onClick={() => setDevices(pv => [...pv, {
                         deviceName: "Device Name",
+                        id: (devices.length+1),
                         device: "",
                         quantity: 0,
                         power: 0,

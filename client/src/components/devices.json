@@ -1,0 +1,293 @@
+[
+    {
+        "name": "Desk Lamp",
+        "power": 25
+    },
+    {
+        "name": "Floor Lamp",
+        "power": 50
+    },
+    {
+        "name": "Table Lamp",
+        "power": 35
+    },
+    {
+        "name": "32-Inch LED TV",
+        "power": 100
+    },
+    {
+        "name": "42-Inch LED TV",
+        "power": 150
+    },
+    {
+        "name": "55-Inch LED TV",
+        "power": 200
+    },
+    {
+        "name": "Plasma TV",
+        "power": 250
+    },
+    {
+        "name": "CRT TV",
+        "power": 300
+    },
+    {
+        "name": "Incandescent Light Bulb",
+        "power": 60
+    },
+    {
+        "name": "Fluorescent Light Bulb",
+        "power": 25
+    },
+    {
+        "name": "LED Light Bulb",
+        "power": 10
+    },
+    {
+        "name": "Toaster",
+        "power": 900
+    },
+    {
+        "name": "Coffee Maker",
+        "power": 1000
+    },
+    {
+        "name": "Microwave",
+        "power": 1200
+    },
+    {
+        "name": "Refrigerator",
+        "power": 500
+    },
+    {
+        "name": "Washing Machine",
+        "power": 400
+    },
+    {
+        "name": "Dryer",
+        "power": 2000
+    },
+    {
+        "name": "Vacuum Cleaner",
+        "power": 1000
+    },
+    {
+        "name": "Computer",
+        "power": 150
+    },
+    {
+        "name": "Printer",
+        "power": 300
+    },
+    {
+        "name": "TV Box",
+        "power": 10
+    },
+    {
+        "name": "Router",
+        "power": 15
+    },
+    {
+        "name": "Oven",
+        "power": 2000
+    },
+    {
+        "name": "Stovetop",
+        "power": 1000
+    },
+    {
+        "name": "Dishwasher",
+        "power": 1200
+    },
+    {
+        "name": "Heater",
+        "power": 1000
+    },
+    {
+        "name": "Desk Lamp",
+        "power": 25
+    },
+    {
+        "name": "Floor Lamp",
+        "power": 50
+    },
+    {
+        "name": "Table Lamp",
+        "power": 35
+    },
+    {
+        "name": "Incandescent Desk Lamp",
+        "power": 60
+    },
+    {
+        "name": "Fluorescent Desk Lamp",
+        "power": 25
+    },
+    {
+        "name": "LED Desk Lamp",
+        "power": 10
+    },
+    {
+        "name": "Incandescent Floor Lamp",
+        "power": 100
+    },
+    {
+        "name": "Fluorescent Floor Lamp",
+        "power": 50
+    },
+    {
+        "name": "LED Floor Lamp",
+        "power": 25
+    },
+    {
+        "name": "Incandescent Table Lamp",
+        "power": 40
+    },
+    {
+        "name": "Fluorescent Table Lamp",
+        "power": 20
+    },
+    {
+        "name": "LED Table Lamp",
+        "power": 10
+    },
+    {
+        "name": "Spotlight",
+        "power": 100
+    },
+    {
+        "name": "Floodlight",
+        "power": 200
+    },
+    {
+        "name": "Nightlight",
+        "power": 5
+    },
+    {
+        "name": "Mood Lamp",
+        "power": 10
+    },
+    {
+        "name": "Color-Changing Lamp",
+        "power": 15
+    },
+    {
+        "name": "Smart Lamp",
+        "power": 10
+    },{
+        "name": "Desk Lamp",
+        "power": 25
+      },
+      {
+        "name": "Floor Lamp",
+        "power": 40
+      },
+      {
+        "name": "Table Lamp",
+        "power": 15
+      },
+      {
+        "name": "LED TV",
+        "power": 100
+      },
+      {
+        "name": "Smart TV",
+        "power": 120
+      },
+      {
+        "name": "OLED TV",
+        "power": 150
+      },
+      {
+        "name": "Refrigerator",
+        "power": 200
+      },
+      {
+        "name": "Microwave",
+        "power": 800
+      },
+      {
+        "name": "Toaster",
+        "power": 900
+      },
+      {
+        "name": "Coffee Maker",
+        "power": 600
+      },
+      {
+        "name": "Blender",
+        "power": 500
+      },
+      {
+        "name": "Electric Kettle",
+        "power": 1000
+      },
+      {
+        "name": "Hair Dryer",
+        "power": 1200
+      },
+      {
+        "name": "Iron",
+        "power": 1100
+      },
+      {
+        "name": "Vacuum Cleaner",
+        "power": 1300
+      },
+      {
+        "name": "Air Conditioner",
+        "power": 2500
+      },
+      {
+        "name": "Fan",
+        "power": 80
+      },
+      {
+        "name": "Heater",
+        "power": 1500
+      },
+      {
+        "name": "Washing Machine",
+        "power": 500
+      },
+      {
+        "name": "Dryer",
+        "power": 3000
+      },
+       {
+         "name": "Dishwasher",
+         "power": 1800
+       }, 
+       {
+         "name": "Oven",
+         "power": 2400
+       }, 
+       {
+         "name": "Stove",
+         "power": 1500
+       }, 
+       {
+         "name": "Printer",
+         "power": 100
+       }, 
+       {
+         "name": "Scanner",
+         "power": 50
+       }, 
+       {
+         "name": "Router",
+         "power": 10
+       }, 
+       {
+         "name": "Laptop",
+         "power": 65
+       }, 
+       {
+         "name": "Desktop",
+         "power": 200
+       }, 
+       {
+         "name": "Monitor",
+         "power": 50
+       }
+]

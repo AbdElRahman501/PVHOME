@@ -7,7 +7,7 @@ import DropDown from '../components/DropDown';
 function OffGridScreen() {
 
     const [onSubmit, setOnSubmit] = useState(false)
-    const [data, setData] = useState({ type: "OFF Grid", safetyFactor: 25, dod: 0.80, autonomyDay: 1 })
+    const [data, setData] = useState({ type: "OFF Grid", safetyFactor: 25, dod: 0.85, autonomyDay: 1 })
 
 
     let localData = JSON.parse((localStorage.getItem("DATA-" + data.type)))

@@ -26,7 +26,6 @@ batteryRouter.post(
   '/addBattery',
   expressAsyncHandler(async (req, res) => {
     const battery = req.body
-    console.log(battery);
     const newBattery = new Batteries(battery);
     const createdBattery = await newBattery.save();
     res.send({ message: 'battery Added Successfully', battery: createdBattery });

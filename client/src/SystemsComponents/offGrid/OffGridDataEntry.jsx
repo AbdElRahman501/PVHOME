@@ -34,6 +34,7 @@ function OffGridDataEntry(props) {
     const [totalPower, setTotalPower] = useState(0)
     const [devices, setDevices] = useState(data.devices || [{
         deviceName: "ex: lamps",
+        id:1,
         device: "",
         quantity: 0,
         power: 0,
@@ -41,6 +42,7 @@ function OffGridDataEntry(props) {
 
     }, {
         deviceName: "ex: fridge",
+        id:2,
         device: "",
         quantity: 0,
         power: 0,
@@ -48,6 +50,7 @@ function OffGridDataEntry(props) {
 
     }, {
         deviceName: "ex: TV",
+        id:3,
         device: "",
         quantity: 0,
         power: 0,
@@ -55,6 +58,7 @@ function OffGridDataEntry(props) {
 
     }, {
         deviceName: "ex: fan",
+        id:4,
         device: "",
         quantity: 0,
         power: 0,
