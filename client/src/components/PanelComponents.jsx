@@ -103,7 +103,7 @@ function PanelComponents(props) {
 
         </div>
         <div className='grid data' style={{ gridTemplateColumns: "repeat(4,1fr)", height: "50px" }}>
-          <h4>{(inverterLoading || chargerLoading) ? <i style={{ fontSize: "16px" }} className=" fa fa-spinner fa-pulse"></i> : arrangement}</h4>
+          <h4 style={{ fontSize: "12px" }}>{(inverterLoading || chargerLoading) ? <i style={{ fontSize: "16px" }} className=" fa fa-spinner fa-pulse"></i> : arrangement}</h4>
           <h4>{panels[0]?.power} W </h4>
           <h4>{panels[0]?.price} EGP X {panels[0].numOfPanels} = {panels[0].totalPrice} EGP </h4>
           <h4>{panels[0]?.totalArea?.toFixed(0)} m<sup>2</sup></h4>
