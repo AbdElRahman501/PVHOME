@@ -57,7 +57,7 @@ export async function getDailyIrradiation(lat, lon, tilt, setIrradiation) {
 export async function getLocation(government, city, setCoordinates, setIrradiation) {
     setCoordinates({ coordinates: "", loading: true, error: "" })
     try {
-        const { data } = await Axios.get(`https://nominatim.openstreetmap.org/?q=egypt, ${government}, ${city || ""}&format=json&limit=1`);        
+        const { data } = await Axios.get(`https://nominatim.openstreetmap.org/search?q=egypt, ${government}, ${city || ""}&format=json&limit=1`);      
         if (data.length > 0) {
             let lat = Number(data[0]?.lat)
             let lon = Number(data[0]?.lon)
